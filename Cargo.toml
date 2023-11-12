@@ -1,0 +1,17 @@
+[package]
+name = "pflogreport"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1"
+nom = "7"
+chrono = "0.4"
+clap = { version = "4", features = ["derive"] }
+serde = "1"
+serde_derive = "1"
+serde_json = "1"
+lazy-regex = "3"
+enum-kinds = "0.5"
