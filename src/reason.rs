@@ -297,10 +297,10 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         });
     }
 
-    static NO_SUCH_USER_RE: [(ReasonPreParseKind, Lazy<Regex>); 15] = [
+    static NO_SUCH_USER_RE: [(ReasonPreParseKind, Lazy<Regex>); 17] = [
         (
             ReasonPreParseKind::RcptTo,
-            lazy_regex!("\\A550-5\\.1\\.1 The email account that you tried to reach does not exist\\. Please try 550-5\\.1\\.1 double-checking the recipient's email address for typos or 550-5\\.1\\.1 unnecessary spaces. Learn more at 550 5\\.1\\.1  https://support\\.google\\.com/mail/\\?p=NoSuchUser [-a-z0-9z.]+ - gsmtp\\z"),
+            lazy_regex!("\\A550-5\\.1\\.1 The email account that you tried to reach does not exist\\. Please try 550-5\\.1\\.1 double-checking the recipient's email address for typos or 550-5\\.1\\.1 unnecessary spaces. (?:Learn more at|For more information, go to) 550 5\\.1\\.1  https://support\\.google\\.com/mail/\\?p=NoSuchUser [-a-z0-9z.]+ - gsmtp\\z"),
         ),
         (
             ReasonPreParseKind::RcptTo,
@@ -358,6 +358,14 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             ReasonPreParseKind::RcptTo,
             lazy_regex!("\\A550[- ]5\\.1\\.1 <[^>]+>: Recipient address rejected: User unknown - [^ ]+\\z"),
         ),
+        (
+            ReasonPreParseKind::Data,
+            lazy_regex!("\\A550 Message was not accepted -- invalid mailbox\\.  Local mailbox [^ ]+ is unavailable: user not found\\z"),
+        ),
+        (
+            ReasonPreParseKind::RcptTo,
+            lazy_regex!("\\A550[- ]5\\.7\\.1 No such user! [-0-9A-Za-z]+\\z"),
+        ),
     ];
     if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &NO_SUCH_USER_RE) {
         let attrs = pre_parse_attrs.unwrap();
@@ -367,10 +375,10 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         });
     }
 
-    static DISABLED_USER_RE: [(ReasonPreParseKind, Lazy<Regex>); 8] = [
+    static DISABLED_USER_RE: [(ReasonPreParseKind, Lazy<Regex>); 10] = [
         (
             ReasonPreParseKind::RcptTo,
-            lazy_regex!("\\A550-5\\.2\\.1 The email account that you tried to reach is disabled\\. Learn more at 550 5\\.2\\.1  https://support\\.google\\.com/mail/\\?p=DisabledUser [-a-z0-9z.]+ - gsmtp\\z"),
+            lazy_regex!("\\A550[- ]5\\.2\\.1 The email account that you tried to reach is (?:disabled|inactive)\\. (?:Learn more at|For more(?: 550[- ]5\\.2\\.1 information, go to)?) 550[- ]5\\.2\\.1  https://support\\.google\\.com/mail/\\?p=DisabledUser [-a-z0-9z.]+ - gsmtp\\z"),
         ),
         (
             ReasonPreParseKind::RcptTo,
@@ -400,6 +408,14 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             ReasonPreParseKind::RcptTo,
             lazy_regex!("\\A550 \\\"[^\\\\]+\\\": Podane konto jest zablokowane administracyjnie lub nieaktywne / This account is disabled or not yet active \\(#5\\.1\\.1\\)\\z"),
         ),
+        (
+            ReasonPreParseKind::Data,
+            lazy_regex!("\\A550 Message was not accepted -- invalid mailbox.  Local mailbox [^ ]+ is unavailable: user is terminated\\z"),
+        ),
+        (
+            ReasonPreParseKind::RcptTo,
+            lazy_regex!("\\A540[- ]5\\.7\\.1 <[^>]+>: recipient address rejected: Inactive\\z"),
+        ),
     ];
     if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &DISABLED_USER_RE) {
         let attrs = pre_parse_attrs.unwrap();
@@ -409,7 +425,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         });
     }
 
-    static UNSOLICITED_MESSAGE_ERROR_RE: [(ReasonPreParseKind, Lazy<Regex>); 4] = [
+    static UNSOLICITED_MESSAGE_ERROR_RE: [(ReasonPreParseKind, Lazy<Regex>); 6] = [
         (
             ReasonPreParseKind::Data,
             lazy_regex!("\\A550-5\\.7\\.1 \\[(?P<from_ipaddr>[A-Fa-f0-9.:]+)\\s+[0-9]+\\] Our system has detected that this 550-5\\.7\\.1 message is likely unsolicited mail. To reduce the amount of spam sent 550-5\\.7\\.1 to Gmail, this message has been blocked\\. Please visit 550-5\\.7\\.1  https://support\\.google\\.com/mail/\\?p=UnsolicitedMessageError 550 5\\.7\\.1  for more information\\. [-a-z0-9z.]+ - gsmtp\\z"),
@@ -426,6 +442,14 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             ReasonPreParseKind::Data,
             lazy_regex!("\\A554[- ]5\\.7\\.1 \\[VI-1\\] Message blocked due to spam content in the message.\\z"),
         ),
+        (
+            ReasonPreParseKind::Data,
+            lazy_regex!("\\A550 spam message rejected\\. Please visit http://help\\.mail\\.ru/notspam-support/id\\?c=[-0-9A-Za-z_]+~ or  report details to abuse@corp\\.mail\\.ru\\. Error code: [0-9A-F]+\\. ID: [0-9A-F]+\\.\\z"),
+        ),
+        (
+            ReasonPreParseKind::Data,
+            lazy_regex!("\\A554[- ]5\\.7\\.1 Spam message rejected; If this is not spam contact abuse\\z"),
+        ),
     ];
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &UNSOLICITED_MESSAGE_ERROR_RE) {
         let attrs = pre_parse_attrs.unwrap();
@@ -440,7 +464,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         });
     }
 
-    static ACCESS_DENIED_1_RE: [(ReasonPreParseKind, Lazy<Regex>); 4] = [
+    static ACCESS_DENIED_1_RE: [(ReasonPreParseKind, Lazy<Regex>); 5] = [
         (
             ReasonPreParseKind::RcptTo,
             lazy_regex!("\\A550[- ]5\\.4\\.1 Recipient address rejected: Access denied.(?: AS\\(\\d+\\))? \\[[^]]+\\]\\z"),
@@ -456,6 +480,10 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         (
             ReasonPreParseKind::Data,
             lazy_regex!("\\A550[- ]5\\.7\\.1 Service refuse\\. Veuillez essayer plus tard\\. service refused, please try later\\. LPN007_510\\z"),
+        ),
+        (
+            ReasonPreParseKind::RcptTo,
+            lazy_regex!("\\A550[- ]5\\.7\\.606 Access denied, banned sending IP \\[(?P<ipaddr>[A-Fa-f0-9.:]+)\\]\\. To request removal from this list please visit https://sender\\.office\\.com/ and follow the directions\\. For more information please go to  http://go\\.microsoft\\.com/fwlink/\\?LinkID=\\d+ AS\\(\\d+\\)\\z"),
         ),
     ];
     if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &ACCESS_DENIED_1_RE) {

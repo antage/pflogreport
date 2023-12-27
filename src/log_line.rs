@@ -154,7 +154,7 @@ fn parse_program_subsystem_pid(input: &[u8]) -> IResult<&[u8], (String, Option<S
 fn parse_message_id(input: &[u8]) -> IResult<&[u8], u64> {
     map_res(
         take_while_m_n(
-            10, 10,
+            10, 12,
             |c| {
                 char::from(c).is_ascii_hexdigit()
             }
@@ -168,6 +168,7 @@ fn parse_message_id(input: &[u8]) -> IResult<&[u8], u64> {
     )(input)
 }
 
+#[derive(Debug)]
 pub struct LogLine {
     pub timestamp: NaiveDateTime,
     pub hostname: String,

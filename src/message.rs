@@ -44,6 +44,7 @@ pub enum Status {
     },
 }
 
+#[derive(Debug)]
 pub struct Message {
     pub log_lines: Vec<LogLine>,
     pub is_in_queue: bool,
