@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Result, anyhow};
 use clap::{Parser, Subcommand, Args};
+use rayon::prelude::*;
 
 mod log_line;
 use log_line::LogLine;
@@ -72,32 +73,54 @@ struct DeferredArgs {
     group_by: Option<String>
 }
 
+const LINE_CHUNK_SIZE: usize = 100_000;
+
 fn load_messages(log_file: &Path) -> Result<BTreeMap<u64, Message>> {
     let mut logs_by_message_id = BTreeMap::<u64, Message>::new();
 
     let file = File::open(log_file)?;
     let buf = BufReader::new(file);
-    for line in buf.lines() {
-        let line_str = line?;
-        let (_, log_line) =
-            LogLine::parse(line_str.as_bytes())
-                .map_err(|err| anyhow!("Can't parse log file: {:?}. At line: \"{}\"", err, line_str))?;
-        if let Some(message_id) = log_line.message_id {
-            if let Some(entry) = logs_by_message_id.get_mut(&message_id) {
-                entry.log_lines.push(log_line);
-            } else {
-                let msg = Message {
-                    log_lines: vec![log_line],
-                    ..Default::default()
-                };
-                logs_by_message_id.insert(message_id, msg);
+    let mut lines = buf.lines();
+
+    loop {
+        let chunk: Vec<String> = lines
+            .by_ref()
+            .take(LINE_CHUNK_SIZE)
+            .collect::<std::io::Result<Vec<String>>>()?;
+        if chunk.is_empty() {
+            break;
+        }
+
+        let parsed: Vec<_> = chunk
+            .par_iter()
+            .map(|line_str| LogLine::parse(line_str.as_bytes()))
+            .collect();
+
+        for (line_str, result) in chunk.iter().zip(parsed) {
+            let log_line = result
+                .map_err(|err| anyhow!("Can't parse log file: {:?}. At line: \"{}\"", err, line_str))?
+                .1;
+            if let Some(message_id) = log_line.message_id {
+                if let Some(entry) = logs_by_message_id.get_mut(&message_id) {
+                    entry.log_lines.push(log_line);
+                } else {
+                    let msg = Message {
+                        log_lines: vec![log_line],
+                        ..Default::default()
+                    };
+                    logs_by_message_id.insert(message_id, msg);
+                }
             }
+        }
+
+        if chunk.len() < LINE_CHUNK_SIZE {
+            break;
         }
     }
 
-    for (_, msg) in logs_by_message_id.iter_mut() {
-        msg.analyze()?;
-    }
+    logs_by_message_id
+        .par_iter_mut()
+        .try_for_each(|(_, msg)| msg.analyze())?;
 
     Ok(logs_by_message_id)
 }
