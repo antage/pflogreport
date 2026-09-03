@@ -968,7 +968,8 @@ mod tests {
 
     #[test]
     fn reason_kind_serializes_as_plain_string() {
-        // Non-verbose JSON output shape: Vec<(ReasonKind, usize)>.
+        // ReasonKind must serialize to a plain string: the grouped/flat JSON
+        // builders rely on it to use kinds as object keys.
         let items: Vec<(ReasonKind, usize)> = vec![(ReasonKind::DNSError, 8), (ReasonKind::Other, 6)];
         assert_eq!(
             serde_json::to_string(&items).unwrap(),

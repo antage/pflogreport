@@ -2,6 +2,7 @@ use std::collections::BTreeMap;
 
 use anyhow::Result;
 use serde_derive::Serialize;
+use serde_json::{Value, json};
 
 use crate::message::{Message, Status};
 use crate::reason::{Reason, ReasonKind, ReasonType};
@@ -27,6 +28,24 @@ impl<T> Deferred<T>
                 .push((k, *v));
         }
         s.into_values().flatten().map(|(k, v)| (k.clone(), v)).collect()
+    }
+
+    // {"kind": count} when the reason serializes to a string (non-verbose),
+    // [[reason, count], ...] otherwise (verbose reasons are objects and cannot be keys).
+    fn grouped_json(r: &BTreeMap<T, usize>) -> Value {
+        let arr: Vec<Value> = Self::convert_reasons(r)
+            .iter()
+            .map(|(reason, count)| json!([reason, count]))
+            .collect();
+        if arr.iter().all(|entry| entry[0].is_string()) {
+            let m: serde_json::Map<String, Value> = arr
+                .into_iter()
+                .map(|e| (e[0].as_str().unwrap().to_string(), e[1].clone()))
+                .collect();
+            Value::Object(m)
+        } else {
+            Value::Array(arr)
+        }
     }
 }
 
@@ -64,27 +83,27 @@ impl<T> ReasonStats for Deferred<T>
     }
 
     fn print_json_reasons(&self) -> Result<()> {
-        println!("{}", serde_json::to_string(&Self::convert_reasons(&self.reasons))?);
+        println!("{}", serde_json::to_string(&Self::grouped_json(&self.reasons))?);
         Ok(())
     }
 
     fn print_json_reasons_by_to_addr(&self) -> Result<()> {
-        let m: BTreeMap<String, Vec<(T, usize)>> =
+        let m: BTreeMap<String, Value> =
             self
                 .reasons_by_to
                 .iter()
-                .map(|(k, v)| (k.clone(), Self::convert_reasons(v)))
+                .map(|(k, v)| (k.clone(), Self::grouped_json(v)))
                 .collect();
         println!("{}", serde_json::to_string(&m)?);
         Ok(())
     }
 
     fn print_json_reasons_by_to_domain(&self) -> Result<()> {
-        let m: BTreeMap<String, Vec<(T, usize)>> =
+        let m: BTreeMap<String, Value> =
             self
                 .reasons_by_to_domain
                 .iter()
-                .map(|(k, v)| (k.clone(), Self::convert_reasons(v)))
+                .map(|(k, v)| (k.clone(), Self::grouped_json(v)))
                 .collect();
         println!("{}", serde_json::to_string(&m)?);
         Ok(())
@@ -159,5 +178,31 @@ impl<T> Deferred<T>
         }
 
         Ok(deferred)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn grouped_json_non_verbose_is_object() {
+        let mut r = BTreeMap::new();
+        r.insert(ReasonKind::OverQuotaPerm, 2);
+        r.insert(ReasonKind::NoSuchUser, 5);
+        assert_eq!(
+            Deferred::<ReasonKind>::grouped_json(&r),
+            json!({"OverQuotaPerm": 2, "NoSuchUser": 5})
+        );
+    }
+
+    #[test]
+    fn grouped_json_verbose_keeps_pairs() {
+        let mut r = BTreeMap::new();
+        r.insert(Reason::Other { message: "boom".into() }, 1);
+        assert_eq!(
+            Deferred::<Reason>::grouped_json(&r),
+            json!([[{"kind": "Other", "message": "boom"}, 1]])
+        );
     }
 }
