@@ -2,6 +2,7 @@ use std::collections::BTreeMap;
 use std::default::Default;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::path::{Path, PathBuf};
 
 use anyhow::{Result, anyhow};
 use clap::{Parser, Subcommand, Args};
@@ -38,12 +39,18 @@ enum Commands {
 
 #[derive(Args)]
 struct StatsArgs {
+    #[arg(value_name = "LOG_FILE")]
+    log_file: PathBuf,
+
     #[arg(short = 'f', long)]
     format: Option<String>,
 }
 
 #[derive(Args)]
 struct BouncedArgs {
+    #[arg(value_name = "LOG_FILE")]
+    log_file: PathBuf,
+
     #[arg(short = 'v', long)]
     verbose: bool,
     #[arg(short = 'f', long)]
@@ -54,6 +61,9 @@ struct BouncedArgs {
 
 #[derive(Args)]
 struct DeferredArgs {
+    #[arg(value_name = "LOG_FILE")]
+    log_file: PathBuf,
+
     #[arg(short = 'v', long)]
     verbose: bool,
     #[arg(short = 'f', long)]
@@ -62,13 +72,11 @@ struct DeferredArgs {
     group_by: Option<String>
 }
 
-fn main() -> Result<()> {
-    let cli = Cli::parse();
-
+fn load_messages(log_file: &Path) -> Result<BTreeMap<u64, Message>> {
     let mut logs_by_message_id = BTreeMap::<u64, Message>::new();
 
-    let log_file = File::open("data/mail.log")?;
-    let buf = BufReader::new(log_file);
+    let file = File::open(log_file)?;
+    let buf = BufReader::new(file);
     for line in buf.lines() {
         let line_str = line?;
         let (_, log_line) =
@@ -91,8 +99,15 @@ fn main() -> Result<()> {
         msg.analyze()?;
     }
 
+    Ok(logs_by_message_id)
+}
+
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+
     match cli.command {
         Commands::Stats(args) => {
+            let logs_by_message_id = load_messages(&args.log_file)?;
             let stats = cmd_stats::stats(&logs_by_message_id)?;
             match args.format {
                 Some(fmt) => {
@@ -106,6 +121,7 @@ fn main() -> Result<()> {
             }
         },
         Commands::Bounced(args) => {
+            let logs_by_message_id = load_messages(&args.log_file)?;
             let bounced: Box<dyn ReasonStats> =
                 if args.verbose {
                     Box::new(cmd_bounced::Bounced::<Reason>::new(&logs_by_message_id)?)
@@ -160,6 +176,7 @@ fn main() -> Result<()> {
             }
         },
         Commands::Deferred(args) => {
+            let logs_by_message_id = load_messages(&args.log_file)?;
             let deferred: Box<dyn ReasonStats> =
                 if args.verbose {
                     Box::new(cmd_deferred::Deferred::<Reason>::new(&logs_by_message_id)?)
