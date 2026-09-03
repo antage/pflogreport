@@ -9,6 +9,7 @@ use nom::{
     bytes::complete::{
         is_a,
         tag,
+        take,
         take_while_m_n,
         take_till1,
         take_until1,
@@ -19,6 +20,7 @@ use nom::{
         not_line_ending,
         line_ending,
         multispace1,
+        one_of,
     },
     combinator::{
         map,
@@ -89,7 +91,7 @@ fn parse_time(input: &[u8]) -> IResult<&[u8], NaiveTime> {
     )(input)
 }
 
-fn parse_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
+fn parse_syslog_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
     map_opt(
         tuple((
             parse_month,
@@ -111,6 +113,47 @@ fn parse_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
             )
         }
     )(input)
+}
+
+// 2026-08-02T00:00:29(.365828)(+00:00|Z) — the year is taken from the log line.
+fn parse_rfc3339_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
+    map_opt(
+        tuple((
+            nom::character::complete::u32,
+            tag("-"),
+            nom::character::complete::u32,
+            tag("-"),
+            nom::character::complete::u32,
+            tag("T"),
+            nom::character::complete::u8,
+            tag(":"),
+            nom::character::complete::u8,
+            tag(":"),
+            nom::character::complete::u8,
+            opt(
+                preceded(
+                    tag("."),
+                    take_while_m_n(1, 9, |c: u8| c.is_ascii_digit()),
+                ),
+            ),
+            alt((
+                tag("Z"),
+                preceded(one_of("+"), take(5usize)),
+            )),
+        )),
+        |(year, _, month, _, day, _, hour, _, minute, _, second, _, _)| {
+            let year = i32::try_from(year).ok()?;
+            NaiveDate::from_ymd_opt(year, month, day)
+                .and_then(|date| date.and_hms_opt(hour as u32, minute as u32, second as u32))
+        }
+    )(input)
+}
+
+fn parse_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
+    alt((
+        parse_rfc3339_timestamp,
+        parse_syslog_timestamp,
+    ))(input)
 }
 
 fn parse_hostname(input: &[u8]) -> IResult<&[u8], &[u8]> {
@@ -307,5 +350,38 @@ mod tests {
     #[test]
     fn parse_garbage_line_fails() {
         assert!(LogLine::parse(b"this is not a log line").is_err());
+    }
+
+    #[test]
+    fn parse_rfc3339_line_with_fraction_and_offset() {
+        let input = b"2026-08-02T00:00:29.365828+00:00 hc5 postfix/smtpd[3635194]: connect from host.example.com[192.0.2.240]";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.timestamp.year(), 2026);
+        assert_eq!(line.timestamp.month(), 8);
+        assert_eq!(line.timestamp.day(), 2);
+        assert_eq!(line.timestamp.hour(), 0);
+        assert_eq!(line.timestamp.minute(), 0);
+        assert_eq!(line.timestamp.second(), 29);
+        assert_eq!(line.hostname, "hc5");
+        assert_eq!(line.program, "postfix");
+        assert_eq!(line.subsystem, Some("smtpd".to_string()));
+        assert_eq!(line.pid, 3635194);
+        assert_eq!(line.message_id, None);
+        assert_eq!(line.content, "connect from host.example.com[192.0.2.240]");
+    }
+
+    #[test]
+    fn parse_rfc3339_line_with_z_and_message_id() {
+        let input = b"2026-08-02T01:03:05Z mail1 postfix/qmgr[1]: A1B2C3D4E5F6: from=<a@b.c>, size=1, nrcpt=1 (queue active)";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.timestamp.year(), 2026);
+        assert_eq!(line.timestamp.minute(), 3);
+        assert_eq!(line.message_id, Some(0xA1B2C3D4E5F6));
+        assert_eq!(line.content, "from=<a@b.c>, size=1, nrcpt=1 (queue active)");
+    }
+
+    #[test]
+    fn parse_rfc3339_invalid_date_fails() {
+        assert!(LogLine::parse(b"2026-02-30T00:00:00+00:00 s1 postfix/smtp[1]: hello").is_err());
     }
 }
