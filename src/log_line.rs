@@ -170,10 +170,14 @@ fn parse_message_id(input: &[u8]) -> IResult<&[u8], u64> {
 
 #[derive(Debug)]
 pub struct LogLine {
+    // Parsed as part of the line grammar; not consumed by analysis yet.
+    #[allow(dead_code)]
     pub timestamp: NaiveDateTime,
+    #[allow(dead_code)]
     pub hostname: String,
     pub program: String,
     pub subsystem: Option<String>,
+    #[allow(dead_code)]
     pub pid: u64,
     pub message_id: Option<u64>,
     pub content: String,
@@ -221,5 +225,87 @@ impl LogLine {
                 Some(log_line)
             }
         )(input)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::{Datelike, Timelike};
+
+    #[test]
+    fn parse_line_with_message_id() {
+        let input =
+            b"Dec 17 00:03:01 s1 postfix/qmgr[1859961]: A1B2C3D4E5: from=<sender@example.com>, size=1234, nrcpt=1 (queue active)\n";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.timestamp.month(), 12);
+        assert_eq!(line.timestamp.day(), 17);
+        assert_eq!(line.timestamp.hour(), 0);
+        assert_eq!(line.timestamp.minute(), 3);
+        assert_eq!(line.timestamp.second(), 1);
+        assert_eq!(line.hostname, "s1");
+        assert_eq!(line.program, "postfix");
+        assert_eq!(line.subsystem, Some("qmgr".to_string()));
+        assert_eq!(line.pid, 1859961);
+        assert_eq!(line.message_id, Some(0xA1B2C3D4E5));
+        assert_eq!(
+            line.content,
+            "from=<sender@example.com>, size=1234, nrcpt=1 (queue active)"
+        );
+    }
+
+    #[test]
+    fn parse_line_without_message_id() {
+        let input = b"Dec 17 00:02:44 s1 postfix/smtpd[1859960]: connect from host.example.com[192.0.2.240]";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.program, "postfix");
+        assert_eq!(line.subsystem, Some("smtpd".to_string()));
+        assert_eq!(line.pid, 1859960);
+        assert_eq!(line.message_id, None);
+        assert_eq!(line.content, "connect from host.example.com[192.0.2.240]");
+    }
+
+    #[test]
+    fn parse_line_with_twelve_digit_message_id() {
+        let input = b"Dec 17 00:03:01 s1 postfix/smtp[123]: A1B2C3D4E5F6: to=<rcpt@example.com>";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.message_id, Some(0xA1B2C3D4E5F6));
+        assert_eq!(line.content, "to=<rcpt@example.com>");
+    }
+
+    #[test]
+    fn parse_line_with_single_digit_day() {
+        let input = b"Jan  5 12:34:56 mail1 postfix/master[123]: daemon running";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.timestamp.month(), 1);
+        assert_eq!(line.timestamp.day(), 5);
+        assert_eq!(line.hostname, "mail1");
+        assert_eq!(line.subsystem, Some("master".to_string()));
+        assert_eq!(line.content, "daemon running");
+    }
+
+    #[test]
+    fn parse_line_without_subsystem() {
+        let input = b"Dec 17 00:02:44 s1 rsyslogd[12345]: some random message";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.program, "rsyslogd");
+        assert_eq!(line.subsystem, None);
+        assert_eq!(line.message_id, None);
+        assert_eq!(line.content, "some random message");
+    }
+
+    #[test]
+    fn parse_invalid_day_fails() {
+        assert!(LogLine::parse(b"Dec 32 00:00:00 s1 postfix/smtp[1]: hello").is_err());
+    }
+
+    #[test]
+    fn parse_invalid_time_fails() {
+        assert!(LogLine::parse(b"Dec 17 25:00:00 s1 postfix/smtp[1]: hello").is_err());
+    }
+
+    #[test]
+    fn parse_garbage_line_fails() {
+        assert!(LogLine::parse(b"this is not a log line").is_err());
     }
 }
