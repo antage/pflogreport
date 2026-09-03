@@ -2,15 +2,17 @@
 
 A CLI tool in Rust for parsing Postfix mail logs and finding "broken" recipient addresses.
 
-It reads a Postfix syslog, reconstructs each mail message by its queue ID, determines the
+It reads a Postfix mail log, reconstructs each mail message by its queue ID, determines the
 final delivery status (`sent`, `deferred`, `bounced`), and classifies delivery failure
 reasons into named categories (unknown user, bad MX, DNS failure, over-quota, spam
 rejection, blocklists, etc.).
 
 ## How it works
 
-1. Every line of the log is parsed as a syslog record:
-   `Mon DD HH:MM:SS host program/subsystem[pid]: [msgid:] content`.
+1. Every line of the log is parsed as a Postfix log record with one of two timestamp
+   formats:
+   - classic syslog: `Mon DD HH:MM:SS host program/subsystem[pid]: [msgid:] content`
+   - RFC 3339: `YYYY-MM-DDTHH:MM:SS.frac+HH:MM host program/subsystem[pid]: [msgid:] content`
 2. Lines are grouped into messages by the Postfix message ID (10-12 hex digits that
    postfix prefixes to its log lines).
 3. For each message the tool extracts what it can from the relevant subsystems:
@@ -57,12 +59,14 @@ The log file to analyze is passed as a positional argument:
 pflogreport <command> [OPTIONS] <LOG_FILE>
 ```
 
-Expected log format (standard Postfix syslog, e.g. from `/var/log/mail.log`):
+Expected log format (standard Postfix mail log, e.g. from `/var/log/mail.log` or from
+the journal):
 
 ```
 Dec 17 00:02:44 s1 postfix/smtpd[1859960]: connect from host.example.com[192.0.2.240]
 Dec 17 00:03:01 s1 postfix/qmgr[1859961]: A1B2C3D4E5: from=<sender@example.com>, size=1234, nrcpt=1 (queue active)
 Dec 17 00:03:05 s1 postfix/smtp[1859962]: A1B2C3D4E5: to=<rcpt@example.com>, relay=mx.example.com[192.0.2.34]:25, delay=4, delays=0.01/0.02/0.4/3.5, dsn=5.1.1, status=bounced (host mx.example.com[192.0.2.34] said: 550 5.1.1 <rcpt@example.com>: user not found (in reply to RCPT TO command))
+2026-08-02T00:00:29.365828+00:00 s1 postfix/smtp[1859963]: 6F7A8B9C0D: to=<rcpt2@example.com>, relay=mx2.example.com[203.0.113.10]:25, delay=2, delays=0.01/0.02/0.1/0.9, dsn=2.0.0, status=sent (250 2.0.0 OK: queued)
 ```
 
 ### Commands
@@ -88,13 +92,13 @@ spot broken addresses.
 ```
 $ pflogreport bounced data/mail.log
 All reasons:
-	         8 DNSError
-	      5466 NoSuchUser
-	        40 DisabledUser
-	       118 UnsolicitedMessageError
 	         7 AccessDenied
 	      4745 BadMX
+	         8 DNSError
+	        40 DisabledUser
+	      5466 NoSuchUser
 	         6 Other
+	       118 UnsolicitedMessageError
 ```
 
 Group by recipient address (the actual broken addresses):
@@ -106,8 +110,6 @@ Reasons by TO address:
 		         2 NoSuchUser
 	second@example.com:
 		         2 NoSuchUser
-	third@example.com:
-		         2 UnsolicitedMessageError
 	...
 ```
 
@@ -116,12 +118,10 @@ Group by recipient domain (to find broken domains, e.g. domains without MX):
 ```
 $ pflogreport bounced -g domain data/mail.log
 Reasons by TO domain:
-	mail.example.com:
-		      5386 NoSuchUser
 	example.com:
+		      5386 NoSuchUser
+	mail.example.com:
 		      4743 BadMX
-	shop.example.com:
-		         2 NoSuchUser
 	...
 ```
 
@@ -130,9 +130,8 @@ Verbose mode prints the full classified reason, including the remote host and IP
 ```
 $ pflogreport bounced -v data/mail.log
 All reasons:
-	       198 NoSuchUser { hostname: "mx.example.com", ipaddr: 192.0.2.26 }
-	       285 NoSuchUser { hostname: "mx.example.com", ipaddr: 192.0.2.27 }
-	         2 DNSError { name: "missing.example.com", _type: "A" }
+	         2 DNSError { name: "bad.example.com", _type: "A" }
+	         1 NoSuchUser { hostname: "mx.example.com", ipaddr: 192.0.2.34 }
 	...
 ```
 
@@ -145,7 +144,8 @@ still being retried).
 $ pflogreport deferred data/mail.log
 All reasons:
 	         2 DNSError
-	         6 Other
+	         4 OverQuotaTemp
+	         2 Other
 ```
 
 ### Options
@@ -158,21 +158,31 @@ All reasons:
 
 #### JSON output
 
-JSON output is a flat structure with counts:
+Without `-v`, JSON output is a plain object mapping reason kinds to counts; grouped
+output maps addresses (or domains) to the same kind-to-count objects:
 
 ```
 $ pflogreport stats -f json data/mail.log
 {"unknown":39,"sent":610,"deferred":8,"bounced":10390}
 
 $ pflogreport bounced -f json data/mail.log
-[["DNSError",8],["NoSuchUser",5466],["DisabledUser",40],["UnsolicitedMessageError",118],["AccessDenied",7],["BadMX",4745],["Other",6]]
+{"AccessDenied":7,"BadMX":4745,"DNSError":8,"DisabledUser":40,"NoSuchUser":5466,"Other":6,"UnsolicitedMessageError":118}
 
 $ pflogreport bounced -f json -g addr data/mail.log
-{"second@example.com":[["NoSuchUser",2]],"third@example.com":[["UnsolicitedMessageError",2]],...}
+{"first@example.com":{"NoSuchUser":2},"second@example.com":{"NoSuchUser":2},...}
+
+$ pflogreport bounced -f json -g domain data/mail.log
+{"example.com":{"NoSuchUser":5386},"mail.example.com":{"BadMX":4743},...}
 ```
 
-Each entry is a `[reason, count]` pair; grouped output maps addresses (or domains) to
-their reason lists.
+With `-v` a reason is a full object (kind plus attributes like the remote host and IP)
+and cannot be used as an object key, so the output is an array of `[reason, count]`
+pairs:
+
+```
+$ pflogreport bounced -v -f json data/mail.log
+[[{"_type":"A","kind":"DNSError","name":"bad.example.com"},2],[{"hostname":"mx.example.com","ipaddr":"192.0.2.34","kind":"NoSuchUser"},1],...]
+```
 
 ### Reason categories
 
@@ -197,8 +207,9 @@ their reason lists.
 
 ## Notes and limitations
 
-- Syslog timestamps do not include the year, so the parser assumes the **current**
-  local year for all entries.
+- Classic syslog timestamps do not include the year, so the parser assumes the
+  **current** local year for such entries. RFC 3339 timestamps include the year; their
+  timezone offset is not applied (the time is used as written).
 - `-f` values other than `json` and `-g` values other than `addr`/`domain` silently
   fall back to the default behavior (console output / no grouping).
 - Only `postfix` program lines are analyzed; other daemons in the same log file are
