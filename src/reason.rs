@@ -81,7 +81,9 @@ pub enum Reason {
     BadMX {
         domain: String,
     },
-    Other(String),
+    Other {
+        message: String,
+    },
 }
 
 impl ReasonType for Reason {
@@ -626,5 +628,176 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         });
     }
 
-    Ok(Reason::Other(s.to_string()))
+    Ok(Reason::Other { message: s.to_string() })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    fn all_reasons() -> Vec<Reason> {
+        vec![
+            Reason::DNSError { name: "example.com".into(), _type: "MX".into() },
+            Reason::ConnectionTimedOut {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+                port: 25,
+            },
+            Reason::ConnectionRefused {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+                port: 25,
+            },
+            Reason::LostConnection {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+                _while: "RCPT TO <rcpt@example.com>".into(),
+            },
+            Reason::OverQuotaTemp {
+                hostname: "mx1.example.com".into(),
+                ipaddr: "192.0.2.35".parse().unwrap(),
+            },
+            Reason::OverQuotaPerm {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::NoSuchUser {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::DisabledUser {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::UnsolicitedMessageError {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.35".parse().unwrap(),
+                from_ipaddr: None,
+            },
+            Reason::AccessDenied {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::CustomDomainPolicy {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::BlockList {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::RelayAccessDenied {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::BadReverseDNS {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            },
+            Reason::BadMX { domain: "example.com".into() },
+            Reason::Other { message: "unrecognized failure text".into() },
+        ]
+    }
+
+    #[test]
+    fn all_reason_variants_serialize_with_kind_tag() {
+        for reason in all_reasons() {
+            let value = serde_json::to_value(reason.clone())
+                .expect("all Reason variants must be serializable");
+            let expected_kind = format!("{:?}", ReasonKind::from(reason.clone()));
+            assert_eq!(value["kind"], json!(expected_kind));
+        }
+    }
+
+    #[test]
+    fn other_variant_serializes_as_tagged_map_with_message() {
+        let value = serde_json::to_value(Reason::Other { message: "boom".into() }).unwrap();
+        assert_eq!(value, json!({ "kind": "Other", "message": "boom" }));
+    }
+
+    #[test]
+    fn verbose_json_shape_with_other_serializes() {
+        // Exact shape used by Bounced/Deferred print_json_reasons in verbose mode:
+        // Vec<(Reason, usize)>. Previously failed for Other(newtype String).
+        let items: Vec<(Reason, usize)> = all_reasons().into_iter().zip(1..).collect();
+        let s = serde_json::to_string(&items).expect("verbose JSON output must serialize");
+        assert!(s.contains(r#""kind":"Other""#));
+        assert!(s.contains(r#""message":"unrecognized failure text""#));
+    }
+
+    #[test]
+    fn reason_kind_serializes_as_plain_string() {
+        // Non-verbose JSON output shape: Vec<(ReasonKind, usize)>.
+        let items: Vec<(ReasonKind, usize)> = vec![(ReasonKind::DNSError, 8), (ReasonKind::Other, 6)];
+        assert_eq!(
+            serde_json::to_string(&items).unwrap(),
+            r#"[["DNSError",8],["Other",6]]"#
+        );
+    }
+
+    #[test]
+    fn parse_dns_error() {
+        let reason = parse_reason(
+            "Host or domain name not found. Name service error for name=missing.example.com type=A: Host not found",
+        ).unwrap();
+        assert_eq!(reason, Reason::DNSError { name: "missing.example.com".into(), _type: "A".into() });
+    }
+
+    #[test]
+    fn parse_connection_timed_out() {
+        let reason = parse_reason(
+            "connect to mx.example.com[192.0.2.1]:25: Connection timed out",
+        ).unwrap();
+        assert_eq!(
+            reason,
+            Reason::ConnectionTimedOut {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+                port: 25,
+            }
+        );
+    }
+
+    #[test]
+    fn parse_no_such_user() {
+        let reason = parse_reason(
+            "host mx.example.com[192.0.2.1] said: 550 5.1.1 <rcpt@example.com>: user not found (in reply to RCPT TO command)",
+        ).unwrap();
+        assert_eq!(
+            reason,
+            Reason::NoSuchUser {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            }
+        );
+    }
+
+    #[test]
+    fn parse_over_quota_perm() {
+        let reason = parse_reason(
+            "host mx.example.com[192.0.2.1] said: 552 5.2.2 <rcpt@example.com>: user is over quota (in reply to RCPT TO command)",
+        ).unwrap();
+        assert_eq!(
+            reason,
+            Reason::OverQuotaPerm {
+                hostname: "mx.example.com".into(),
+                ipaddr: "192.0.2.1".parse().unwrap(),
+            }
+        );
+    }
+
+    #[test]
+    fn parse_bad_mx() {
+        let reason = parse_reason("Domain example.com does not accept mail (nullMX)").unwrap();
+        assert_eq!(reason, Reason::BadMX { domain: "example.com".into() });
+    }
+
+    #[test]
+    fn unknown_reason_kept_verbatim_in_other() {
+        let input =
+            "host mx.example.com[192.0.2.1] said: 554 5.9.9 something brand new (in reply to RCPT TO command)";
+        let reason = parse_reason(input).unwrap();
+        assert_eq!(reason, Reason::Other { message: input.to_string() });
+    }
 }
