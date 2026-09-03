@@ -43,6 +43,7 @@ struct StatsArgs {
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
 
+    /// Output format: json (default: console)
     #[arg(short = 'f', long)]
     format: Option<String>,
 }
@@ -54,8 +55,10 @@ struct BouncedArgs {
 
     #[arg(short = 'v', long)]
     verbose: bool,
+    /// Output format: json (default: console)
     #[arg(short = 'f', long)]
     format: Option<String>,
+    /// Group reasons by: addr, domain (default: no grouping)
     #[arg(short = 'g', long)]
     group_by: Option<String>
 }
@@ -67,8 +70,10 @@ struct DeferredArgs {
 
     #[arg(short = 'v', long)]
     verbose: bool,
+    /// Output format: json (default: console)
     #[arg(short = 'f', long)]
     format: Option<String>,
+    /// Group reasons by: addr, domain (default: no grouping)
     #[arg(short = 'g', long)]
     group_by: Option<String>
 }
