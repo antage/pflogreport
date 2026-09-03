@@ -2,8 +2,14 @@
 name = "pflogreport"
 version = "0.1.0"
 edition = "2024"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Analyze Postfix mail logs: reconstruct messages by queue ID, report delivery status, and classify bounce and defer reasons."
+authors = ["Anton Ageev <antage@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/antage/pflogreport"
+readme = "README.md"
+rust-version = "1.85"
+keywords = ["postfix", "mail", "log", "bounce", "cli"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 anyhow = "1"

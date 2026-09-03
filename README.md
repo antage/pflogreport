@@ -214,3 +214,7 @@ $ pflogreport bounced -v -f json data/mail.log
   fall back to the default behavior (console output / no grouping).
 - Only `postfix` program lines are analyzed; other daemons in the same log file are
   ignored.
+
+## License
+
+MIT — see the [LICENSE](LICENSE) file.
