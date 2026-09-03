@@ -296,3 +296,170 @@ fn parse_status(input: &str) -> IResult<&str, (String, String)> {
         }
     )(input)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::NaiveDateTime;
+
+    fn test_line(subsystem: Option<&str>, content: &str) -> LogLine {
+        LogLine {
+            timestamp: NaiveDateTime::MIN,
+            hostname: "s1".to_string(),
+            program: "postfix".to_string(),
+            subsystem: subsystem.map(|s| s.to_string()),
+            pid: 1,
+            message_id: Some(0xA1B2C3D4E5),
+            content: content.to_string(),
+        }
+    }
+
+    fn test_message(lines: Vec<LogLine>) -> Message {
+        Message {
+            log_lines: lines,
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn analyze_full_sent_message() {
+        let mut msg = test_message(vec![
+            test_line(Some("qmgr"), "from=<sender@example.com>, size=1234, nrcpt=1 (queue active)"),
+            test_line(Some("smtpd"), "client=mail.example.com[192.0.2.4]"),
+            test_line(Some("cleanup"), "message-id=<20260101.000001@example.com>"),
+            test_line(
+                Some("smtp"),
+                "to=<rcpt@example.com>, relay=mx.example.com[192.0.2.34]:25, delay=4, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 12345)",
+            ),
+        ]);
+        msg.analyze().unwrap();
+        assert!(msg.is_in_queue);
+        assert_eq!(msg.from, Some("sender@example.com".to_string()));
+        assert_eq!(msg.size, Some(1234));
+        assert_eq!(msg.client, Some(("mail.example.com".to_string(), "192.0.2.4".to_string())));
+        assert_eq!(msg.message_id, Some("20260101.000001@example.com".to_string()));
+        assert_eq!(msg.to, Some("rcpt@example.com".to_string()));
+        assert_eq!(
+            msg.status,
+            Status::Sent {
+                reason: Reason::Other {
+                    message: "250 2.0.0 Ok: queued as 12345".to_string(),
+                },
+            }
+        );
+    }
+
+    #[test]
+    fn analyze_bounced_message() {
+        let mut msg = test_message(vec![
+            test_line(Some("qmgr"), "from=<sender@example.com>, size=100, nrcpt=1 (queue active)"),
+            test_line(
+                Some("smtp"),
+                "to=<rcpt@bad.example.com>, relay=mx.bad.example.com[192.0.2.7]:25, delay=20, dsn=5.1.1, status=bounced (host mx.bad.example.com[192.0.2.7] said: 550 5.1.1 <rcpt@bad.example.com>: user not found (in reply to RCPT TO command))",
+            ),
+        ]);
+        msg.analyze().unwrap();
+        assert_eq!(
+            msg.status,
+            Status::Bounced {
+                reason: Reason::NoSuchUser {
+                    hostname: "mx.bad.example.com".to_string(),
+                    ipaddr: "192.0.2.7".parse().unwrap(),
+                },
+            }
+        );
+    }
+
+    #[test]
+    fn analyze_deferred_message() {
+        let mut msg = test_message(vec![test_line(
+            Some("smtp"),
+            "to=<rcpt@example.com>, relay=mx.example.com[192.0.2.34]:25, delay=300, dsn=4.4.1, status=deferred (connect to mx.example.com[192.0.2.34]:25: Connection timed out)",
+        )]);
+        msg.analyze().unwrap();
+        assert_eq!(
+            msg.status,
+            Status::Deferred {
+                reason: Reason::ConnectionTimedOut {
+                    hostname: "mx.example.com".to_string(),
+                    ipaddr: "192.0.2.34".parse().unwrap(),
+                    port: 25,
+                },
+            }
+        );
+    }
+
+    #[test]
+    fn analyze_removed_line_marks_not_in_queue() {
+        let mut msg = test_message(vec![
+            test_line(Some("qmgr"), "from=<sender@example.com>, size=100, nrcpt=1 (queue active)"),
+            test_line(Some("qmgr"), "removed"),
+        ]);
+        msg.analyze().unwrap();
+        assert!(!msg.is_in_queue);
+        assert_eq!(msg.status, Status::Unknown);
+    }
+
+    #[test]
+    fn analyze_ignores_non_postfix_lines() {
+        let mut msg = test_message(vec![
+            {
+                let mut l = test_line(Some("smtp"), "junk without fields");
+                l.program = "rsyslogd".to_string();
+                l
+            },
+            test_line(Some("smtp"), "to=<rcpt@example.com>, status=sent (250 2.0.0 Ok)"),
+        ]);
+        msg.analyze().unwrap();
+        assert!(msg.is_in_queue);
+        assert_eq!(
+            msg.status,
+            Status::Sent {
+                reason: Reason::Other {
+                    message: "250 2.0.0 Ok".to_string(),
+                },
+            }
+        );
+    }
+
+    #[test]
+    fn analyze_last_smtp_status_wins() {
+        let mut msg = test_message(vec![
+            test_line(
+                Some("smtp"),
+                "to=<rcpt@example.com>, relay=mx.example.com[192.0.2.34]:25, delay=300, dsn=4.4.1, status=deferred (connect to mx.example.com[192.0.2.34]:25: Connection timed out)",
+            ),
+            test_line(
+                Some("smtp"),
+                "to=<rcpt@example.com>, relay=mx.bad.example.com[192.0.2.7]:25, delay=20, dsn=5.1.1, status=bounced (host mx.bad.example.com[192.0.2.7] said: 550 5.1.1 <rcpt@example.com>: user not found (in reply to RCPT TO command))",
+            ),
+        ]);
+        msg.analyze().unwrap();
+        assert_eq!(
+            msg.status,
+            Status::Bounced {
+                reason: Reason::NoSuchUser {
+                    hostname: "mx.bad.example.com".to_string(),
+                    ipaddr: "192.0.2.7".parse().unwrap(),
+                },
+            }
+        );
+    }
+
+    #[test]
+    fn analyze_unknown_smtp_status_errors() {
+        let mut msg = test_message(vec![test_line(
+            Some("smtp"),
+            "to=<rcpt@example.com>, status=expired (message expired)",
+        )]);
+        assert!(msg.analyze().is_err());
+    }
+
+    #[test]
+    fn analyze_empty_message_stays_unknown() {
+        let mut msg = test_message(vec![]);
+        msg.analyze().unwrap();
+        assert!(!msg.is_in_queue);
+        assert_eq!(msg.status, Status::Unknown);
+    }
+}
