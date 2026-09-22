@@ -67,7 +67,7 @@ impl Message {
                         Some("qmgr") => {
                             if line.content == "removed" {
                                 self.is_in_queue = false;
-                            } else {
+                            } else if line.content.starts_with("from=") {
                                 let (_, fields) =
                                     parse_fields(&line.content)
                                         .map_err(|err| {
@@ -97,42 +97,46 @@ impl Message {
                             }
                         },
                         Some("smtpd") => {
-                            let (_, fields) =
-                                parse_fields(&line.content)
-                                    .map_err(|err| {
-                                        anyhow!("postfix/smtpd fields parsing error: {}", err)
-                                    })?;
-                            for (name, value) in fields {
-                                match name.as_ref() {
-                                    "client" => {
-                                        let (_, (hostname, ip_addr)) =
-                                            parse_client(&value)
-                                                .map_err(|err| {
-                                                    anyhow!("postfix/smtpd client field parsing error: {}", err)
-                                                })?;
-                                        self.client = Some((hostname, ip_addr));
-                                    },
-                                    _ => {},
+                            if line.content.starts_with("client=") {
+                                let (_, fields) =
+                                    parse_fields(&line.content)
+                                        .map_err(|err| {
+                                            anyhow!("postfix/smtpd fields parsing error: {}", err)
+                                        })?;
+                                for (name, value) in fields {
+                                    match name.as_ref() {
+                                        "client" => {
+                                            let (_, (hostname, ip_addr)) =
+                                                parse_client(&value)
+                                                    .map_err(|err| {
+                                                        anyhow!("postfix/smtpd client field parsing error: {}", err)
+                                                    })?;
+                                            self.client = Some((hostname, ip_addr));
+                                        },
+                                        _ => {},
+                                    }
                                 }
                             }
                         },
                         Some("cleanup") => {
-                            let (_, fields) =
-                                parse_fields(&line.content)
-                                    .map_err(|err| {
-                                        anyhow!("postfix/cleanup fields parsing error: {}", err)
-                                    })?;
-                            for (name, value) in fields {
-                                match name.as_ref() {
-                                    "message-id" => {
-                                        let (_, message_id) =
-                                            parse_email(&value)
-                                                .map_err(|err| {
-                                                    anyhow!("postfix/cleanup message-id field parsing error: {}", err)
-                                                })?;
-                                        self.message_id = Some(message_id);
-                                    },
-                                    _ => {},
+                            if line.content.starts_with("message-id=") {
+                                let (_, fields) =
+                                    parse_fields(&line.content)
+                                        .map_err(|err| {
+                                            anyhow!("postfix/cleanup fields parsing error: {}", err)
+                                        })?;
+                                for (name, value) in fields {
+                                    match name.as_ref() {
+                                        "message-id" => {
+                                            let (_, message_id) =
+                                                parse_email(&value)
+                                                    .map_err(|err| {
+                                                        anyhow!("postfix/cleanup message-id field parsing error: {}", err)
+                                                    })?;
+                                            self.message_id = Some(message_id);
+                                        },
+                                        _ => {},
+                                    }
                                 }
                             }
                         },
@@ -398,6 +402,35 @@ mod tests {
         msg.analyze().unwrap();
         assert!(!msg.is_in_queue);
         assert_eq!(msg.status, Status::Unknown);
+    }
+
+    #[test]
+    fn analyze_ignores_qmgr_skipped_line() {
+        let mut msg = test_message(vec![
+            test_line(Some("qmgr"), "from=<sender@example.com>, size=100, nrcpt=1 (queue active)"),
+            test_line(Some("qmgr"), "skipped, still being delivered"),
+        ]);
+        msg.analyze().unwrap();
+        assert!(msg.is_in_queue);
+        assert_eq!(msg.from, Some("sender@example.com".to_string()));
+        assert_eq!(msg.size, Some(100));
+    }
+
+    #[test]
+    fn analyze_ignores_non_field_smtpd_and_cleanup_lines() {
+        let mut msg = test_message(vec![
+            test_line(Some("smtpd"), "warning: TLS handshake failed"),
+            test_line(Some("cleanup"), "unexpected line without fields"),
+            test_line(
+                Some("smtp"),
+                "to=<rcpt@example.com>, status=sent (250 2.0.0 Ok)",
+            ),
+        ]);
+        msg.analyze().unwrap();
+        assert!(msg.is_in_queue);
+        assert!(msg.client.is_none());
+        assert!(msg.message_id.is_none());
+        assert!(matches!(msg.status, Status::Sent { .. }));
     }
 
     #[test]
