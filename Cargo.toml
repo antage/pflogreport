@@ -1,6 +1,6 @@
 [package]
 name = "pflogreport"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 description = "Analyze Postfix mail logs: reconstruct messages by queue ID, report delivery status, and classify bounce and defer reasons."
 authors = ["Anton Ageev <antage@gmail.com>"]
@@ -16,6 +16,7 @@ include = [
     "Cargo.lock",
     "LICENSE",
     "README.md",
+    "CHANGELOG.md",
 ]
 
 [dependencies]
