@@ -53,11 +53,21 @@ install -m 0755 target/release/pflogreport /usr/local/bin/
 
 ## Usage
 
-The log file to analyze is passed as a positional argument:
+The log file to analyze is passed as a positional argument. Pass `-` to read the log
+from stdin instead of a file:
 
 ```sh
 pflogreport <command> [OPTIONS] <LOG_FILE>
 ```
+
+```sh
+pflogreport bounced /var/log/mail.log
+zcat /var/log/mail.log.1.gz | pflogreport bounced -
+```
+
+When piping several rotated logs into one stream, keep them in chronological order
+(oldest first): the lines of a single queue ID are joined across the whole input, and a
+message can be split by a rotation.
 
 Expected log format (standard Postfix mail log, e.g. from `/var/log/mail.log` or from
 the journal):

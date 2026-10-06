@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 use std::default::Default;
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Read, stdin};
 use std::path::{Path, PathBuf};
 
 use anyhow::{Result, anyhow};
@@ -40,6 +40,7 @@ enum Commands {
 
 #[derive(Args)]
 struct StatsArgs {
+    /// Log file to analyze, or "-" to read stdin
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
 
@@ -50,6 +51,7 @@ struct StatsArgs {
 
 #[derive(Args)]
 struct BouncedArgs {
+    /// Log file to analyze, or "-" to read stdin
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
 
@@ -65,6 +67,7 @@ struct BouncedArgs {
 
 #[derive(Args)]
 struct DeferredArgs {
+    /// Log file to analyze, or "-" to read stdin
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
 
@@ -80,12 +83,31 @@ struct DeferredArgs {
 
 const LINE_CHUNK_SIZE: usize = 100_000;
 
-fn load_messages(log_file: &Path) -> Result<BTreeMap<u64, Message>> {
+struct LogInput {
+    name: String,
+    reader: BufReader<Box<dyn Read>>,
+}
+
+// "-" means stdin, anything else is a file path.
+fn open_log(path: &Path) -> Result<LogInput> {
+    if path == Path::new("-") {
+        Ok(LogInput {
+            name: "<stdin>".to_string(),
+            reader: BufReader::new(Box::new(stdin())),
+        })
+    } else {
+        Ok(LogInput {
+            name: path.display().to_string(),
+            reader: BufReader::new(Box::new(File::open(path)?)),
+        })
+    }
+}
+
+fn load_messages(input: LogInput) -> Result<BTreeMap<u64, Message>> {
     let mut logs_by_message_id = BTreeMap::<u64, Message>::new();
 
-    let file = File::open(log_file)?;
-    let buf = BufReader::new(file);
-    let mut lines = buf.lines();
+    let LogInput { name, reader } = input;
+    let mut lines = reader.lines();
 
     loop {
         let chunk: Vec<String> = lines
@@ -103,7 +125,7 @@ fn load_messages(log_file: &Path) -> Result<BTreeMap<u64, Message>> {
 
         for (line_str, result) in chunk.iter().zip(parsed) {
             let log_line = result
-                .map_err(|err| anyhow!("Can't parse log file: {:?}. At line: \"{}\"", err, line_str))?
+                .map_err(|err| anyhow!("Can't parse log file \"{}\": {:?}. At line: \"{}\"", name, err, line_str))?
                 .1;
             if let Some(message_id) = log_line.message_id {
                 if let Some(entry) = logs_by_message_id.get_mut(&message_id) {
@@ -135,7 +157,7 @@ fn main() -> Result<()> {
 
     match cli.command {
         Commands::Stats(args) => {
-            let logs_by_message_id = load_messages(&args.log_file)?;
+            let logs_by_message_id = load_messages(open_log(&args.log_file)?)?;
             let stats = cmd_stats::stats(&logs_by_message_id)?;
             match args.format {
                 Some(fmt) => {
@@ -149,7 +171,7 @@ fn main() -> Result<()> {
             }
         },
         Commands::Bounced(args) => {
-            let logs_by_message_id = load_messages(&args.log_file)?;
+            let logs_by_message_id = load_messages(open_log(&args.log_file)?)?;
             let bounced: Box<dyn ReasonStats> =
                 if args.verbose {
                     Box::new(cmd_bounced::Bounced::<Reason>::new(&logs_by_message_id)?)
@@ -204,7 +226,7 @@ fn main() -> Result<()> {
             }
         },
         Commands::Deferred(args) => {
-            let logs_by_message_id = load_messages(&args.log_file)?;
+            let logs_by_message_id = load_messages(open_log(&args.log_file)?)?;
             let deferred: Box<dyn ReasonStats> =
                 if args.verbose {
                     Box::new(cmd_deferred::Deferred::<Reason>::new(&logs_by_message_id)?)
