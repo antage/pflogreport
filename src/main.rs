@@ -47,7 +47,7 @@ struct StatsArgs {
     log_file: PathBuf,
 
     /// Output format: json (default: console)
-    #[arg(short = 'f', long)]
+    #[arg(short = 'f', long, value_parser = ["json"])]
     format: Option<String>,
 }
 
@@ -60,11 +60,11 @@ struct BouncedArgs {
     #[arg(short = 'v', long)]
     verbose: bool,
     /// Output format: json (default: console)
-    #[arg(short = 'f', long)]
+    #[arg(short = 'f', long, value_parser = ["json"])]
     format: Option<String>,
     /// Group reasons by: addr, domain (default: no grouping)
-    #[arg(short = 'g', long)]
-    group_by: Option<String>
+    #[arg(short = 'g', long, value_parser = ["addr", "domain"])]
+    group_by: Option<String>,
 }
 
 #[derive(Args)]
@@ -76,11 +76,11 @@ struct DeferredArgs {
     #[arg(short = 'v', long)]
     verbose: bool,
     /// Output format: json (default: console)
-    #[arg(short = 'f', long)]
+    #[arg(short = 'f', long, value_parser = ["json"])]
     format: Option<String>,
     /// Group reasons by: addr, domain (default: no grouping)
-    #[arg(short = 'g', long)]
-    group_by: Option<String>
+    #[arg(short = 'g', long, value_parser = ["addr", "domain"])]
+    group_by: Option<String>,
 }
 
 const LINE_CHUNK_SIZE: usize = 100_000;
@@ -295,4 +295,47 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn parse(cmd: &str, flag: &str, value: &str) -> clap::error::Result<Cli> {
+        Cli::try_parse_from(["pflogreport", cmd, "-", flag, value])
+    }
+
+    #[test]
+    fn options_accept_the_documented_values() {
+        for (cmd, flag, value) in [
+            ("stats", "-f", "json"),
+            ("bounced", "-f", "json"),
+            ("deferred", "-f", "json"),
+            ("bounced", "-g", "addr"),
+            ("bounced", "-g", "domain"),
+            ("deferred", "-g", "addr"),
+            ("deferred", "-g", "domain"),
+        ] {
+            assert!(
+                parse(cmd, flag, value).is_ok(),
+                "{cmd} {flag} {value} must parse"
+            );
+        }
+    }
+
+    #[test]
+    fn options_reject_an_unknown_value() {
+        for (cmd, flag, value) in [
+            ("stats", "-f", "xml"),
+            ("bounced", "-f", "xml"),
+            ("deferred", "-f", "xml"),
+            ("bounced", "-g", "wrong"),
+            ("deferred", "-g", "wrong"),
+        ] {
+            match parse(cmd, flag, value) {
+                Err(err) => assert_eq!(err.kind(), clap::error::ErrorKind::InvalidValue),
+                Ok(_) => panic!("{cmd} {flag} {value} must be rejected"),
+            }
+        }
+    }
 }

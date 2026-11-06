@@ -12,6 +12,9 @@ versioning.
   reply in another encoding (a Chinese MX answering in GBK, for example) used to fail the
   whole run with `stream did not contain valid UTF-8`. Such bytes are now decoded with the
   Unicode replacement character and the line stays in the report.
+- The `-f` and `-g` options accepted any value: `-f xml` and `-g wrong` silently produced the
+  default report instead of failing. Both values are now checked by the argument parser,
+  which rejects anything outside the documented set and lists it in `--help`.
 
 ### Security
 
