@@ -13,6 +13,13 @@ versioning.
   whole run with `stream did not contain valid UTF-8`. Such bytes are now decoded with the
   Unicode replacement character and the line stays in the report.
 
+### Security
+
+- Lockfile update that clears `cargo audit`. `time` 0.1 is gone from the dependency tree
+  (RUSTSEC-2020-0071, a potential segfault) since newer chrono no longer pulls it in through
+  the unused `oldtime` feature; `anyhow` and `anstream` moved past their unsoundness
+  advisories (RUSTSEC-2026-0190 and RUSTSEC-2024-0404).
+
 ## [0.2.0] - 2026-10-06
 
 ### Added
