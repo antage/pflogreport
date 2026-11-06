@@ -4,7 +4,13 @@ All notable changes to this project are documented in this file. The format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), the versions follow semantic
 versioning.
 
-## [Unreleased]
+## [0.3.0] - 2026-11-06
+
+### Changed
+
+- The `-f` and `-g` options reject values outside the documented set. `-f xml` and `-g wrong`
+  used to silently produce the default report; now they fail with an error naming the accepted
+  values, which `--help` lists as well.
 
 ### Fixed
 
@@ -12,9 +18,6 @@ versioning.
   reply in another encoding (a Chinese MX answering in GBK, for example) used to fail the
   whole run with `stream did not contain valid UTF-8`. Such bytes are now decoded with the
   Unicode replacement character and the line stays in the report.
-- The `-f` and `-g` options accepted any value: `-f xml` and `-g wrong` silently produced the
-  default report instead of failing. Both values are now checked by the argument parser,
-  which rejects anything outside the documented set and lists it in `--help`.
 
 ### Security
 
