@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file. The format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), the versions follow semantic
 versioning.
 
+## [Unreleased]
+
+### Fixed
+
+- Abort on a log that is not valid UTF-8. Postfix writes SMTP replies as raw bytes, so a
+  reply in another encoding (a Chinese MX answering in GBK, for example) used to fail the
+  whole run with `stream did not contain valid UTF-8`. Such bytes are now decoded with the
+  Unicode replacement character and the line stays in the report.
+
 ## [0.2.0] - 2026-10-06
 
 ### Added

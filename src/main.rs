@@ -6,6 +6,8 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Result, anyhow};
 use clap::{Parser, Subcommand, Args};
+use encoding_rs::UTF_8;
+use encoding_rs_io::DecodeReaderBytesBuilder;
 use rayon::prelude::*;
 
 mod log_line;
@@ -90,17 +92,27 @@ struct LogInput {
 
 // "-" means stdin, anything else is a file path.
 fn open_log(path: &Path) -> Result<LogInput> {
-    if path == Path::new("-") {
-        Ok(LogInput {
-            name: "<stdin>".to_string(),
-            reader: BufReader::new(Box::new(stdin())),
-        })
+    let (name, source): (String, Box<dyn Read>) = if path == Path::new("-") {
+        ("<stdin>".to_string(), Box::new(stdin()))
     } else {
-        Ok(LogInput {
-            name: path.display().to_string(),
-            reader: BufReader::new(Box::new(File::open(path)?)),
-        })
-    }
+        (path.display().to_string(), Box::new(File::open(path)?))
+    };
+
+    // A mail log is bytes, not text: Postfix writes SMTP replies as they come
+    // in, so a reply in another encoding (a Chinese MX answering in GBK, for
+    // example) makes the whole stream invalid UTF-8, and one such line aborts
+    // the log. Decode it as UTF-8 with invalid sequences replaced by the
+    // replacement character. UTF_8 is spelled out on purpose: without an
+    // explicit encoding the decoder only kicks in on a BOM and passes the
+    // bytes through unchanged otherwise.
+    Ok(LogInput {
+        name,
+        reader: BufReader::new(Box::new(
+            DecodeReaderBytesBuilder::new()
+                .encoding(Some(UTF_8))
+                .build(source),
+        )),
+    })
 }
 
 fn load_messages(input: LogInput) -> Result<BTreeMap<u64, Message>> {
