@@ -21,6 +21,14 @@ versioning.
   they belonged to: a log from a Postfix with 7-digit or longer IDs produced an empty report
   and no complaint.
 
+### Fixed
+
+- `bounced -g addr` and `bounced -g domain` grouped recipients by the exact spelling of the
+  address, so one domain written two ways was reported as two (`Mail.ru` next to
+  `mail.ru`), while `deferred` folded the whole address and disagreed with `bounced`. The
+  domain part is now folded to lowercase once, where the recipient is recorded, and the
+  local part is kept as Postfix wrote it, in both commands.
+
 ## [0.3.0] - 2026-11-06
 
 ### Changed

@@ -155,7 +155,7 @@ impl Message {
                                                     .map_err(|err| {
                                                         anyhow!("postfix/smtp to field parsing error: {}", err)
                                                     })?;
-                                            self.to = Some(email);
+                                            self.to = Some(lowercase_domain(email));
                                         },
                                         "status" => {
                                             let (_, (status, reason)) =
@@ -255,6 +255,18 @@ fn parse_email(input: &str) -> IResult<&str, String> {
     )(input)
 }
 
+// The recipient domain decides how both reports group (`-g addr`, `-g domain`), and
+// DNS names are case-insensitive, so it is folded here, where the address enters the
+// message. The local part stays exactly as Postfix wrote it: without folding in
+// virtual_alias_maps, `John@x` and `john@x` are different mailboxes. Folding ASCII is
+// enough because domain labels arrive as ASCII or as punycode.
+fn lowercase_domain(mut addr: String) -> String {
+    if let Some(at) = addr.rfind('@') {
+        addr[at + 1..].make_ascii_lowercase();
+    }
+    addr
+}
+
 fn parse_size(input: &str) -> IResult<&str, u64> {
     map(
         nom::character::complete::u64,
@@ -325,6 +337,16 @@ mod tests {
             log_lines: lines,
             ..Default::default()
         }
+    }
+
+    #[test]
+    fn recipient_domain_is_folded_and_local_part_is_kept() {
+        let mut msg = test_message(vec![test_line(
+            Some("smtp"),
+            "to=<John.Doe@Mail.EXAMPLE.com>, relay=mx.example.com[192.0.2.34]:25, delay=4, dsn=2.0.0, status=sent (250 2.0.0 Ok)",
+        )]);
+        msg.analyze().unwrap();
+        assert_eq!(msg.to, Some("John.Doe@mail.example.com".to_string()));
     }
 
     #[test]

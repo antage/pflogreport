@@ -150,13 +150,9 @@ impl<T> Bounced<T>
                             },
                         }
 
-                        let to_addr_parts: Vec<String> =
-                            to_addr
-                                .splitn(2, "@")
-                                .map(|s| s.to_string())
-                                .collect();
-                        if to_addr_parts.len() == 2 {
-                            let to_domain = &to_addr_parts[1];
+                        // The domain is folded where the address is recorded, so the
+                        // key here needs no normalizing of its own.
+                        if let Some((_, to_domain)) = to_addr.rsplit_once('@') {
                             match bounced.reasons_by_to_domain.get_mut(to_domain) {
                                 Some(reasons) => {
                                     if let Some(counter) = reasons.get_mut(&reason_kind) {
@@ -168,7 +164,8 @@ impl<T> Bounced<T>
                                 None => {
                                     let mut reasons = BTreeMap::new();
                                     reasons.insert(reason_kind.clone(), 1);
-                                    bounced.reasons_by_to_domain.insert(to_domain.clone(), reasons);
+                                    bounced.reasons_by_to_domain
+                                        .insert(to_domain.to_string(), reasons);
                                 },
                             }
                         }
@@ -185,6 +182,7 @@ impl<T> Bounced<T>
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::log_line::LogLine;
 
     #[test]
     fn grouped_json_non_verbose_is_object() {
@@ -205,5 +203,40 @@ mod tests {
             Bounced::<Reason>::grouped_json(&r),
             json!([[{"kind": "Other", "message": "boom"}, 1]])
         );
+    }
+
+    // One recipient in two spellings. The domain is folded where the address is
+    // recorded, so the two messages share a domain key, while their address keys stay
+    // apart: without folding in virtual_alias_maps, Postfix delivers `John@x` and
+    // `john@x` to different mailboxes.
+    fn bounced_message(queue_id: &str, to: &str) -> (u64, Message) {
+        let line = format!(
+            "Dec 17 00:03:02 s1 postfix/smtp[123]: {}: to=<{}>, relay=mx.example.com[192.0.2.7]:25, delay=1, delays=1/1/1/1, dsn=5.1.1, status=bounced (host mx.example.com[192.0.2.7] said: 550 5.1.1 <{}>: user not found (in reply to RCPT TO command))",
+            queue_id, to, to
+        );
+        let (_, parsed) = LogLine::parse(line.as_bytes()).unwrap();
+        let id = parsed.message_id.expect("the line built above carries a queue ID");
+        let mut msg = Message { log_lines: vec![parsed], ..Default::default() };
+        msg.analyze().unwrap();
+        (id, msg)
+    }
+
+    #[test]
+    fn domain_grouping_folds_case_and_address_grouping_does_not() {
+        let mut messages = BTreeMap::new();
+        messages.extend([
+            bounced_message("A1B2C3D4E5", "John@Mail.EXAMPLE.com"),
+            bounced_message("A1B2C3D4E6", "john@mail.example.com"),
+        ]);
+        let bounced = Bounced::<ReasonKind>::new(&messages).unwrap();
+        assert_eq!(
+            bounced.reasons_by_to_domain.keys().collect::<Vec<_>>(),
+            vec!["mail.example.com"]
+        );
+        assert_eq!(
+            bounced.reasons_by_to.keys().collect::<Vec<_>>(),
+            vec!["John@mail.example.com", "john@mail.example.com"]
+        );
+        assert_eq!(bounced.reasons_by_to_domain["mail.example.com"].values().sum::<usize>(), 2);
     }
 }

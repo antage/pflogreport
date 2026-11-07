@@ -135,6 +135,11 @@ Reasons by TO domain:
 	...
 ```
 
+Both commands group by the same folded address: one domain written two ways (`Mail.EXAMPLE.com`
+and `mail.example.com`) is one key, while two local parts (`John@x` and `john@x`) stay two
+keys, because Postfix without folding in `virtual_alias_maps` delivers them to different
+mailboxes.
+
 Verbose mode prints the full classified reason, including the remote host and IP:
 
 ```
@@ -163,7 +168,7 @@ All reasons:
 | Option | Applies to | Description |
 |---|---|---|
 | `-f, --format <fmt>` | all | `json` for machine-readable output; any other value (or default) prints the human-readable console table |
-| `-g, --group-by <g>` | `bounced`, `deferred` | `addr` — group by recipient address, `domain` — group by recipient domain; default is no grouping |
+| `-g, --group-by <g>` | `bounced`, `deferred` | `addr` — group by recipient address, `domain` — group by recipient domain; default is no grouping. The domain part is folded to lowercase, the local part is taken as written |
 | `-v, --verbose` | `bounced`, `deferred` | print the full reason (with remote host/IP) instead of just the reason kind |
 | `-y, --year <year>` | all | year to assume for timestamps that do not state one; the default is the year of the log file, or the current year when reading stdin |
 

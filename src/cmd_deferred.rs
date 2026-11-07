@@ -134,8 +134,7 @@ impl<T> Deferred<T>
                     }
 
                     if let Some(to_addr) = &msg.to {
-                        let to_addr_lc = to_addr.to_lowercase();
-                        match deferred.reasons_by_to.get_mut(&to_addr_lc) {
+                        match deferred.reasons_by_to.get_mut(to_addr) {
                             Some(reasons) => {
                                 if let Some(counter) = reasons.get_mut(&reason_kind) {
                                     *counter += 1;
@@ -146,17 +145,14 @@ impl<T> Deferred<T>
                             None => {
                                 let mut reasons = BTreeMap::new();
                                 reasons.insert(reason_kind.clone(), 1);
-                                deferred.reasons_by_to.insert(to_addr_lc, reasons);
+                                deferred.reasons_by_to.insert(to_addr.clone(), reasons);
                             },
                         }
 
-                        let to_addr_parts: Vec<&str> =
-                            to_addr
-                                .splitn(2, "@")
-                                .collect();
-                        if to_addr_parts.len() == 2 {
-                            let to_domain = to_addr_parts[1].to_lowercase();
-                            match deferred.reasons_by_to_domain.get_mut(&to_domain) {
+                        // The domain is folded where the address is recorded, so the
+                        // key here needs no normalizing of its own.
+                        if let Some((_, to_domain)) = to_addr.rsplit_once('@') {
+                            match deferred.reasons_by_to_domain.get_mut(to_domain) {
                                 Some(reasons) => {
                                     if let Some(counter) = reasons.get_mut(&reason_kind) {
                                         *counter += 1;
@@ -167,7 +163,8 @@ impl<T> Deferred<T>
                                 None => {
                                     let mut reasons = BTreeMap::new();
                                     reasons.insert(reason_kind.clone(), 1);
-                                    deferred.reasons_by_to_domain.insert(to_domain, reasons);
+                                    deferred.reasons_by_to_domain
+                                        .insert(to_domain.to_string(), reasons);
                                 },
                             }
                         }
@@ -184,6 +181,7 @@ impl<T> Deferred<T>
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::log_line::LogLine;
 
     #[test]
     fn grouped_json_non_verbose_is_object() {
@@ -204,5 +202,38 @@ mod tests {
             Deferred::<Reason>::grouped_json(&r),
             json!([[{"kind": "Other", "message": "boom"}, 1]])
         );
+    }
+
+    // One recipient in two spellings, as in cmd_bounced: both commands take their keys
+    // from the same already-folded address, so grouping cannot disagree between them.
+    fn deferred_message(queue_id: &str, to: &str) -> (u64, Message) {
+        let line = format!(
+            "Dec 17 00:03:02 s1 postfix/smtp[123]: {}: to=<{}>, relay=mx.example.com[192.0.2.7]:25, delay=1, delays=1/1/1/1, dsn=4.1.1, status=deferred (host mx.example.com[192.0.2.7] said: 450 4.1.1 <{}>: user not found: Recipient address rejected (in reply to RCPT TO command))",
+            queue_id, to, to
+        );
+        let (_, parsed) = LogLine::parse(line.as_bytes()).unwrap();
+        let id = parsed.message_id.expect("the line built above carries a queue ID");
+        let mut msg = Message { log_lines: vec![parsed], ..Default::default() };
+        msg.analyze().unwrap();
+        (id, msg)
+    }
+
+    #[test]
+    fn domain_grouping_folds_case_and_address_grouping_does_not() {
+        let mut messages = BTreeMap::new();
+        messages.extend([
+            deferred_message("A1B2C3D4E5", "John@Mail.EXAMPLE.com"),
+            deferred_message("A1B2C3D4E6", "john@mail.example.com"),
+        ]);
+        let deferred = Deferred::<ReasonKind>::new(&messages).unwrap();
+        assert_eq!(
+            deferred.reasons_by_to_domain.keys().collect::<Vec<_>>(),
+            vec!["mail.example.com"]
+        );
+        assert_eq!(
+            deferred.reasons_by_to.keys().collect::<Vec<_>>(),
+            vec!["John@mail.example.com", "john@mail.example.com"]
+        );
+        assert_eq!(deferred.reasons_by_to_domain["mail.example.com"].values().sum::<usize>(), 2);
     }
 }
