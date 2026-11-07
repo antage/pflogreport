@@ -257,15 +257,14 @@ fn parse_message_id(input: &[u8]) -> PResult<'_, Option<u64>> {
 }
 
 #[derive(Debug)]
+// `dead_code` is reported once for the whole definition, and the fields are live in
+// `cfg(test)` because the parser tests read them, so only the real build expects it.
+#[cfg_attr(not(test), expect(dead_code, reason = "timestamp, hostname and pid are parsed by the line grammar but not read by analysis"))]
 pub struct LogLine {
-    // Parsed as part of the line grammar; not consumed by analysis yet.
-    #[allow(dead_code)]
     pub timestamp: NaiveDateTime,
-    #[allow(dead_code)]
     pub hostname: String,
     pub program: String,
     pub subsystem: Option<String>,
-    #[allow(dead_code)]
     pub pid: u64,
     pub message_id: Option<u64>,
     pub content: String,
