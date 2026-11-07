@@ -197,10 +197,21 @@ fn find_any_reason<'a>(pre_parse: &ReasonPreParse, pre_parse_kind: &ReasonPrePar
         })
 }
 
+// Pattern tables for the kinds that carry attributes (RcptTo, MailFrom, Data).
+// Patterns are filtered by the kind of pre_parse, so a match from such a table
+// means pre_parse carries attributes: they come back with the match instead of
+// an Option::unwrap at every call site. Tables with Other entries cannot use
+// this (Other lines have no attributes). is_match, not captures: none of the
+// tables below reads a capture group.
+fn find_any_attrs<'a>(pre_parse: &'a ReasonPreParse, pre_parse_kind: &ReasonPreParseKind, patterns: &[(ReasonPreParseKind, Lazy<Regex>)]) -> Option<&'a ReasonCommandAttributes> {
+    pre_parse
+        .attributes()
+        .filter(|_| patterns.iter().any(|(kind, re)| kind == pre_parse_kind && re.is_match(pre_parse.message())))
+}
+
 pub fn parse_reason(s: &str) -> Result<Reason> {
     let pre_parse = pre_parse_reason(s)?;
     let pre_parse_kind = ReasonPreParseKind::from(&pre_parse);
-    let pre_parse_attrs = pre_parse.attributes();
 
     static DNS_ERROR_RE: [(ReasonPreParseKind, Lazy<Regex>); 3] = [
         (
@@ -281,8 +292,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A452[- ]4\\.2\\.2 <[^>]+>: Recipient address rejected: Recipient mailbox quota exceeded\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &OVER_QUOTA_TEMP_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &OVER_QUOTA_TEMP_RE) {
         return Ok(Reason::OverQuotaTemp {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -319,8 +329,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A552-Requested mail action aborted: exceeded storage allocation 552-Quota exceeded\\. 552 For explanation visit https://postmaster\\.gmx\\.net/en/case\\?c=r1503&i=ip&v=[A-Fa-f0-9.:]+&r=[0-9A-Za-z-]+\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &OVER_QUOTA_PERM_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &OVER_QUOTA_PERM_RE) {
         return Ok(Reason::OverQuotaPerm {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -529,8 +538,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A550[- ]5\\.1\\.1 Requested action not taken: mailbox unavailable\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &NO_SUCH_USER_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &NO_SUCH_USER_RE) {
         return Ok(Reason::NoSuchUser {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -603,8 +611,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A550 permanent failure for one or more recipients \\([^:]+:550 5\\.2\\.1 The email account that you tried to reach is (?:disabled|inactive)\\..*\\)\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &DISABLED_USER_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &DISABLED_USER_RE) {
         return Ok(Reason::DisabledUser {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -638,7 +645,12 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
         ),
     ];
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &UNSOLICITED_MESSAGE_ERROR_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+        // This site needs the capture groups as well as the attributes, so it
+        // cannot use find_any_attrs. A RcptTo/Data pattern can only match a
+        // line that carries attributes, so the Option is Some here.
+        let attrs = pre_parse
+            .attributes()
+            .expect("a RcptTo/Data pattern matched, so the line has attributes");
         return Ok(Reason::UnsolicitedMessageError {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -692,8 +704,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A550[- ]5\\.5\\.1 Recipient rejected - [A-Z0-9_]+ - https://postmaster-oxseu\\.vadesecure\\.com/inbound_error_codes/#_403\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &ACCESS_DENIED_1_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &ACCESS_DENIED_1_RE) {
         return Ok(Reason::AccessDenied {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -744,8 +755,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A554[- ]5\\.7\\.1 [A-Za-z0-9.-]+ is a closed system\\. Emails can only be sent to or received from a limited number of approved external addresses\\..*\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &CUSTOM_DOMAIN_POLICY_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &CUSTOM_DOMAIN_POLICY_RE) {
         return Ok(Reason::CustomDomainPolicy {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -762,8 +772,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A450[- ]4\\.7\\.1 Mail from [A-Fa-f0-9.:]+ has been blocked by Trend Micro Email Reputation Service\\. Please see https://ers\\.trendmicro\\.com/reputations to get detailed information\\.\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &BLOCK_LIST_1_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &BLOCK_LIST_1_RE) {
         return Ok(Reason::BlockList {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -813,8 +822,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A550[- ]5\\.7\\.64 TenantAttribution; Relay Access Denied \\[[^\\]]+\\] \\[[^\\]]+\\]\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &RELAY_ACCESS_DENIED_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &RELAY_ACCESS_DENIED_RE) {
         return Ok(Reason::RelayAccessDenied {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,
@@ -831,8 +839,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             lazy_regex!("\\A550-Inconsistent/Missing DNS PTR record \\(RFC 1912 2\\.1\\) \\([^)]+\\) 550 \\[[A-Fa-f0-9.:]+\\]:\\d+\\z"),
         ),
     ];
-    if let Some(_) = find_any_reason(&pre_parse, &pre_parse_kind, &BAD_REVERSE_DNS_1_RE) {
-        let attrs = pre_parse_attrs.unwrap();
+    if let Some(attrs) = find_any_attrs(&pre_parse, &pre_parse_kind, &BAD_REVERSE_DNS_1_RE) {
         return Ok(Reason::BadReverseDNS {
             hostname: attrs.hostname.clone(),
             ipaddr: attrs.ipaddr,

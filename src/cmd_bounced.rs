@@ -40,7 +40,7 @@ impl<T> Bounced<T>
         if arr.iter().all(|entry| entry[0].is_string()) {
             let m: serde_json::Map<String, Value> = arr
                 .into_iter()
-                .map(|e| (e[0].as_str().unwrap().to_string(), e[1].clone()))
+                .map(|e| (e[0].as_str().expect("every entry[0] is a string, checked above").to_string(), e[1].clone()))
                 .collect();
             Value::Object(m)
         } else {
