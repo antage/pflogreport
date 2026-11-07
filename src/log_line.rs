@@ -4,15 +4,22 @@ use chrono::{
     NaiveTime, Datelike,
 };
 use nom::{
-    IResult,
     branch::alt,
     bytes::complete::{
         is_a,
         tag,
         take,
+        take_while,
         take_while_m_n,
         take_till1,
         take_until1,
+    },
+    error::{
+        ContextError,
+        ErrorKind,
+        ParseError,
+        VerboseError,
+        VerboseErrorKind,
     },
     character::complete::{
         alpha1,
@@ -25,7 +32,6 @@ use nom::{
     combinator::{
         map,
         map_opt,
-        map_res,
         opt,
         recognize,
     },
@@ -40,7 +46,11 @@ use nom::{
     }
 };
 
-fn parse_month(input: &[u8]) -> IResult<&[u8], u32> {
+// VerboseError is the only nom error type that carries context strings, so a
+// rejected queue ID can name the reason instead of a bare ErrorKind.
+type PResult<'a, O> = nom::IResult<&'a [u8], O, VerboseError<&'a [u8]>>;
+
+fn parse_month(input: &[u8]) -> PResult<'_, u32> {
     map(
         alt((
             tag(b"Jan"),
@@ -76,7 +86,7 @@ fn parse_month(input: &[u8]) -> IResult<&[u8], u32> {
     )(input)
 }
 
-fn parse_time(input: &[u8]) -> IResult<&[u8], NaiveTime> {
+fn parse_time(input: &[u8]) -> PResult<'_, NaiveTime> {
     map_opt(
         tuple((
             nom::character::complete::u8,
@@ -91,7 +101,7 @@ fn parse_time(input: &[u8]) -> IResult<&[u8], NaiveTime> {
     )(input)
 }
 
-fn parse_syslog_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
+fn parse_syslog_timestamp(input: &[u8]) -> PResult<'_, NaiveDateTime> {
     map_opt(
         tuple((
             parse_month,
@@ -116,7 +126,7 @@ fn parse_syslog_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
 }
 
 // 2026-08-02T00:00:29(.365828)(+00:00|Z) — the year is taken from the log line.
-fn parse_rfc3339_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
+fn parse_rfc3339_timestamp(input: &[u8]) -> PResult<'_, NaiveDateTime> {
     map_opt(
         tuple((
             nom::character::complete::u32,
@@ -149,14 +159,14 @@ fn parse_rfc3339_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
     )(input)
 }
 
-fn parse_timestamp(input: &[u8]) -> IResult<&[u8], NaiveDateTime> {
+fn parse_timestamp(input: &[u8]) -> PResult<'_, NaiveDateTime> {
     alt((
         parse_rfc3339_timestamp,
         parse_syslog_timestamp,
     ))(input)
 }
 
-fn parse_hostname(input: &[u8]) -> IResult<&[u8], &[u8]> {
+fn parse_hostname(input: &[u8]) -> PResult<'_, &[u8]> {
     recognize(
         pair(
             alpha1,
@@ -170,7 +180,7 @@ fn parse_hostname(input: &[u8]) -> IResult<&[u8], &[u8]> {
     )(input)
 }
 
-fn parse_program_subsystem_pid(input: &[u8]) -> IResult<&[u8], (String, Option<String>, u64)> {
+fn parse_program_subsystem_pid(input: &[u8]) -> PResult<'_, (String, Option<String>, u64)> {
     map(
         tuple((
             take_till1(|c| c == b'/' || c == b'['),
@@ -194,21 +204,56 @@ fn parse_program_subsystem_pid(input: &[u8]) -> IResult<&[u8], (String, Option<S
     )(input)
 }
 
-fn parse_message_id(input: &[u8]) -> IResult<&[u8], u64> {
-    map_res(
-        take_while_m_n(
-            10, 12,
-            |c| {
-                char::from(c).is_ascii_hexdigit()
-            }
-        ),
-        |id| -> Result<u64, anyhow::Error> {
-            let id_str = std::str::from_utf8(id)?;
-            Ok(
-                u64::from_str_radix(id_str, 16)?
-            )
-        }
-    )(input)
+// Postfix queue IDs are hex digits. The two MXes this tool is run against
+// emit 10 and 12 digit ones (README "How it works"), and this range is a hard
+// assumption, not a guess: nom does not backtrack, so eating at most
+// QUEUE_ID_MAX_LEN of a longer run makes the ":" that follows the ID fail to
+// match, the field is then treated as absent, and the line is kept WITHOUT a
+// message ID - it silently drops out of the message it belongs to. A Postfix
+// with the pre-3.6 7 digit IDs would report not a single message and not a
+// single error. A hex run followed by ":" outside this range is therefore a
+// parse error. Widen both bounds together if a wider Postfix shows up.
+const QUEUE_ID_MIN_LEN: usize = 10;
+const QUEUE_ID_MAX_LEN: usize = 12;
+
+fn is_queue_id_char(c: u8) -> bool {
+    char::from(c).is_ascii_hexdigit()
+}
+
+fn queue_id_error<'a>(input: &'a [u8], reason: &'static str) -> nom::Err<VerboseError<&'a [u8]>> {
+    // Failure, not Error: no backtrack around this point is wanted, the
+    // caller must see it.
+    nom::Err::Failure(ContextError::add_context(
+        input,
+        reason,
+        VerboseError::from_error_kind(input, ErrorKind::Verify),
+    ))
+}
+
+// The optional " <queue ID>:" field between the program stamp and the text.
+// Returns None, leaving input untouched, when the line carries no queue ID.
+fn parse_message_id(input: &[u8]) -> PResult<'_, Option<u64>> {
+    let Ok((after_ws, _)) = multispace1::<&[u8], VerboseError<&[u8]>>(input) else {
+        return Ok((input, None));
+    };
+    let (after_run, run) = take_while(is_queue_id_char)(after_ws)?;
+    let Ok((after_colon, _)) = tag::<&[u8], &[u8], VerboseError<&[u8]>>(b":")(after_run) else {
+        // Not an ID field at all: "connect from host[192.0.2.1]", "uid=1000 ..".
+        return Ok((input, None));
+    };
+    if run.is_empty() {
+        return Ok((input, None));
+    }
+    if run.len() < QUEUE_ID_MIN_LEN || run.len() > QUEUE_ID_MAX_LEN {
+        return Err(queue_id_error(after_ws, "queue ID must be 10-12 hex digits"));
+    }
+    let Some(id) = std::str::from_utf8(run)
+        .ok()
+        .and_then(|id_str| u64::from_str_radix(id_str, 16).ok())
+    else {
+        return Err(queue_id_error(after_ws, "queue ID is not a hex number"));
+    };
+    Ok((after_colon, Some(id)))
 }
 
 #[derive(Debug)]
@@ -227,7 +272,7 @@ pub struct LogLine {
 }
 
 impl LogLine {
-    pub fn parse(input: &[u8]) -> IResult<&[u8], LogLine> {
+    pub fn parse(input: &[u8]) -> PResult<'_, LogLine> {
         map_opt(
             terminated(
                 tuple((
@@ -237,24 +282,13 @@ impl LogLine {
                     multispace1,
                     parse_program_subsystem_pid,
                     tag(":"),
-                    opt(
-                        tuple((
-                            multispace1,
-                            parse_message_id,
-                            tag(":"),
-                        )),
-                    ),
+                    parse_message_id,
                     multispace1,
                     not_line_ending,
                 )),
                 opt(line_ending),
             ),
             |(timestamp, _, hostname, _, prog_subsystem_pid, _, message_id, _, line)| {
-                let opt_message_id =
-                    match message_id {
-                        Some((_, id, _)) => Some(id),
-                        None => None,
-                    };
                 let log_line =
                     LogLine {
                         timestamp: timestamp,
@@ -262,13 +296,43 @@ impl LogLine {
                         program: prog_subsystem_pid.0,
                         subsystem: prog_subsystem_pid.1,
                         pid: prog_subsystem_pid.2,
-                        message_id: opt_message_id,
+                        message_id,
                         content: String::from_utf8_lossy(line).into_owned(),
                     };
                 Some(log_line)
             }
         )(input)
     }
+}
+
+// A one-line description of a parse failure: the context strings the parser
+// attached (see queue_id_error), or the bare nom error when it attached none.
+// Debug on a VerboseError<&[u8]> prints every input slice as byte numbers,
+// which buries the reason.
+pub fn parse_error_text(err: &nom::Err<VerboseError<&[u8]>>) -> String {
+    let inner: &VerboseError<&[u8]> = match err {
+        nom::Err::Error(inner) | nom::Err::Failure(inner) => inner,
+        _ => return "unexpected end of input".to_string(),
+    };
+    let mut contexts: Vec<&str> = inner
+        .errors
+        .iter()
+        .filter_map(|(_, kind)| match kind {
+            VerboseErrorKind::Context(ctx) => Some(*ctx),
+            _ => None,
+        })
+        .collect();
+    if contexts.is_empty() {
+        // No context attached: name the position the parser gave up at, since
+        // Debug on this error type dumps every input slice as byte numbers.
+        let Some((at, kind)) = inner.errors.first() else {
+            return "unexpected end of input".to_string();
+        };
+        let (head, _) = at.split_at(at.len().min(40));
+        return format!("unexpected text at \"{}\" ({kind:?})", String::from_utf8_lossy(head));
+    }
+    contexts.dedup();
+    contexts.join("; ")
 }
 
 #[cfg(test)]
@@ -317,6 +381,28 @@ mod tests {
     }
 
     #[test]
+    fn parse_line_with_too_wide_message_id_fails() {
+        let input = b"Dec 17 00:03:01 s1 postfix/smtp[123]: A1B2C3D4E5F67: to=<rcpt@example.com>";
+        let err = format!("{:?}", LogLine::parse(input).unwrap_err());
+        assert!(err.contains("queue ID must be 10-12 hex digits"), "{err}");
+    }
+
+    #[test]
+    fn parse_line_with_too_narrow_message_id_fails() {
+        let input = b"Dec 17 00:03:01 s1 postfix/cleanup[123]: A1B2C3D: message-id=<a@example.com>";
+        let err = format!("{:?}", LogLine::parse(input).unwrap_err());
+        assert!(err.contains("queue ID must be 10-12 hex digits"), "{err}");
+    }
+
+    #[test]
+    fn parse_short_hex_word_in_text_is_not_a_message_id() {
+        let input = b"Dec 17 00:03:01 s1 postfix/smtpd[123]: disconnect from abc[192.0.2.1]";
+        let (_, line) = LogLine::parse(input).unwrap();
+        assert_eq!(line.message_id, None);
+        assert_eq!(line.content, "disconnect from abc[192.0.2.1]");
+    }
+
+    #[test]
     fn parse_line_with_single_digit_day() {
         let input = b"Jan  5 12:34:56 mail1 postfix/master[123]: daemon running";
         let (_, line) = LogLine::parse(input).unwrap();
@@ -345,6 +431,14 @@ mod tests {
     #[test]
     fn parse_invalid_time_fails() {
         assert!(LogLine::parse(b"Dec 17 25:00:00 s1 postfix/smtp[1]: hello").is_err());
+    }
+
+    #[test]
+    fn parse_error_text_without_context_names_the_position() {
+        let err = LogLine::parse(b"this is not a log line").unwrap_err();
+        let text = parse_error_text(&err);
+        assert!(text.starts_with("unexpected text at \"this is not a log line\""), "{text}");
+        assert!(!text.contains("VerboseError"), "{text}");
     }
 
     #[test]

@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file. The format foll
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), the versions follow semantic
 versioning.
 
+## [Unreleased]
+
+### Changed
+
+- A Postfix queue ID that is not 10-12 hex digits now fails the run with an error naming the
+  line. Such a line used to parse without a queue ID, so its lines silently left the message
+  they belonged to: a log from a Postfix with 7-digit or longer IDs produced an empty report
+  and no complaint.
+
 ## [0.3.0] - 2026-11-06
 
 ### Changed

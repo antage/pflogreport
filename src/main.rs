@@ -83,6 +83,15 @@ struct DeferredArgs {
     group_by: Option<String>,
 }
 
+// Lines per rayon task in load_messages: a chunk is read, parsed in parallel
+// behind a barrier, then merged into the message map sequentially, so the
+// size trades per-chunk sync overhead against a longer straggler tail and
+// more resident memory. Measured on a 2.26 GB / 7.8 M line mail log, 32
+// cores, warm cache, parse+merge median of 3: 10k 6032 ms, 50k 5417 ms,
+// 100k 4795 ms, 250k 4816 ms, 1M 4647 ms. 100k is the knee: below it the
+// barrier cost shows up (10k is 26% slower), above it 1M buys 3% for 400 MB
+// more peak RSS (~460 B per buffered line). Re-measure if the merge stops
+// being sequential.
 const LINE_CHUNK_SIZE: usize = 100_000;
 
 struct LogInput {
@@ -137,7 +146,7 @@ fn load_messages(input: LogInput) -> Result<BTreeMap<u64, Message>> {
 
         for (line_str, result) in chunk.iter().zip(parsed) {
             let log_line = result
-                .map_err(|err| anyhow!("Can't parse log file \"{}\": {:?}. At line: \"{}\"", name, err, line_str))?
+                .map_err(|err| anyhow!("Can't parse log file \"{}\": {}. At line: \"{}\"", name, log_line::parse_error_text(&err), line_str))?
                 .1;
             if let Some(message_id) = log_line.message_id {
                 if let Some(entry) = logs_by_message_id.get_mut(&message_id) {
