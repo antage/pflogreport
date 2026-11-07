@@ -305,10 +305,12 @@ fn parse_status(input: &str) -> IResult<&str, (String, String)> {
 mod tests {
     use super::*;
     use chrono::NaiveDateTime;
+    use crate::log_line::LogStamp;
 
     fn test_line(subsystem: Option<&str>, content: &str) -> LogLine {
         LogLine {
-            timestamp: NaiveDateTime::MIN,
+            // Resolved stamps are all a loaded log ever holds.
+            stamp: LogStamp::Absolute(NaiveDateTime::MIN),
             hostname: "s1".to_string(),
             program: "postfix".to_string(),
             subsystem: subsystem.map(|s| s.to_string()),

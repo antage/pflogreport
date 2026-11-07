@@ -6,6 +6,14 @@ versioning.
 
 ## [Unreleased]
 
+### Added
+
+- The year of a classic syslog timestamp is inferred from the order of the log. A mail log
+  is appended to, so `Jan  1` after `Dec 31` is read as the next year. Before, every such
+  line got the year the analysis ran in, which dated the December half of a log read after
+  midnight a year late and left a report no wiser. `--year` states the year outright; the
+  default anchor is the date of the log file itself, or the clock when reading stdin.
+
 ### Changed
 
 - A Postfix queue ID that is not 10-12 hex digits now fails the run with an error naming the

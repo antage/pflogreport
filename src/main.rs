@@ -2,16 +2,18 @@ use std::collections::BTreeMap;
 use std::default::Default;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Read, stdin};
+use std::ops::RangeInclusive;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Result, anyhow};
+use chrono::{DateTime, Datelike, Local};
 use clap::{Parser, Subcommand, Args};
 use encoding_rs::UTF_8;
 use encoding_rs_io::DecodeReaderBytesBuilder;
 use rayon::prelude::*;
 
 mod log_line;
-use log_line::LogLine;
+use log_line::{LogLine, LogStamp, YearTracker};
 
 mod message;
 use message::Message;
@@ -25,6 +27,10 @@ use reason_stats::ReasonStats;
 mod cmd_stats;
 mod cmd_bounced;
 mod cmd_deferred;
+
+// A plausible four-digit year: anything outside it is a typo, and chrono could not
+// place a log date in it anyway.
+const YEAR_RANGE: RangeInclusive<i64> = 1000..=9999;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -46,6 +52,12 @@ struct StatsArgs {
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
 
+    /// Assume this year for timestamps that do not state one (default: the year
+    /// of the log file)
+    #[arg(short = 'y', long, value_name = "YEAR",
+          value_parser = clap::value_parser!(i32).range(YEAR_RANGE))]
+    year: Option<i32>,
+
     /// Output format: json (default: console)
     #[arg(short = 'f', long, value_parser = ["json"])]
     format: Option<String>,
@@ -56,6 +68,12 @@ struct BouncedArgs {
     /// Log file to analyze, or "-" to read stdin
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
+
+    /// Assume this year for timestamps that do not state one (default: the year
+    /// of the log file)
+    #[arg(short = 'y', long, value_name = "YEAR",
+          value_parser = clap::value_parser!(i32).range(YEAR_RANGE))]
+    year: Option<i32>,
 
     #[arg(short = 'v', long)]
     verbose: bool,
@@ -72,6 +90,12 @@ struct DeferredArgs {
     /// Log file to analyze, or "-" to read stdin
     #[arg(value_name = "LOG_FILE")]
     log_file: PathBuf,
+
+    /// Assume this year for timestamps that do not state one (default: the year
+    /// of the log file)
+    #[arg(short = 'y', long, value_name = "YEAR",
+          value_parser = clap::value_parser!(i32).range(YEAR_RANGE))]
+    year: Option<i32>,
 
     #[arg(short = 'v', long)]
     verbose: bool,
@@ -124,8 +148,21 @@ fn open_log(path: &Path) -> Result<LogInput> {
     })
 }
 
-fn load_messages(input: LogInput) -> Result<BTreeMap<u64, Message>> {
+// The year the first line of a log belongs to. Classic syslog stamps do not state
+// it and YearTracker can only count rollovers from here, so the anchor comes
+// from the outside: --year, else the year the file itself was last written (a
+// rotated log read after midnight is still last year's), else the clock, which
+// is all a stream on stdin offers.
+fn base_year(log_file: &Path, stated: Option<i32>) -> i32 {
+    stated.unwrap_or_else(|| match log_file.metadata().and_then(|m| m.modified()) {
+        Ok(written) => DateTime::<Local>::from(written).year(),
+        Err(_) => Local::now().year(),
+    })
+}
+
+fn load_messages(input: LogInput, base_year: i32) -> Result<BTreeMap<u64, Message>> {
     let mut logs_by_message_id = BTreeMap::<u64, Message>::new();
+    let mut years = YearTracker::new(base_year);
 
     let LogInput { name, reader } = input;
     let mut lines = reader.lines();
@@ -145,9 +182,15 @@ fn load_messages(input: LogInput) -> Result<BTreeMap<u64, Message>> {
             .collect();
 
         for (line_str, result) in chunk.iter().zip(parsed) {
-            let log_line = result
+            let mut log_line = result
                 .map_err(|err| anyhow!("Can't parse log file \"{}\": {}. At line: \"{}\"", name, log_line::parse_error_text(&err), line_str))?
                 .1;
+            // The merge walk is already sequential and in file order, which is
+            // exactly what resolving a year-less stamp needs; resolving here
+            // costs no extra pass over the lines.
+            let resolved = years.resolve(log_line.stamp)
+                .ok_or_else(|| anyhow!("Can't parse log file \"{}\": no year holds this date. At line: \"{}\"", name, line_str))?;
+            log_line.stamp = LogStamp::Absolute(resolved);
             if let Some(message_id) = log_line.message_id {
                 if let Some(entry) = logs_by_message_id.get_mut(&message_id) {
                     entry.log_lines.push(log_line);
@@ -178,7 +221,8 @@ fn main() -> Result<()> {
 
     match cli.command {
         Commands::Stats(args) => {
-            let logs_by_message_id = load_messages(open_log(&args.log_file)?)?;
+            let base = base_year(&args.log_file, args.year);
+            let logs_by_message_id = load_messages(open_log(&args.log_file)?, base)?;
             let stats = cmd_stats::stats(&logs_by_message_id)?;
             match args.format {
                 Some(fmt) => {
@@ -192,7 +236,8 @@ fn main() -> Result<()> {
             }
         },
         Commands::Bounced(args) => {
-            let logs_by_message_id = load_messages(open_log(&args.log_file)?)?;
+            let base = base_year(&args.log_file, args.year);
+            let logs_by_message_id = load_messages(open_log(&args.log_file)?, base)?;
             let bounced: Box<dyn ReasonStats> =
                 if args.verbose {
                     Box::new(cmd_bounced::Bounced::<Reason>::new(&logs_by_message_id)?)
@@ -247,7 +292,8 @@ fn main() -> Result<()> {
             }
         },
         Commands::Deferred(args) => {
-            let logs_by_message_id = load_messages(open_log(&args.log_file)?)?;
+            let base = base_year(&args.log_file, args.year);
+            let logs_by_message_id = load_messages(open_log(&args.log_file)?, base)?;
             let deferred: Box<dyn ReasonStats> =
                 if args.verbose {
                     Box::new(cmd_deferred::Deferred::<Reason>::new(&logs_by_message_id)?)

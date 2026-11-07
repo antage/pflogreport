@@ -165,6 +165,7 @@ All reasons:
 | `-f, --format <fmt>` | all | `json` for machine-readable output; any other value (or default) prints the human-readable console table |
 | `-g, --group-by <g>` | `bounced`, `deferred` | `addr` — group by recipient address, `domain` — group by recipient domain; default is no grouping |
 | `-v, --verbose` | `bounced`, `deferred` | print the full reason (with remote host/IP) instead of just the reason kind |
+| `-y, --year <year>` | all | year to assume for timestamps that do not state one; the default is the year of the log file, or the current year when reading stdin |
 
 #### JSON output
 
@@ -217,9 +218,17 @@ $ pflogreport bounced -v -f json data/mail.log
 
 ## Notes and limitations
 
-- Classic syslog timestamps do not include the year, so the parser assumes the
-  **current** local year for such entries. RFC 3339 timestamps include the year; their
-  timezone offset is not applied (the time is used as written).
+- Classic syslog timestamps do not include the year. The first line takes the year of
+  the log file (its modification time), or `--year`, or the clock when reading stdin;
+  from there the order of the lines decides: a mail log is appended to, so `Jan  1`
+  after `Dec 31` belongs to the year after it. A line more than about six months out of
+  order is not believed in either direction (a host with a lagging clock and a year of
+  real progress look identical in a year-less stamp) and keeps the running year. `Feb 29`
+  is the one date that overrules the anchor. RFC 3339 timestamps include the year, which
+  also re-anchors the lines after them; their timezone offset is not applied (the time is
+  used as written). The one case the order cannot settle is a file whose own date is much
+  later than its content, an archive copied without preserving timestamps: its lines are
+  read in that later year, and `--year` is the fix.
 - `-f` values other than `json` and `-g` values other than `addr`/`domain` silently
   fall back to the default behavior (console output / no grouping).
 - Only `postfix` program lines are analyzed; other daemons in the same log file are
