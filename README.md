@@ -27,6 +27,8 @@ rejection, blocklists, etc.).
 ## Requirements
 
 - A recent stable Rust toolchain with `cargo` (the project uses Rust 2024 edition, which requires Rust 1.85 or newer).
+- A C compiler (`cc`): the allocator, mimalloc, is built from sources shipped with its crate. Nothing is needed from
+  the system at run time.
 - No runtime dependencies beyond the standard library.
 
 ## Building

@@ -10,7 +10,15 @@ use chrono::{DateTime, Datelike, Local};
 use clap::{Parser, Subcommand, Args};
 use encoding_rs::UTF_8;
 use encoding_rs_io::DecodeReaderBytesBuilder;
+use mimalloc::MiMalloc;
 use rayon::prelude::*;
+
+// A line of Postfix log costs two or three heap Strings and they are allocated on rayon
+// threads over inputs of several gigabytes, which the system allocator served largely in
+// the kernel: on a 2.26 GB log mimalloc measured -25% wall time (8.3 s to 6.3 s, faster in
+// 18 of 18 paired runs, system time 13.5 s to 9.2 s). See CHANGELOG for what it costs.
+#[global_allocator]
+static ALLOCATOR: MiMalloc = MiMalloc;
 
 mod log_line;
 use log_line::{LogLine, LogStamp, YearTracker};

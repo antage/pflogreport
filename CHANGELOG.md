@@ -20,6 +20,11 @@ versioning.
   line. Such a line used to parse without a queue ID, so its lines silently left the message
   they belonged to: a log from a Postfix with 7-digit or longer IDs produced an empty report
   and no complaint.
+- Memory is now allocated through mimalloc instead of the system allocator. Reconstructing a
+  message costs two or three heap allocations per log line, on rayon threads, and the kernel
+  time to serve them was a third of the run: on a 2.26 GB log the whole run went from 8.3 s
+  to 6.3 s (-25%, faster in 18 of 18 paired runs; system time 13.5 s to 9.2 s). The price is
+  about 160 KB of binary and a C compiler at build time.
 
 ### Fixed
 
