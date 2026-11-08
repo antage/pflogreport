@@ -20,6 +20,9 @@ versioning.
   line got the year the analysis ran in, which dated the December half of a log read after
   midnight a year late and left a report no wiser. `--year` states the year outright; the
   default anchor is the date of the log file itself, or the clock when reading stdin.
+- Two cases the reason classifier did not cover: a reply is tried only against the patterns
+  kept for the command it answers, and the unsolicited-message reply carries both the host
+  that spoke and the address it blames.
 
 ### Changed
 
@@ -32,6 +35,11 @@ versioning.
   time to serve them was a third of the run: on a 2.26 GB log the whole run went from 8.3 s
   to 6.3 s (-25%, faster in 18 of 18 paired runs; system time 13.5 s to 9.2 s). The price is
   about 160 KB of binary and a C compiler at build time.
+- A reason that reads capture groups takes them out of the match, instead of out of a map
+  holding every group the matched pattern names. A blocked sender, a lost connection or a
+  DNS failure reads one or two groups, so the map cost three to seven allocations on each
+  such reply, and about a tenth of all allocations on a reply set shaped like a real log's.
+  Working out a reply is 8% quicker; reports are unchanged.
 
 ### Fixed
 

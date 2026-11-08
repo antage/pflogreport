@@ -1,9 +1,9 @@
-use std::collections::HashMap;
 use std::net::IpAddr;
 
 use anyhow::Result;
 use enum_kinds::EnumKind;
 use lazy_regex::{
+    Captures,
     lazy_regex,
     Lazy,
     Regex,
@@ -178,23 +178,14 @@ fn pre_parse_reason(s: &str) -> Result<ReasonPreParse> {
     }
 }
 
-fn find_any_reason<'a>(pre_parse: &ReasonPreParse, pre_parse_kind: &ReasonPreParseKind, patterns: &[(ReasonPreParseKind, Lazy<Regex>)]) -> Option<HashMap<String, String>> {
+// The first pattern of the table that the reply matches, with its capture groups
+// borrowed from the reply itself. Handing back the match, rather than a map of every
+// named group, is what keeps a match to one copy per group the `Reason` really uses.
+fn find_any_reason<'a>(pre_parse: &'a ReasonPreParse, pre_parse_kind: &ReasonPreParseKind, patterns: &[(ReasonPreParseKind, Lazy<Regex>)]) -> Option<Captures<'a>> {
     patterns
         .into_iter()
         .filter(|(kind, _)| kind == pre_parse_kind)
-        .find_map(|(_, re)| {
-            if let Some(caps) = re.captures(pre_parse.message()) {
-                let mut groups = HashMap::new();
-                for cap_name in re.capture_names() {
-                    if let Some(name) = cap_name {
-                        groups.insert(name.to_string(), caps[name].to_string());
-                    }
-                }
-                Some(groups)
-            } else {
-                None
-            }
-        })
+        .find_map(|(_, re)| re.captures(pre_parse.message()))
 }
 
 // Pattern tables for the kinds that carry attributes (RcptTo, MailFrom, Data).
@@ -230,8 +221,8 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &DNS_ERROR_RE) {
         return Ok(
             Reason::DNSError {
-                name: caps["name"].clone(),
-                _type: caps["type"].clone(),
+                name: caps["name"].to_string(),
+                _type: caps["type"].to_string(),
             }
         )
     };
@@ -656,8 +647,8 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
             ipaddr: attrs.ipaddr,
             from_ipaddr:
                 caps
-                    .get("from_ipaddr")
-                    .map(|s| s.parse())
+                    .name("from_ipaddr")
+                    .map(|m| m.as_str().parse())
                     .transpose()?,
         });
     }
@@ -723,7 +714,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
     ];
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &ACCESS_DENIED_2_RE) {
         return Ok(Reason::AccessDenied {
-            hostname: caps["hostname"].clone(),
+            hostname: caps["hostname"].to_string(),
             ipaddr: caps["ipaddr"].parse()?,
         });
     }
@@ -791,7 +782,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
     ];
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &BLOCK_LIST_2_RE) {
         return Ok(Reason::BlockList {
-            hostname: caps["hostname"].clone(),
+            hostname: caps["hostname"].to_string(),
             ipaddr: caps["ipaddr"].parse()?,
         });
     }
@@ -854,7 +845,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
     ];
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &BAD_REVERSE_DNS_2_RE) {
         return Ok(Reason::BadReverseDNS {
-            hostname: caps["hostname"].clone(),
+            hostname: caps["hostname"].to_string(),
             ipaddr: caps["ipaddr"].parse()?,
         });
     }
@@ -871,7 +862,7 @@ pub fn parse_reason(s: &str) -> Result<Reason> {
     ];
     if let Some(caps) = find_any_reason(&pre_parse, &pre_parse_kind, &BAD_MX_RE) {
         return Ok(Reason::BadMX {
-            domain: caps["domain"].clone(),
+            domain: caps["domain"].to_string(),
         });
     }
 
@@ -1039,6 +1030,32 @@ mod tests {
     fn parse_bad_mx() {
         let reason = parse_reason("Domain example.com does not accept mail (nullMX)").unwrap();
         assert_eq!(reason, Reason::BadMX { domain: "example.com".into() });
+    }
+
+    #[test]
+    fn a_reply_only_tries_the_patterns_of_the_command_it_answers() {
+        // Postfix states "Domain ... (nullMX)" itself, so that pattern lives in the
+        // table of replies that name no command. Inside a reply to RCPT TO the same
+        // words must not reach that table, which leaves the reply unclassified.
+        let reason = parse_reason(
+            "host mx.example.com[192.0.2.9] said: Domain example.com does not accept mail (nullMX) (in reply to RCPT TO command)",
+        ).unwrap();
+        assert!(matches!(reason, Reason::Other { .. }), "{reason:?}");
+    }
+
+    #[test]
+    fn parse_unsolicited_message_error_names_the_reporting_host() {
+        let reason = parse_reason(
+            "host smtp.google.com[192.0.2.9] said: 550-5.7.1 [198.51.100.4 17] Our system has detected that this 550-5.7.1 message is likely unsolicited mail. To reduce the amount of spam sent 550-5.7.1 to Gmail, this message has been blocked. Please visit 550-5.7.1  https://support.google.com/mail/?p=UnsolicitedMessageError 550 5.7.1  for more information. esmtpsoutbkna1-20.0 - gsmtp (in reply to DATA command)",
+        ).unwrap();
+        assert_eq!(
+            reason,
+            Reason::UnsolicitedMessageError {
+                hostname: "smtp.google.com".into(),
+                ipaddr: "192.0.2.9".parse().unwrap(),
+                from_ipaddr: Some("198.51.100.4".parse().unwrap()),
+            }
+        );
     }
 
     #[test]
