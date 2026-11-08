@@ -1,672 +1,686 @@
 Dec 17 06:00:02 mail postfix/smtpd[4000]: connect from node3.example.com[192.0.2.20]
-Dec 17 06:00:02 mail postfix/smtpd[4000]: C9FA9748A748: client=node3.example.com[192.0.2.20]
-Dec 17 06:00:02 mail postfix/cleanup[4100]: C9FA9748A748: message-id=<D51B11652E996913@mail.example.com>
-Dec 17 06:00:02 mail postfix/qmgr[3900]: C9FA9748A748: from=<alice@example.com>, size=27275, nrcpt=1 (queue active)
-Dec 17 06:00:02 mail postfix/smtp[4200]: C9FA9748A748: to=<hank@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.1.1 The user you tried to send mail no longer exists on the domain of example.org (in reply to DATA command))
-Dec 17 06:00:02 mail postfix/bounce[4300]: C9FA9748A748: sender non-delivery notification: C9DFDED3
-Dec 17 06:00:02 mail postfix/qmgr[3900]: C9FA9748A748: removed
+Dec 17 06:00:02 mail postfix/smtpd[4000]: 0C0FFEE00000: client=node3.example.com[192.0.2.20]
+Dec 17 06:00:02 mail postfix/cleanup[4100]: 0C0FFEE00000: message-id=<0D0FFEE001B3@mail.example.com>
+Dec 17 06:00:02 mail postfix/qmgr[3900]: 0C0FFEE00000: from=<alice@example.com>, size=20000, nrcpt=1 (queue active)
+Dec 17 06:00:02 mail postfix/smtp[4200]: 0C0FFEE00000: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 0C0FFEE00000)
+Dec 17 06:00:02 mail postfix/qmgr[3900]: 0C0FFEE00000: removed
 Dec 17 06:00:02 mail postfix/smtpd[4000]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:05 mail postfix/smtpd[4001]: connect from desk12.example.com[192.0.2.21]
-Dec 17 06:00:05 mail postfix/smtpd[4001]: F861DA89A789: client=desk12.example.com[192.0.2.21]
-Dec 17 06:00:05 mail postfix/cleanup[4101]: F861DA89A789: message-id=<7557AD87DA4F5730@mail.example.com>
-Dec 17 06:00:05 mail postfix/qmgr[3900]: F861DA89A789: from=<bob@example.com>, size=2966, nrcpt=1 (queue active)
-Dec 17 06:00:05 mail postfix/smtp[4201]: F861DA89A789: to=<irene@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 84A9B4F0)
-Dec 17 06:00:05 mail postfix/qmgr[3900]: F861DA89A789: removed
-Dec 17 06:00:05 mail postfix/smtpd[4001]: disconnect from desk12.example.com[192.0.2.21] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:06 mail postfix/smtpd[4002]: connect from vpn7.example.net[192.0.2.22]
-Dec 17 06:00:06 mail postfix/smtpd[4002]: AEA095C1A7C1: client=vpn7.example.net[192.0.2.22]
-Dec 17 06:00:06 mail postfix/cleanup[4102]: AEA095C1A7C1: message-id=<A19F60224332F955@mail.example.com>
-Dec 17 06:00:06 mail postfix/qmgr[3900]: AEA095C1A7C1: from=<carol@example.com>, size=28172, nrcpt=1 (queue active)
-Dec 17 06:00:06 mail postfix/smtp[4202]: AEA095C1A7C1: to=<mike@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B24A0D3C)
-Dec 17 06:00:06 mail postfix/qmgr[3900]: AEA095C1A7C1: removed
-Dec 17 06:00:06 mail postfix/smtpd[4002]: disconnect from vpn7.example.net[192.0.2.22] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:08 mail postfix/smtpd[4003]: connect from server.example.org[192.0.2.23]
-Dec 17 06:00:08 mail postfix/smtpd[4003]: F96F23B8A7B8: client=server.example.org[192.0.2.23]
-Dec 17 06:00:08 mail postfix/cleanup[4103]: F96F23B8A7B8: message-id=<B95EFB3B1B71426A@mail.example.com>
-Dec 17 06:00:08 mail postfix/qmgr[3900]: F96F23B8A7B8: from=<postmaster@example.com>, size=23569, nrcpt=1 (queue active)
-Dec 17 06:00:08 mail postfix/smtp[4203]: F96F23B8A7B8: to=<nina@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host gateway.example.net[203.0.113.50] said: 554 5.7.1 Message rejected as spam by Content Filtering (in reply to DATA command))
-Dec 17 06:00:08 mail postfix/bounce[4303]: F96F23B8A7B8: sender non-delivery notification: 6EDA5443
-Dec 17 06:00:08 mail postfix/qmgr[3900]: F96F23B8A7B8: removed
-Dec 17 06:00:08 mail postfix/smtpd[4003]: disconnect from server.example.org[192.0.2.23] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:11 mail postfix/smtpd[4004]: connect from node3.example.com[192.0.2.24]
-Dec 17 06:00:11 mail postfix/smtpd[4004]: 1A12866FA76F: client=node3.example.com[192.0.2.24]
-Dec 17 06:00:11 mail postfix/cleanup[4104]: 1A12866FA76F: message-id=<EE5511D37E5A9F28@mail.example.com>
-Dec 17 06:00:11 mail postfix/qmgr[3900]: 1A12866FA76F: from=<alice@example.com>, size=1490, nrcpt=1 (queue active)
-Dec 17 06:00:11 mail postfix/smtp[4204]: 1A12866FA76F: to=<Ollie@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2DB8C739)
-Dec 17 06:00:11 mail postfix/qmgr[3900]: 1A12866FA76F: removed
-Dec 17 06:00:11 mail postfix/smtpd[4004]: disconnect from node3.example.com[192.0.2.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:13 mail postfix/smtpd[4005]: connect from desk12.example.com[192.0.2.25]
-Dec 17 06:00:13 mail postfix/smtpd[4005]: 0B3CB6DFA7DF: client=desk12.example.com[192.0.2.25]
-Dec 17 06:00:13 mail postfix/cleanup[4105]: 0B3CB6DFA7DF: message-id=<B79C3201702B728C@mail.example.com>
-Dec 17 06:00:13 mail postfix/qmgr[3900]: 0B3CB6DFA7DF: from=<bob@example.com>, size=17546, nrcpt=1 (queue active)
-Dec 17 06:00:13 mail postfix/smtp[4205]: 0B3CB6DFA7DF: to=<hank@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as C1355661)
-Dec 17 06:00:13 mail postfix/qmgr[3900]: 0B3CB6DFA7DF: removed
-Dec 17 06:00:13 mail postfix/smtpd[4005]: disconnect from desk12.example.com[192.0.2.25] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:14 mail postfix/smtpd[4006]: connect from vpn7.example.net[192.0.2.26]
-Dec 17 06:00:14 mail postfix/smtpd[4006]: 9B50DDF6A7F6: client=vpn7.example.net[192.0.2.26]
-Dec 17 06:00:14 mail postfix/cleanup[4106]: 9B50DDF6A7F6: message-id=<D3B970FFD8ACDB59@mail.example.com>
-Dec 17 06:00:14 mail postfix/qmgr[3900]: 9B50DDF6A7F6: from=<carol@example.com>, size=26566, nrcpt=1 (queue active)
-Dec 17 06:00:14 mail postfix/smtp[4206]: 9B50DDF6A7F6: to=<irene@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as D2817C59)
-Dec 17 06:00:14 mail postfix/qmgr[3900]: 9B50DDF6A7F6: removed
-Dec 17 06:00:14 mail postfix/smtpd[4006]: disconnect from vpn7.example.net[192.0.2.26] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:17 mail postfix/smtpd[4007]: connect from server.example.org[192.0.2.27]
-Dec 17 06:00:17 mail postfix/smtpd[4007]: BAD935ABA7AB: client=server.example.org[192.0.2.27]
-Dec 17 06:00:17 mail postfix/cleanup[4107]: BAD935ABA7AB: message-id=<8DBD97CF2B9A2D8E@mail.example.com>
-Dec 17 06:00:17 mail postfix/qmgr[3900]: BAD935ABA7AB: from=<postmaster@example.com>, size=24929, nrcpt=1 (queue active)
-Dec 17 06:00:17 mail postfix/smtp[4207]: BAD935ABA7AB: to=<mike@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as C8382DA4)
-Dec 17 06:00:17 mail postfix/qmgr[3900]: BAD935ABA7AB: removed
-Dec 17 06:00:17 mail postfix/smtpd[4007]: disconnect from server.example.org[192.0.2.27] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:18 mail postfix/smtpd[4008]: connect from node3.example.com[192.0.2.28]
-Dec 17 06:00:18 mail postfix/smtpd[4008]: ED76A96CA76C: client=node3.example.com[192.0.2.28]
-Dec 17 06:00:18 mail postfix/cleanup[4108]: ED76A96CA76C: message-id=<2C39DF6071AE3249@mail.example.com>
-Dec 17 06:00:18 mail postfix/qmgr[3900]: ED76A96CA76C: from=<alice@example.com>, size=5511, nrcpt=1 (queue active)
-Dec 17 06:00:18 mail postfix/smtp[4208]: ED76A96CA76C: to=<nina@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 39F0ED84)
-Dec 17 06:00:18 mail postfix/qmgr[3900]: ED76A96CA76C: removed
-Dec 17 06:00:18 mail postfix/smtpd[4008]: disconnect from node3.example.com[192.0.2.28] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:21 mail postfix/smtpd[4009]: connect from desk12.example.com[192.0.2.29]
-Dec 17 06:00:21 mail postfix/smtpd[4009]: 1410271FA71F: client=desk12.example.com[192.0.2.29]
-Dec 17 06:00:21 mail postfix/cleanup[4109]: 1410271FA71F: message-id=<4DDCC34FD16822A3@mail.example.com>
-Dec 17 06:00:21 mail postfix/qmgr[3900]: 1410271FA71F: from=<bob@example.com>, size=5035, nrcpt=1 (queue active)
-Dec 17 06:00:21 mail postfix/smtp[4209]: 1410271FA71F: to=<Ollie@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as A0CCF573)
-Dec 17 06:00:21 mail postfix/qmgr[3900]: 1410271FA71F: removed
-Dec 17 06:00:21 mail postfix/smtpd[4009]: disconnect from desk12.example.com[192.0.2.29] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:23 mail postfix/smtpd[4010]: connect from vpn7.example.net[192.0.2.30]
-Dec 17 06:00:23 mail postfix/smtpd[4010]: 0E0097A6A7A6: client=vpn7.example.net[192.0.2.30]
-Dec 17 06:00:23 mail postfix/cleanup[4110]: 0E0097A6A7A6: message-id=<3F6C3B07584B5944@mail.example.com>
-Dec 17 06:00:23 mail postfix/qmgr[3900]: 0E0097A6A7A6: from=<carol@example.com>, size=17746, nrcpt=1 (queue active)
-Dec 17 06:00:23 mail postfix/smtp[4210]: 0E0097A6A7A6: to=<hank@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B618A7B1)
-Dec 17 06:00:23 mail postfix/qmgr[3900]: 0E0097A6A7A6: removed
-Dec 17 06:00:23 mail postfix/smtpd[4010]: disconnect from vpn7.example.net[192.0.2.30] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:24 mail postfix/smtpd[4011]: connect from server.example.org[192.0.2.31]
-Dec 17 06:00:24 mail postfix/smtpd[4011]: 514B1C9EA79E: client=server.example.org[192.0.2.31]
-Dec 17 06:00:24 mail postfix/cleanup[4111]: 514B1C9EA79E: message-id=<11596F7DD63B4FAA@mail.example.com>
-Dec 17 06:00:24 mail postfix/qmgr[3900]: 514B1C9EA79E: from=<postmaster@example.com>, size=15473, nrcpt=1 (queue active)
-Dec 17 06:00:24 mail postfix/smtp[4211]: 514B1C9EA79E: to=<irene@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.3, status=deferred (host gateway.example.net[203.0.113.50] said: Host or domain name not found. Name service error for name=nxdomain.example.org type=A: Host not found, try again (in reply to RCPT TO command))
-Dec 17 06:00:24 mail postfix/qmgr[3900]: 514B1C9EA79E: removed
-Dec 17 06:00:24 mail postfix/smtpd[4011]: disconnect from server.example.org[192.0.2.31] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:26 mail postfix/smtpd[4012]: connect from node3.example.com[192.0.2.32]
-Dec 17 06:00:26 mail postfix/smtpd[4012]: 84010AA3A7A3: client=node3.example.com[192.0.2.32]
-Dec 17 06:00:26 mail postfix/cleanup[4112]: 84010AA3A7A3: message-id=<4B194440BFDDEB11@mail.example.com>
-Dec 17 06:00:26 mail postfix/qmgr[3900]: 84010AA3A7A3: from=<alice@example.com>, size=9267, nrcpt=1 (queue active)
-Dec 17 06:00:26 mail postfix/smtp[4212]: 84010AA3A7A3: to=<mike@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 5EF4B303)
-Dec 17 06:00:26 mail postfix/qmgr[3900]: 84010AA3A7A3: removed
-Dec 17 06:00:26 mail postfix/smtpd[4012]: disconnect from node3.example.com[192.0.2.32] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:27 mail postfix/smtpd[4013]: connect from desk12.example.com[192.0.2.33]
-Dec 17 06:00:27 mail postfix/smtpd[4013]: DDFE997CA77C: client=desk12.example.com[192.0.2.33]
-Dec 17 06:00:27 mail postfix/cleanup[4113]: DDFE997CA77C: message-id=<F7EA070E60AACD07@mail.example.com>
-Dec 17 06:00:27 mail postfix/qmgr[3900]: DDFE997CA77C: from=<bob@example.com>, size=24129, nrcpt=1 (queue active)
-Dec 17 06:00:27 mail postfix/smtp[4213]: DDFE997CA77C: to=<nina@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.2.2, status=deferred (host mail.example.net[198.51.100.24] said: 452 4.2.2 <nina@example.net>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to DATA command))
-Dec 17 06:00:27 mail postfix/qmgr[3900]: DDFE997CA77C: removed
-Dec 17 06:00:27 mail postfix/smtpd[4013]: disconnect from desk12.example.com[192.0.2.33] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:29 mail postfix/smtpd[4014]: connect from vpn7.example.net[192.0.2.34]
-Dec 17 06:00:29 mail postfix/smtpd[4014]: 7421EDD3A7D3: client=vpn7.example.net[192.0.2.34]
-Dec 17 06:00:29 mail postfix/cleanup[4114]: 7421EDD3A7D3: message-id=<D718FC4E53E67A95@mail.example.com>
-Dec 17 06:00:29 mail postfix/qmgr[3900]: 7421EDD3A7D3: from=<carol@example.com>, size=28389, nrcpt=1 (queue active)
-Dec 17 06:00:29 mail postfix/smtp[4214]: 7421EDD3A7D3: to=<Ollie@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as F4461DCE)
-Dec 17 06:00:29 mail postfix/qmgr[3900]: 7421EDD3A7D3: removed
-Dec 17 06:00:29 mail postfix/smtpd[4014]: disconnect from vpn7.example.net[192.0.2.34] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:31 mail postfix/smtpd[4015]: connect from server.example.org[192.0.2.35]
-Dec 17 06:00:31 mail postfix/smtpd[4015]: 48FE09B8A7B8: client=server.example.org[192.0.2.35]
-Dec 17 06:00:31 mail postfix/cleanup[4115]: 48FE09B8A7B8: message-id=<0CB7517E0430E1F1@mail.example.com>
-Dec 17 06:00:31 mail postfix/qmgr[3900]: 48FE09B8A7B8: from=<postmaster@example.com>, size=4890, nrcpt=1 (queue active)
-Dec 17 06:00:31 mail postfix/smtp[4215]: 48FE09B8A7B8: to=<hank@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (host gateway.example.net[203.0.113.50] said: connect to gateway.example.net[203.0.113.50]:25: Network is unreachable (in reply to DATA command))
-Dec 17 06:00:31 mail postfix/qmgr[3900]: 48FE09B8A7B8: removed
-Dec 17 06:00:31 mail postfix/smtpd[4015]: disconnect from server.example.org[192.0.2.35] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:33 mail postfix/smtpd[4016]: connect from node3.example.com[192.0.2.36]
-Dec 17 06:00:33 mail postfix/smtpd[4016]: 3813E429A729: client=node3.example.com[192.0.2.36]
-Dec 17 06:00:33 mail postfix/cleanup[4116]: 3813E429A729: message-id=<67EB4A2E7F35797F@mail.example.com>
-Dec 17 06:00:33 mail postfix/qmgr[3900]: 3813E429A729: from=<alice@example.com>, size=17657, nrcpt=1 (queue active)
-Dec 17 06:00:33 mail postfix/smtp[4216]: 3813E429A729: to=<irene@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as A788EF1F)
-Dec 17 06:00:33 mail postfix/qmgr[3900]: 3813E429A729: removed
-Dec 17 06:00:33 mail postfix/smtpd[4016]: disconnect from node3.example.com[192.0.2.36] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:35 mail postfix/smtpd[4017]: connect from desk12.example.com[192.0.2.37]
-Dec 17 06:00:35 mail postfix/smtpd[4017]: 85C55661A761: client=desk12.example.com[192.0.2.37]
-Dec 17 06:00:35 mail postfix/cleanup[4117]: 85C55661A761: message-id=<927A0A7ECC7A557E@mail.example.com>
-Dec 17 06:00:35 mail postfix/qmgr[3900]: 85C55661A761: from=<bob@example.com>, size=17121, nrcpt=1 (queue active)
-Dec 17 06:00:35 mail postfix/smtp[4217]: 85C55661A761: to=<mike@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mail.example.net[198.51.100.24] said: 550 No Such User Here (in reply to MAIL FROM command))
-Dec 17 06:00:35 mail postfix/bounce[4317]: 85C55661A761: sender non-delivery notification: 29E7A129
-Dec 17 06:00:35 mail postfix/qmgr[3900]: 85C55661A761: removed
-Dec 17 06:00:35 mail postfix/smtpd[4017]: disconnect from desk12.example.com[192.0.2.37] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:37 mail postfix/smtpd[4018]: connect from vpn7.example.net[192.0.2.38]
-Dec 17 06:00:37 mail postfix/smtpd[4018]: CA6ABD21A721: client=vpn7.example.net[192.0.2.38]
-Dec 17 06:00:37 mail postfix/cleanup[4118]: CA6ABD21A721: message-id=<DC0D4307E37D6FF6@mail.example.com>
-Dec 17 06:00:37 mail postfix/qmgr[3900]: CA6ABD21A721: from=<carol@example.com>, size=7166, nrcpt=1 (queue active)
-Dec 17 06:00:37 mail postfix/smtp[4218]: CA6ABD21A721: to=<nina@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host aspmx.example.org[203.0.113.11] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to DATA command))
-Dec 17 06:00:37 mail postfix/qmgr[3900]: CA6ABD21A721: removed
-Dec 17 06:00:37 mail postfix/smtpd[4018]: disconnect from vpn7.example.net[192.0.2.38] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:39 mail postfix/smtpd[4019]: connect from server.example.org[192.0.2.39]
-Dec 17 06:00:39 mail postfix/smtpd[4019]: 362FFFE3A7E3: client=server.example.org[192.0.2.39]
-Dec 17 06:00:39 mail postfix/cleanup[4119]: 362FFFE3A7E3: message-id=<4A342EB08867A8E2@mail.example.com>
-Dec 17 06:00:39 mail postfix/qmgr[3900]: 362FFFE3A7E3: from=<postmaster@example.com>, size=6075, nrcpt=1 (queue active)
-Dec 17 06:00:39 mail postfix/smtp[4219]: 362FFFE3A7E3: to=<Ollie@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B9AC0107)
-Dec 17 06:00:39 mail postfix/qmgr[3900]: 362FFFE3A7E3: removed
-Dec 17 06:00:39 mail postfix/smtpd[4019]: disconnect from server.example.org[192.0.2.39] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:40 mail postfix/smtpd[4020]: connect from node3.example.com[192.0.2.40]
-Dec 17 06:00:40 mail postfix/smtpd[4020]: C6F03270A770: client=node3.example.com[192.0.2.40]
-Dec 17 06:00:40 mail postfix/cleanup[4120]: C6F03270A770: message-id=<12866D037298FD83@mail.example.com>
-Dec 17 06:00:40 mail postfix/qmgr[3900]: C6F03270A770: from=<alice@example.com>, size=9973, nrcpt=1 (queue active)
-Dec 17 06:00:40 mail postfix/smtp[4220]: C6F03270A770: to=<hank@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 63D3A54F)
-Dec 17 06:00:40 mail postfix/qmgr[3900]: C6F03270A770: removed
-Dec 17 06:00:40 mail postfix/smtpd[4020]: disconnect from node3.example.com[192.0.2.40] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:43 mail postfix/smtpd[4021]: connect from desk12.example.com[192.0.2.41]
-Dec 17 06:00:43 mail postfix/smtpd[4021]: 5B8C229FA79F: client=desk12.example.com[192.0.2.41]
-Dec 17 06:00:43 mail postfix/cleanup[4121]: 5B8C229FA79F: message-id=<B1CDE613D323B57C@mail.example.com>
-Dec 17 06:00:43 mail postfix/qmgr[3900]: 5B8C229FA79F: from=<bob@example.com>, size=18422, nrcpt=1 (queue active)
-Dec 17 06:00:43 mail postfix/smtp[4221]: 5B8C229FA79F: to=<irene@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2E3AAA2E)
-Dec 17 06:00:43 mail postfix/qmgr[3900]: 5B8C229FA79F: removed
-Dec 17 06:00:43 mail postfix/smtpd[4021]: disconnect from desk12.example.com[192.0.2.41] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:46 mail postfix/smtpd[4022]: connect from vpn7.example.net[192.0.2.42]
-Dec 17 06:00:46 mail postfix/smtpd[4022]: 2011EC57A757: client=vpn7.example.net[192.0.2.42]
-Dec 17 06:00:46 mail postfix/cleanup[4122]: 2011EC57A757: message-id=<980D6B652E02EFF5@mail.example.com>
-Dec 17 06:00:46 mail postfix/qmgr[3900]: 2011EC57A757: from=<carol@example.com>, size=15014, nrcpt=1 (queue active)
-Dec 17 06:00:46 mail postfix/smtp[4222]: 2011EC57A757: to=<mike@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 95272E2F)
-Dec 17 06:00:46 mail postfix/qmgr[3900]: 2011EC57A757: removed
-Dec 17 06:00:46 mail postfix/smtpd[4022]: disconnect from vpn7.example.net[192.0.2.42] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:47 mail postfix/smtpd[4023]: connect from server.example.org[192.0.2.43]
-Dec 17 06:00:47 mail postfix/smtpd[4023]: 396FDE9DA79D: client=server.example.org[192.0.2.43]
-Dec 17 06:00:47 mail postfix/cleanup[4123]: 396FDE9DA79D: message-id=<3D8E3A48A41902A6@mail.example.com>
-Dec 17 06:00:47 mail postfix/qmgr[3900]: 396FDE9DA79D: from=<postmaster@example.com>, size=16490, nrcpt=1 (queue active)
-Dec 17 06:00:47 mail postfix/smtp[4223]: 396FDE9DA79D: to=<nina@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 79C438A1)
-Dec 17 06:00:47 mail postfix/qmgr[3900]: 396FDE9DA79D: removed
-Dec 17 06:00:47 mail postfix/smtpd[4023]: disconnect from server.example.org[192.0.2.43] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:50 mail postfix/smtpd[4024]: connect from node3.example.com[192.0.2.44]
-Dec 17 06:00:50 mail postfix/smtpd[4024]: AE9BC52AA72A: client=node3.example.com[192.0.2.44]
-Dec 17 06:00:50 mail postfix/cleanup[4124]: AE9BC52AA72A: message-id=<7011260FF350F1F4@mail.example.com>
-Dec 17 06:00:50 mail postfix/qmgr[3900]: AE9BC52AA72A: from=<alice@example.com>, size=22289, nrcpt=1 (queue active)
-Dec 17 06:00:50 mail postfix/smtp[4224]: AE9BC52AA72A: to=<Ollie@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host mx.example.org[198.51.100.7] said: 451 4.7.1 <192.0.2.44>: Client host rejected: cannot find your hostname, [192.0.2.44] (in reply to MAIL FROM command))
-Dec 17 06:00:50 mail postfix/qmgr[3900]: AE9BC52AA72A: removed
-Dec 17 06:00:50 mail postfix/smtpd[4024]: disconnect from node3.example.com[192.0.2.44] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:53 mail postfix/smtpd[4025]: connect from desk12.example.com[192.0.2.45]
-Dec 17 06:00:53 mail postfix/smtpd[4025]: ADBD0153A753: client=desk12.example.com[192.0.2.45]
-Dec 17 06:00:53 mail postfix/cleanup[4125]: ADBD0153A753: message-id=<420A6553B50709B9@mail.example.com>
-Dec 17 06:00:53 mail postfix/qmgr[3900]: ADBD0153A753: from=<bob@example.com>, size=24377, nrcpt=1 (queue active)
-Dec 17 06:00:53 mail postfix/smtp[4225]: ADBD0153A753: to=<hank@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as CD24EB1B)
-Dec 17 06:00:53 mail postfix/qmgr[3900]: ADBD0153A753: removed
-Dec 17 06:00:53 mail postfix/smtpd[4025]: disconnect from desk12.example.com[192.0.2.45] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:56 mail postfix/smtpd[4026]: connect from vpn7.example.net[192.0.2.46]
-Dec 17 06:00:56 mail postfix/smtpd[4026]: 173D354CA74C: client=vpn7.example.net[192.0.2.46]
-Dec 17 06:00:56 mail postfix/cleanup[4126]: 173D354CA74C: message-id=<5DF85DE63E22315C@mail.example.com>
-Dec 17 06:00:56 mail postfix/qmgr[3900]: 173D354CA74C: from=<carol@example.com>, size=18214, nrcpt=1 (queue active)
-Dec 17 06:00:56 mail postfix/smtp[4226]: 173D354CA74C: to=<irene@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host aspmx.example.org[203.0.113.11] said: 550 5.0.0 Unrecognised reply from the remote host, code 999 (in reply to RCPT TO command))
-Dec 17 06:00:56 mail postfix/bounce[4326]: 173D354CA74C: sender non-delivery notification: 4EFDED69
-Dec 17 06:00:56 mail postfix/qmgr[3900]: 173D354CA74C: removed
-Dec 17 06:00:56 mail postfix/smtpd[4026]: disconnect from vpn7.example.net[192.0.2.46] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:00:59 mail postfix/smtpd[4027]: connect from server.example.org[192.0.2.47]
-Dec 17 06:00:59 mail postfix/smtpd[4027]: FD17C55FA75F: client=server.example.org[192.0.2.47]
-Dec 17 06:00:59 mail postfix/cleanup[4127]: FD17C55FA75F: message-id=<23CCCDCD36F84AB7@mail.example.com>
-Dec 17 06:00:59 mail postfix/qmgr[3900]: FD17C55FA75F: from=<postmaster@example.com>, size=29783, nrcpt=1 (queue active)
-Dec 17 06:00:59 mail postfix/smtp[4227]: FD17C55FA75F: to=<mike@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host gateway.example.net[203.0.113.50] said: 450 4.7.1 Error: connection has exceeded local traffic-limit (in reply to RCPT TO command))
-Dec 17 06:00:59 mail postfix/qmgr[3900]: FD17C55FA75F: removed
-Dec 17 06:00:59 mail postfix/smtpd[4027]: disconnect from server.example.org[192.0.2.47] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:02 mail postfix/smtpd[4028]: connect from node3.example.com[192.0.2.48]
-Dec 17 06:01:02 mail postfix/smtpd[4028]: FA4F9662A762: client=node3.example.com[192.0.2.48]
-Dec 17 06:01:02 mail postfix/cleanup[4128]: FA4F9662A762: message-id=<CD2CF3B71D071FC9@mail.example.com>
-Dec 17 06:01:02 mail postfix/qmgr[3900]: FA4F9662A762: from=<alice@example.com>, size=19010, nrcpt=1 (queue active)
-Dec 17 06:01:02 mail postfix/smtp[4228]: FA4F9662A762: to=<nina@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as F90CE8BE)
-Dec 17 06:01:02 mail postfix/qmgr[3900]: FA4F9662A762: removed
-Dec 17 06:01:02 mail postfix/smtpd[4028]: disconnect from node3.example.com[192.0.2.48] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:05 mail postfix/smtpd[4029]: connect from desk12.example.com[192.0.2.49]
-Dec 17 06:01:05 mail postfix/smtpd[4029]: 1CB9B37AA77A: client=desk12.example.com[192.0.2.49]
-Dec 17 06:01:05 mail postfix/cleanup[4129]: 1CB9B37AA77A: message-id=<47B2B271E6E25F42@mail.example.com>
-Dec 17 06:01:05 mail postfix/qmgr[3900]: 1CB9B37AA77A: from=<bob@example.com>, size=24710, nrcpt=1 (queue active)
-Dec 17 06:01:05 mail postfix/smtp[4229]: 1CB9B37AA77A: to=<Ollie@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.2.2, status=deferred (host mail.example.net[198.51.100.24] said: 452 4.2.2 <Ollie@example.org>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to RCPT TO command))
-Dec 17 06:01:05 mail postfix/qmgr[3900]: 1CB9B37AA77A: removed
-Dec 17 06:01:05 mail postfix/smtpd[4029]: disconnect from desk12.example.com[192.0.2.49] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:08 mail postfix/smtpd[4030]: connect from vpn7.example.net[192.0.2.50]
-Dec 17 06:01:08 mail postfix/smtpd[4030]: 5D202D99A799: client=vpn7.example.net[192.0.2.50]
-Dec 17 06:01:08 mail postfix/cleanup[4130]: 5D202D99A799: message-id=<99BF1DCBED8DEF74@mail.example.com>
-Dec 17 06:01:08 mail postfix/qmgr[3900]: 5D202D99A799: from=<carol@example.com>, size=32915, nrcpt=1 (queue active)
-Dec 17 06:01:08 mail postfix/smtp[4230]: 5D202D99A799: to=<hank@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (host aspmx.example.org[203.0.113.11] said: connect to aspmx.example.org[203.0.113.11]:25: Network is unreachable (in reply to DATA command))
-Dec 17 06:01:08 mail postfix/qmgr[3900]: 5D202D99A799: removed
-Dec 17 06:01:08 mail postfix/smtpd[4030]: disconnect from vpn7.example.net[192.0.2.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:09 mail postfix/smtpd[4031]: connect from server.example.org[192.0.2.51]
-Dec 17 06:01:09 mail postfix/smtpd[4031]: 5C65B348A748: client=server.example.org[192.0.2.51]
-Dec 17 06:01:09 mail postfix/cleanup[4131]: 5C65B348A748: message-id=<116993F42DD06D0D@mail.example.com>
-Dec 17 06:01:09 mail postfix/qmgr[3900]: 5C65B348A748: from=<postmaster@example.com>, size=5993, nrcpt=1 (queue active)
-Dec 17 06:01:09 mail postfix/smtp[4231]: 5C65B348A748: to=<irene@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as FEDC9C1F)
-Dec 17 06:01:09 mail postfix/qmgr[3900]: 5C65B348A748: removed
-Dec 17 06:01:09 mail postfix/smtpd[4031]: disconnect from server.example.org[192.0.2.51] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:11 mail postfix/smtpd[4032]: connect from node3.example.com[192.0.2.52]
-Dec 17 06:01:11 mail postfix/smtpd[4032]: A3F8664BA74B: client=node3.example.com[192.0.2.52]
-Dec 17 06:01:11 mail postfix/cleanup[4132]: A3F8664BA74B: message-id=<F6C2FA57B4C78A0A@mail.example.com>
-Dec 17 06:01:11 mail postfix/qmgr[3900]: A3F8664BA74B: from=<alice@example.com>, size=27795, nrcpt=1 (queue active)
-Dec 17 06:01:11 mail postfix/smtp[4232]: A3F8664BA74B: to=<mike@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.1.1 <mike@example.org>: Recipient address rejected: User unknown in virtual mailbox table (in reply to RCPT TO command))
-Dec 17 06:01:11 mail postfix/bounce[4332]: A3F8664BA74B: sender non-delivery notification: 647ED9D5
-Dec 17 06:01:11 mail postfix/qmgr[3900]: A3F8664BA74B: removed
-Dec 17 06:01:11 mail postfix/smtpd[4032]: disconnect from node3.example.com[192.0.2.52] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:14 mail postfix/smtpd[4033]: connect from desk12.example.com[192.0.2.53]
-Dec 17 06:01:14 mail postfix/smtpd[4033]: 2072FDA6A7A6: client=desk12.example.com[192.0.2.53]
-Dec 17 06:01:14 mail postfix/cleanup[4133]: 2072FDA6A7A6: message-id=<9F7EF110CC072416@mail.example.com>
-Dec 17 06:01:14 mail postfix/qmgr[3900]: 2072FDA6A7A6: from=<bob@example.com>, size=32624, nrcpt=1 (queue active)
-Dec 17 06:01:14 mail postfix/smtp[4233]: 2072FDA6A7A6: to=<nina@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 54894B41)
-Dec 17 06:01:14 mail postfix/qmgr[3900]: 2072FDA6A7A6: removed
-Dec 17 06:01:14 mail postfix/smtpd[4033]: disconnect from desk12.example.com[192.0.2.53] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:15 mail postfix/smtpd[4034]: connect from vpn7.example.net[192.0.2.54]
-Dec 17 06:01:15 mail postfix/smtpd[4034]: 9264CD89A789: client=vpn7.example.net[192.0.2.54]
-Dec 17 06:01:15 mail postfix/cleanup[4134]: 9264CD89A789: message-id=<DC36AF8E3A72F755@mail.example.com>
-Dec 17 06:01:15 mail postfix/qmgr[3900]: 9264CD89A789: from=<carol@example.com>, size=35438, nrcpt=1 (queue active)
-Dec 17 06:01:15 mail postfix/smtp[4234]: 9264CD89A789: to=<Ollie@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 60CECD65)
-Dec 17 06:01:15 mail postfix/qmgr[3900]: 9264CD89A789: removed
-Dec 17 06:01:15 mail postfix/smtpd[4034]: disconnect from vpn7.example.net[192.0.2.54] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:16 mail postfix/smtpd[4035]: connect from server.example.org[192.0.2.55]
-Dec 17 06:01:16 mail postfix/smtpd[4035]: D272C7ECA7EC: client=server.example.org[192.0.2.55]
-Dec 17 06:01:16 mail postfix/cleanup[4135]: D272C7ECA7EC: message-id=<A203EEDECB2DD3BD@mail.example.com>
-Dec 17 06:01:16 mail postfix/qmgr[3900]: D272C7ECA7EC: from=<postmaster@example.com>, size=12539, nrcpt=1 (queue active)
-Dec 17 06:01:16 mail postfix/smtp[4235]: D272C7ECA7EC: to=<hank@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 63809491)
-Dec 17 06:01:16 mail postfix/qmgr[3900]: D272C7ECA7EC: removed
-Dec 17 06:01:16 mail postfix/smtpd[4035]: disconnect from server.example.org[192.0.2.55] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:19 mail postfix/smtpd[4036]: connect from node3.example.com[192.0.2.56]
-Dec 17 06:01:19 mail postfix/smtpd[4036]: FAF330F0A7F0: client=node3.example.com[192.0.2.56]
-Dec 17 06:01:19 mail postfix/cleanup[4136]: FAF330F0A7F0: message-id=<ACD3BEAA69DF0DE7@mail.example.com>
-Dec 17 06:01:19 mail postfix/qmgr[3900]: FAF330F0A7F0: from=<alice@example.com>, size=1320, nrcpt=1 (queue active)
-Dec 17 06:01:19 mail postfix/smtp[4236]: FAF330F0A7F0: to=<irene@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as A7296C7F)
-Dec 17 06:01:19 mail postfix/qmgr[3900]: FAF330F0A7F0: removed
-Dec 17 06:01:19 mail postfix/smtpd[4036]: disconnect from node3.example.com[192.0.2.56] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:22 mail postfix/smtpd[4037]: connect from desk12.example.com[192.0.2.57]
-Dec 17 06:01:22 mail postfix/smtpd[4037]: 0E2A27ADA7AD: client=desk12.example.com[192.0.2.57]
-Dec 17 06:01:22 mail postfix/cleanup[4137]: 0E2A27ADA7AD: message-id=<1FD173CDF38A697D@mail.example.com>
-Dec 17 06:01:22 mail postfix/qmgr[3900]: 0E2A27ADA7AD: from=<bob@example.com>, size=11834, nrcpt=1 (queue active)
-Dec 17 06:01:22 mail postfix/smtp[4237]: 0E2A27ADA7AD: to=<mike@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2AB3A2EF)
-Dec 17 06:01:22 mail postfix/qmgr[3900]: 0E2A27ADA7AD: removed
-Dec 17 06:01:22 mail postfix/smtpd[4037]: disconnect from desk12.example.com[192.0.2.57] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:25 mail postfix/smtpd[4038]: connect from vpn7.example.net[192.0.2.58]
-Dec 17 06:01:25 mail postfix/smtpd[4038]: 4811EE45A745: client=vpn7.example.net[192.0.2.58]
-Dec 17 06:01:25 mail postfix/cleanup[4138]: 4811EE45A745: message-id=<C0776BAF05670D58@mail.example.com>
-Dec 17 06:01:25 mail postfix/qmgr[3900]: 4811EE45A745: from=<carol@example.com>, size=17964, nrcpt=1 (queue active)
-Dec 17 06:01:25 mail postfix/smtp[4238]: 4811EE45A745: to=<nina@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 845613CF)
-Dec 17 06:01:25 mail postfix/qmgr[3900]: 4811EE45A745: removed
-Dec 17 06:01:25 mail postfix/smtpd[4038]: disconnect from vpn7.example.net[192.0.2.58] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:28 mail postfix/smtpd[4039]: connect from server.example.org[192.0.2.59]
-Dec 17 06:01:28 mail postfix/smtpd[4039]: FAA9F3D2A7D2: client=server.example.org[192.0.2.59]
-Dec 17 06:01:28 mail postfix/cleanup[4139]: FAA9F3D2A7D2: message-id=<F6FA3677BB7E6D77@mail.example.com>
-Dec 17 06:01:28 mail postfix/qmgr[3900]: FAA9F3D2A7D2: from=<postmaster@example.com>, size=22874, nrcpt=1 (queue active)
-Dec 17 06:01:28 mail postfix/smtp[4239]: FAA9F3D2A7D2: to=<Ollie@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (host gateway.example.net[203.0.113.50] said: lost connection with gateway.example.net[203.0.113.50] while sending message body (in reply to RCPT TO command))
-Dec 17 06:01:28 mail postfix/qmgr[3900]: FAA9F3D2A7D2: removed
-Dec 17 06:01:28 mail postfix/smtpd[4039]: disconnect from server.example.org[192.0.2.59] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:30 mail postfix/smtpd[4040]: connect from node3.example.com[192.0.2.60]
-Dec 17 06:01:30 mail postfix/smtpd[4040]: 73C70466A766: client=node3.example.com[192.0.2.60]
-Dec 17 06:01:30 mail postfix/cleanup[4140]: 73C70466A766: message-id=<28B8AF034E5DCF73@mail.example.com>
-Dec 17 06:01:30 mail postfix/qmgr[3900]: 73C70466A766: from=<alice@example.com>, size=7609, nrcpt=1 (queue active)
-Dec 17 06:01:30 mail postfix/smtp[4240]: 73C70466A766: to=<hank@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (host mx.example.org[198.51.100.7] said: lost connection with mx.example.org[198.51.100.7] while sending message body (in reply to RCPT TO command))
-Dec 17 06:01:30 mail postfix/qmgr[3900]: 73C70466A766: removed
-Dec 17 06:01:30 mail postfix/smtpd[4040]: disconnect from node3.example.com[192.0.2.60] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:32 mail postfix/smtpd[4041]: connect from desk12.example.com[192.0.2.61]
-Dec 17 06:01:32 mail postfix/smtpd[4041]: 4A2FAED2A7D2: client=desk12.example.com[192.0.2.61]
-Dec 17 06:01:32 mail postfix/cleanup[4141]: 4A2FAED2A7D2: message-id=<2218D06A0E7F6EA8@mail.example.com>
-Dec 17 06:01:32 mail postfix/qmgr[3900]: 4A2FAED2A7D2: from=<bob@example.com>, size=15817, nrcpt=1 (queue active)
-Dec 17 06:01:32 mail postfix/smtp[4241]: 4A2FAED2A7D2: to=<irene@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.2.2, status=bounced (host mail.example.net[198.51.100.24] said: 552 5.2.2 <irene@example.net>: user is over quota (in reply to RCPT TO command))
-Dec 17 06:01:32 mail postfix/bounce[4341]: 4A2FAED2A7D2: sender non-delivery notification: 09240A91
-Dec 17 06:01:32 mail postfix/qmgr[3900]: 4A2FAED2A7D2: removed
-Dec 17 06:01:32 mail postfix/smtpd[4041]: disconnect from desk12.example.com[192.0.2.61] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:35 mail postfix/smtpd[4042]: connect from vpn7.example.net[192.0.2.62]
-Dec 17 06:01:35 mail postfix/smtpd[4042]: 67C93C6CA76C: client=vpn7.example.net[192.0.2.62]
-Dec 17 06:01:35 mail postfix/cleanup[4142]: 67C93C6CA76C: message-id=<F0D005237A284E56@mail.example.com>
-Dec 17 06:01:35 mail postfix/qmgr[3900]: 67C93C6CA76C: from=<carol@example.com>, size=12537, nrcpt=1 (queue active)
-Dec 17 06:01:35 mail postfix/smtp[4242]: 67C93C6CA76C: to=<mike@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 03164BD0)
-Dec 17 06:01:35 mail postfix/qmgr[3900]: 67C93C6CA76C: removed
-Dec 17 06:01:35 mail postfix/smtpd[4042]: disconnect from vpn7.example.net[192.0.2.62] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:37 mail postfix/smtpd[4043]: connect from server.example.org[192.0.2.63]
-Dec 17 06:01:37 mail postfix/smtpd[4043]: 740AE409A709: client=server.example.org[192.0.2.63]
-Dec 17 06:01:37 mail postfix/cleanup[4143]: 740AE409A709: message-id=<478E3D4615ED9D2D@mail.example.com>
-Dec 17 06:01:37 mail postfix/qmgr[3900]: 740AE409A709: from=<postmaster@example.com>, size=36129, nrcpt=1 (queue active)
-Dec 17 06:01:37 mail postfix/smtp[4243]: 740AE409A709: to=<nina@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 62BE6D4F)
-Dec 17 06:01:37 mail postfix/qmgr[3900]: 740AE409A709: removed
-Dec 17 06:01:37 mail postfix/smtpd[4043]: disconnect from server.example.org[192.0.2.63] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:39 mail postfix/smtpd[4044]: connect from node3.example.com[192.0.2.64]
-Dec 17 06:01:39 mail postfix/smtpd[4044]: 059447E6A7E6: client=node3.example.com[192.0.2.64]
-Dec 17 06:01:39 mail postfix/cleanup[4144]: 059447E6A7E6: message-id=<D7EB70B60560B598@mail.example.com>
-Dec 17 06:01:39 mail postfix/qmgr[3900]: 059447E6A7E6: from=<alice@example.com>, size=24043, nrcpt=1 (queue active)
-Dec 17 06:01:39 mail postfix/smtp[4244]: 059447E6A7E6: to=<Ollie@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 9DDCE0C9)
-Dec 17 06:01:39 mail postfix/qmgr[3900]: 059447E6A7E6: removed
-Dec 17 06:01:39 mail postfix/smtpd[4044]: disconnect from node3.example.com[192.0.2.64] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:40 mail postfix/smtpd[4045]: connect from desk12.example.com[192.0.2.65]
-Dec 17 06:01:40 mail postfix/smtpd[4045]: 4248EFC0A7C0: client=desk12.example.com[192.0.2.65]
-Dec 17 06:01:40 mail postfix/cleanup[4145]: 4248EFC0A7C0: message-id=<5A9A1A73FD77ABAA@mail.example.com>
-Dec 17 06:01:40 mail postfix/qmgr[3900]: 4248EFC0A7C0: from=<bob@example.com>, size=16207, nrcpt=1 (queue active)
-Dec 17 06:01:40 mail postfix/smtp[4245]: 4248EFC0A7C0: to=<hank@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 3841C55D)
-Dec 17 06:01:40 mail postfix/qmgr[3900]: 4248EFC0A7C0: removed
-Dec 17 06:01:40 mail postfix/smtpd[4045]: disconnect from desk12.example.com[192.0.2.65] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:41 mail postfix/smtpd[4046]: connect from vpn7.example.net[192.0.2.66]
-Dec 17 06:01:41 mail postfix/smtpd[4046]: 554A48CDA7CD: client=vpn7.example.net[192.0.2.66]
-Dec 17 06:01:41 mail postfix/cleanup[4146]: 554A48CDA7CD: message-id=<C37F09F7445C3417@mail.example.com>
-Dec 17 06:01:41 mail postfix/qmgr[3900]: 554A48CDA7CD: from=<carol@example.com>, size=25702, nrcpt=1 (queue active)
-Dec 17 06:01:41 mail postfix/smtp[4246]: 554A48CDA7CD: to=<irene@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 873C6C87)
-Dec 17 06:01:41 mail postfix/qmgr[3900]: 554A48CDA7CD: removed
-Dec 17 06:01:41 mail postfix/smtpd[4046]: disconnect from vpn7.example.net[192.0.2.66] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:43 mail postfix/smtpd[4047]: connect from server.example.org[192.0.2.67]
-Dec 17 06:01:43 mail postfix/smtpd[4047]: A7D6DD07A707: client=server.example.org[192.0.2.67]
-Dec 17 06:01:43 mail postfix/cleanup[4147]: A7D6DD07A707: message-id=<D288F914A20774B0@mail.example.com>
-Dec 17 06:01:43 mail postfix/qmgr[3900]: A7D6DD07A707: from=<postmaster@example.com>, size=31042, nrcpt=1 (queue active)
-Dec 17 06:01:43 mail postfix/smtp[4247]: A7D6DD07A707: to=<mike@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B969A868)
-Dec 17 06:01:43 mail postfix/qmgr[3900]: A7D6DD07A707: removed
-Dec 17 06:01:43 mail postfix/smtpd[4047]: disconnect from server.example.org[192.0.2.67] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:44 mail postfix/smtpd[4048]: connect from node3.example.com[192.0.2.68]
-Dec 17 06:01:44 mail postfix/smtpd[4048]: 8C359CD9A7D9: client=node3.example.com[192.0.2.68]
-Dec 17 06:01:44 mail postfix/cleanup[4148]: 8C359CD9A7D9: message-id=<57A3B7850C72F4B9@mail.example.com>
-Dec 17 06:01:44 mail postfix/qmgr[3900]: 8C359CD9A7D9: from=<alice@example.com>, size=9289, nrcpt=1 (queue active)
-Dec 17 06:01:44 mail postfix/smtp[4248]: 8C359CD9A7D9: to=<nina@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as E58F319D)
-Dec 17 06:01:44 mail postfix/qmgr[3900]: 8C359CD9A7D9: removed
-Dec 17 06:01:44 mail postfix/smtpd[4048]: disconnect from node3.example.com[192.0.2.68] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:47 mail postfix/smtpd[4049]: connect from desk12.example.com[192.0.2.69]
-Dec 17 06:01:47 mail postfix/smtpd[4049]: 207AD052A752: client=desk12.example.com[192.0.2.69]
-Dec 17 06:01:47 mail postfix/cleanup[4149]: 207AD052A752: message-id=<0C5BDEBC11015CCA@mail.example.com>
-Dec 17 06:01:47 mail postfix/qmgr[3900]: 207AD052A752: from=<bob@example.com>, size=24334, nrcpt=1 (queue active)
-Dec 17 06:01:47 mail postfix/smtp[4249]: 207AD052A752: to=<Ollie@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host mail.example.net[198.51.100.24] said: 450 4.7.1 Error: connection has exceeded local traffic-limit (in reply to RCPT TO command))
-Dec 17 06:01:47 mail postfix/qmgr[3900]: 207AD052A752: removed
-Dec 17 06:01:47 mail postfix/smtpd[4049]: disconnect from desk12.example.com[192.0.2.69] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:49 mail postfix/smtpd[4050]: connect from vpn7.example.net[192.0.2.70]
-Dec 17 06:01:49 mail postfix/smtpd[4050]: B2B796ADA7AD: client=vpn7.example.net[192.0.2.70]
-Dec 17 06:01:49 mail postfix/cleanup[4150]: B2B796ADA7AD: message-id=<08002F3E9821874C@mail.example.com>
-Dec 17 06:01:49 mail postfix/qmgr[3900]: B2B796ADA7AD: from=<carol@example.com>, size=19779, nrcpt=1 (queue active)
-Dec 17 06:01:49 mail postfix/smtp[4250]: B2B796ADA7AD: to=<hank@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 450306C7)
-Dec 17 06:01:49 mail postfix/qmgr[3900]: B2B796ADA7AD: removed
-Dec 17 06:01:49 mail postfix/smtpd[4050]: disconnect from vpn7.example.net[192.0.2.70] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:51 mail postfix/smtpd[4051]: connect from server.example.org[192.0.2.71]
-Dec 17 06:01:51 mail postfix/smtpd[4051]: F8E72C1CA71C: client=server.example.org[192.0.2.71]
-Dec 17 06:01:51 mail postfix/cleanup[4151]: F8E72C1CA71C: message-id=<34B44AE9B78FAD7B@mail.example.com>
-Dec 17 06:01:51 mail postfix/qmgr[3900]: F8E72C1CA71C: from=<postmaster@example.com>, size=21124, nrcpt=1 (queue active)
-Dec 17 06:01:51 mail postfix/smtp[4251]: F8E72C1CA71C: to=<irene@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as D9DAC5B8)
-Dec 17 06:01:51 mail postfix/qmgr[3900]: F8E72C1CA71C: removed
-Dec 17 06:01:51 mail postfix/smtpd[4051]: disconnect from server.example.org[192.0.2.71] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:53 mail postfix/smtpd[4052]: connect from node3.example.com[192.0.2.72]
-Dec 17 06:01:53 mail postfix/smtpd[4052]: 86D3095CA75C: client=node3.example.com[192.0.2.72]
-Dec 17 06:01:53 mail postfix/cleanup[4152]: 86D3095CA75C: message-id=<2AEAF76939551AE4@mail.example.com>
-Dec 17 06:01:53 mail postfix/qmgr[3900]: 86D3095CA75C: from=<alice@example.com>, size=16300, nrcpt=1 (queue active)
-Dec 17 06:01:53 mail postfix/smtp[4252]: 86D3095CA75C: to=<mike@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as D134AA5D)
-Dec 17 06:01:53 mail postfix/qmgr[3900]: 86D3095CA75C: removed
-Dec 17 06:01:53 mail postfix/smtpd[4052]: disconnect from node3.example.com[192.0.2.72] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:56 mail postfix/smtpd[4053]: connect from desk12.example.com[192.0.2.73]
-Dec 17 06:01:56 mail postfix/smtpd[4053]: 0D686230A730: client=desk12.example.com[192.0.2.73]
-Dec 17 06:01:56 mail postfix/cleanup[4153]: 0D686230A730: message-id=<4B63AFEA8E3ABD2A@mail.example.com>
-Dec 17 06:01:56 mail postfix/qmgr[3900]: 0D686230A730: from=<bob@example.com>, size=2072, nrcpt=1 (queue active)
-Dec 17 06:01:56 mail postfix/smtp[4253]: 0D686230A730: to=<nina@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mail.example.net[198.51.100.24] said: 550 5.1.1 <nina@example.net>: Recipient address rejected: User unknown in virtual mailbox table (in reply to RCPT TO command))
-Dec 17 06:01:56 mail postfix/bounce[4353]: 0D686230A730: sender non-delivery notification: 1039125A
-Dec 17 06:01:56 mail postfix/qmgr[3900]: 0D686230A730: removed
-Dec 17 06:01:56 mail postfix/smtpd[4053]: disconnect from desk12.example.com[192.0.2.73] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:01:57 mail postfix/smtpd[4054]: connect from vpn7.example.net[192.0.2.74]
-Dec 17 06:01:57 mail postfix/smtpd[4054]: 930EF3EFA7EF: client=vpn7.example.net[192.0.2.74]
-Dec 17 06:01:57 mail postfix/cleanup[4154]: 930EF3EFA7EF: message-id=<686348BED9F9D7FF@mail.example.com>
-Dec 17 06:01:57 mail postfix/qmgr[3900]: 930EF3EFA7EF: from=<carol@example.com>, size=5734, nrcpt=1 (queue active)
-Dec 17 06:01:57 mail postfix/smtp[4254]: 930EF3EFA7EF: to=<Ollie@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.3, status=deferred (host aspmx.example.org[203.0.113.11] said: Host or domain name not found. Name service error for name=nxdomain.example.org type=A: Host not found, try again (in reply to MAIL FROM command))
-Dec 17 06:01:57 mail postfix/qmgr[3900]: 930EF3EFA7EF: removed
-Dec 17 06:01:57 mail postfix/smtpd[4054]: disconnect from vpn7.example.net[192.0.2.74] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:00 mail postfix/smtpd[4055]: connect from server.example.org[192.0.2.75]
-Dec 17 06:02:00 mail postfix/smtpd[4055]: 35C09088A788: client=server.example.org[192.0.2.75]
-Dec 17 06:02:00 mail postfix/cleanup[4155]: 35C09088A788: message-id=<51A625A883783C50@mail.example.com>
-Dec 17 06:02:00 mail postfix/qmgr[3900]: 35C09088A788: from=<postmaster@example.com>, size=15146, nrcpt=1 (queue active)
-Dec 17 06:02:00 mail postfix/smtp[4255]: 35C09088A788: to=<hank@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2C2381EE)
-Dec 17 06:02:00 mail postfix/qmgr[3900]: 35C09088A788: removed
-Dec 17 06:02:00 mail postfix/smtpd[4055]: disconnect from server.example.org[192.0.2.75] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:02 mail postfix/smtpd[4056]: connect from node3.example.com[192.0.2.76]
-Dec 17 06:02:02 mail postfix/smtpd[4056]: 5FE0D97FA77F: client=node3.example.com[192.0.2.76]
-Dec 17 06:02:02 mail postfix/cleanup[4156]: 5FE0D97FA77F: message-id=<D51CA818EF1064A6@mail.example.com>
-Dec 17 06:02:02 mail postfix/qmgr[3900]: 5FE0D97FA77F: from=<alice@example.com>, size=2082, nrcpt=1 (queue active)
-Dec 17 06:02:02 mail postfix/smtp[4256]: 5FE0D97FA77F: to=<irene@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 71137AB3)
-Dec 17 06:02:02 mail postfix/qmgr[3900]: 5FE0D97FA77F: removed
-Dec 17 06:02:02 mail postfix/smtpd[4056]: disconnect from node3.example.com[192.0.2.76] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:04 mail postfix/smtpd[4057]: connect from desk12.example.com[192.0.2.77]
-Dec 17 06:02:04 mail postfix/smtpd[4057]: 7BD2BB79A779: client=desk12.example.com[192.0.2.77]
-Dec 17 06:02:04 mail postfix/cleanup[4157]: 7BD2BB79A779: message-id=<29775CC2D52FF9B0@mail.example.com>
-Dec 17 06:02:04 mail postfix/qmgr[3900]: 7BD2BB79A779: from=<bob@example.com>, size=13041, nrcpt=1 (queue active)
-Dec 17 06:02:04 mail postfix/smtp[4257]: 7BD2BB79A779: to=<mike@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 1AF31A2B)
-Dec 17 06:02:04 mail postfix/qmgr[3900]: 7BD2BB79A779: removed
-Dec 17 06:02:04 mail postfix/smtpd[4057]: disconnect from desk12.example.com[192.0.2.77] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:06 mail postfix/smtpd[4058]: connect from vpn7.example.net[192.0.2.78]
-Dec 17 06:02:06 mail postfix/smtpd[4058]: D4BF86E8A7E8: client=vpn7.example.net[192.0.2.78]
-Dec 17 06:02:06 mail postfix/cleanup[4158]: D4BF86E8A7E8: message-id=<61CFAE250D7A0781@mail.example.com>
-Dec 17 06:02:06 mail postfix/qmgr[3900]: D4BF86E8A7E8: from=<carol@example.com>, size=38852, nrcpt=1 (queue active)
-Dec 17 06:02:06 mail postfix/smtp[4258]: D4BF86E8A7E8: to=<nina@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as D3292AEA)
-Dec 17 06:02:06 mail postfix/qmgr[3900]: D4BF86E8A7E8: removed
-Dec 17 06:02:06 mail postfix/smtpd[4058]: disconnect from vpn7.example.net[192.0.2.78] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:07 mail postfix/smtpd[4059]: connect from server.example.org[192.0.2.79]
-Dec 17 06:02:07 mail postfix/smtpd[4059]: 9BB375FDA7FD: client=server.example.org[192.0.2.79]
-Dec 17 06:02:07 mail postfix/cleanup[4159]: 9BB375FDA7FD: message-id=<0F8572D7953B025A@mail.example.com>
-Dec 17 06:02:07 mail postfix/qmgr[3900]: 9BB375FDA7FD: from=<postmaster@example.com>, size=8563, nrcpt=1 (queue active)
-Dec 17 06:02:07 mail postfix/smtp[4259]: 9BB375FDA7FD: to=<Ollie@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host gateway.example.net[203.0.113.50] said: 550 5.0.0 Unrecognised reply from the remote host, code 999 (in reply to DATA command))
-Dec 17 06:02:07 mail postfix/bounce[4359]: 9BB375FDA7FD: sender non-delivery notification: 59B78EFD
-Dec 17 06:02:07 mail postfix/qmgr[3900]: 9BB375FDA7FD: removed
-Dec 17 06:02:07 mail postfix/smtpd[4059]: disconnect from server.example.org[192.0.2.79] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:09 mail postfix/smtpd[4060]: connect from node3.example.com[192.0.2.80]
-Dec 17 06:02:09 mail postfix/smtpd[4060]: 3ADC8C56A756: client=node3.example.com[192.0.2.80]
-Dec 17 06:02:09 mail postfix/cleanup[4160]: 3ADC8C56A756: message-id=<3A079575AC9AF1D4@mail.example.com>
-Dec 17 06:02:09 mail postfix/qmgr[3900]: 3ADC8C56A756: from=<alice@example.com>, size=961, nrcpt=1 (queue active)
-Dec 17 06:02:09 mail postfix/smtp[4260]: 3ADC8C56A756: to=<hank@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 No Such User Here (in reply to DATA command))
-Dec 17 06:02:09 mail postfix/bounce[4360]: 3ADC8C56A756: sender non-delivery notification: D86C408A
-Dec 17 06:02:09 mail postfix/qmgr[3900]: 3ADC8C56A756: removed
-Dec 17 06:02:09 mail postfix/smtpd[4060]: disconnect from node3.example.com[192.0.2.80] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:10 mail postfix/smtpd[4061]: connect from desk12.example.com[192.0.2.81]
-Dec 17 06:02:10 mail postfix/smtpd[4061]: 1BC73201A701: client=desk12.example.com[192.0.2.81]
-Dec 17 06:02:10 mail postfix/cleanup[4161]: 1BC73201A701: message-id=<EA010C7A9C2960D5@mail.example.com>
-Dec 17 06:02:10 mail postfix/qmgr[3900]: 1BC73201A701: from=<bob@example.com>, size=28911, nrcpt=1 (queue active)
-Dec 17 06:02:10 mail postfix/smtp[4261]: 1BC73201A701: to=<irene@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host mail.example.net[198.51.100.24] said: 451 4.7.1 <192.0.2.81>: Client host rejected: cannot find your hostname, [192.0.2.81] (in reply to RCPT TO command))
-Dec 17 06:02:10 mail postfix/qmgr[3900]: 1BC73201A701: removed
-Dec 17 06:02:10 mail postfix/smtpd[4061]: disconnect from desk12.example.com[192.0.2.81] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:13 mail postfix/smtpd[4062]: connect from vpn7.example.net[192.0.2.82]
-Dec 17 06:02:13 mail postfix/smtpd[4062]: 8D183DA2A7A2: client=vpn7.example.net[192.0.2.82]
-Dec 17 06:02:13 mail postfix/cleanup[4162]: 8D183DA2A7A2: message-id=<167C66A4A847C587@mail.example.com>
-Dec 17 06:02:13 mail postfix/qmgr[3900]: 8D183DA2A7A2: from=<carol@example.com>, size=17099, nrcpt=1 (queue active)
-Dec 17 06:02:13 mail postfix/smtp[4262]: 8D183DA2A7A2: to=<mike@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as DDFB6D6E)
-Dec 17 06:02:13 mail postfix/qmgr[3900]: 8D183DA2A7A2: removed
-Dec 17 06:02:13 mail postfix/smtpd[4062]: disconnect from vpn7.example.net[192.0.2.82] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:16 mail postfix/smtpd[4063]: connect from server.example.org[192.0.2.83]
-Dec 17 06:02:16 mail postfix/smtpd[4063]: 28B4D817A717: client=server.example.org[192.0.2.83]
-Dec 17 06:02:16 mail postfix/cleanup[4163]: 28B4D817A717: message-id=<9877502CF7DF7F01@mail.example.com>
-Dec 17 06:02:16 mail postfix/qmgr[3900]: 28B4D817A717: from=<postmaster@example.com>, size=21185, nrcpt=1 (queue active)
-Dec 17 06:02:16 mail postfix/smtp[4263]: 28B4D817A717: to=<nina@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 8FFFCEA4)
-Dec 17 06:02:16 mail postfix/qmgr[3900]: 28B4D817A717: removed
-Dec 17 06:02:16 mail postfix/smtpd[4063]: disconnect from server.example.org[192.0.2.83] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:17 mail postfix/smtpd[4064]: connect from node3.example.com[192.0.2.84]
-Dec 17 06:02:17 mail postfix/smtpd[4064]: 3FA5ABD0A7D0: client=node3.example.com[192.0.2.84]
-Dec 17 06:02:17 mail postfix/cleanup[4164]: 3FA5ABD0A7D0: message-id=<B00985B55A1B5333@mail.example.com>
-Dec 17 06:02:17 mail postfix/qmgr[3900]: 3FA5ABD0A7D0: from=<alice@example.com>, size=1560, nrcpt=1 (queue active)
-Dec 17 06:02:17 mail postfix/smtp[4264]: 3FA5ABD0A7D0: to=<Ollie@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 0E3D7AC1)
-Dec 17 06:02:17 mail postfix/qmgr[3900]: 3FA5ABD0A7D0: removed
-Dec 17 06:02:17 mail postfix/smtpd[4064]: disconnect from node3.example.com[192.0.2.84] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:19 mail postfix/smtpd[4065]: connect from desk12.example.com[192.0.2.85]
-Dec 17 06:02:19 mail postfix/smtpd[4065]: 5E8C7778A778: client=desk12.example.com[192.0.2.85]
-Dec 17 06:02:19 mail postfix/cleanup[4165]: 5E8C7778A778: message-id=<351D9AAEA47D41FB@mail.example.com>
-Dec 17 06:02:19 mail postfix/qmgr[3900]: 5E8C7778A778: from=<bob@example.com>, size=37234, nrcpt=1 (queue active)
-Dec 17 06:02:19 mail postfix/smtp[4265]: 5E8C7778A778: to=<hank@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.2.2, status=bounced (host mail.example.net[198.51.100.24] said: 552 5.2.2 <hank@example.org>: user is over quota (in reply to MAIL FROM command))
-Dec 17 06:02:19 mail postfix/bounce[4365]: 5E8C7778A778: sender non-delivery notification: FACD239F
-Dec 17 06:02:19 mail postfix/qmgr[3900]: 5E8C7778A778: removed
-Dec 17 06:02:19 mail postfix/smtpd[4065]: disconnect from desk12.example.com[192.0.2.85] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:20 mail postfix/smtpd[4066]: connect from vpn7.example.net[192.0.2.86]
-Dec 17 06:02:20 mail postfix/smtpd[4066]: 3510D266A766: client=vpn7.example.net[192.0.2.86]
-Dec 17 06:02:20 mail postfix/cleanup[4166]: 3510D266A766: message-id=<6DCC13A082C35360@mail.example.com>
-Dec 17 06:02:20 mail postfix/qmgr[3900]: 3510D266A766: from=<carol@example.com>, size=12665, nrcpt=1 (queue active)
-Dec 17 06:02:20 mail postfix/smtp[4266]: 3510D266A766: to=<irene@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2809082C)
-Dec 17 06:02:20 mail postfix/qmgr[3900]: 3510D266A766: removed
-Dec 17 06:02:20 mail postfix/smtpd[4066]: disconnect from vpn7.example.net[192.0.2.86] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:22 mail postfix/smtpd[4067]: connect from server.example.org[192.0.2.87]
-Dec 17 06:02:22 mail postfix/smtpd[4067]: A8889B2BA72B: client=server.example.org[192.0.2.87]
-Dec 17 06:02:22 mail postfix/cleanup[4167]: A8889B2BA72B: message-id=<E8B7109954F70445@mail.example.com>
-Dec 17 06:02:22 mail postfix/qmgr[3900]: A8889B2BA72B: from=<postmaster@example.com>, size=34148, nrcpt=1 (queue active)
-Dec 17 06:02:22 mail postfix/smtp[4267]: A8889B2BA72B: to=<mike@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host gateway.example.net[203.0.113.50] said: 451 4.7.1 <192.0.2.87>: Relay access denied (in reply to RCPT TO command))
-Dec 17 06:02:22 mail postfix/qmgr[3900]: A8889B2BA72B: removed
-Dec 17 06:02:22 mail postfix/smtpd[4067]: disconnect from server.example.org[192.0.2.87] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:24 mail postfix/smtpd[4068]: connect from node3.example.com[192.0.2.88]
-Dec 17 06:02:24 mail postfix/smtpd[4068]: C74D69F2A7F2: client=node3.example.com[192.0.2.88]
-Dec 17 06:02:24 mail postfix/cleanup[4168]: C74D69F2A7F2: message-id=<BD0CF13C20390D68@mail.example.com>
-Dec 17 06:02:24 mail postfix/qmgr[3900]: C74D69F2A7F2: from=<alice@example.com>, size=1437, nrcpt=1 (queue active)
-Dec 17 06:02:24 mail postfix/smtp[4268]: C74D69F2A7F2: to=<nina@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B16822AB)
-Dec 17 06:02:24 mail postfix/qmgr[3900]: C74D69F2A7F2: removed
-Dec 17 06:02:24 mail postfix/smtpd[4068]: disconnect from node3.example.com[192.0.2.88] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:25 mail postfix/smtpd[4069]: connect from desk12.example.com[192.0.2.89]
-Dec 17 06:02:25 mail postfix/smtpd[4069]: F7F1E59BA79B: client=desk12.example.com[192.0.2.89]
-Dec 17 06:02:25 mail postfix/cleanup[4169]: F7F1E59BA79B: message-id=<99F5C13751BD8518@mail.example.com>
-Dec 17 06:02:25 mail postfix/qmgr[3900]: F7F1E59BA79B: from=<bob@example.com>, size=15024, nrcpt=1 (queue active)
-Dec 17 06:02:25 mail postfix/smtp[4269]: F7F1E59BA79B: to=<Ollie@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (host mail.example.net[198.51.100.24] said: connect to mail.example.net[198.51.100.24]:25: Connection timed out (in reply to MAIL FROM command))
-Dec 17 06:02:25 mail postfix/qmgr[3900]: F7F1E59BA79B: removed
-Dec 17 06:02:25 mail postfix/smtpd[4069]: disconnect from desk12.example.com[192.0.2.89] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:26 mail postfix/smtpd[4070]: connect from vpn7.example.net[192.0.2.90]
-Dec 17 06:02:26 mail postfix/smtpd[4070]: 7EF20159A759: client=vpn7.example.net[192.0.2.90]
-Dec 17 06:02:26 mail postfix/cleanup[4170]: 7EF20159A759: message-id=<4D56F6444DF4AAEA@mail.example.com>
-Dec 17 06:02:26 mail postfix/qmgr[3900]: 7EF20159A759: from=<carol@example.com>, size=26817, nrcpt=1 (queue active)
-Dec 17 06:02:26 mail postfix/smtp[4270]: 7EF20159A759: to=<hank@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host aspmx.example.org[203.0.113.11] said: 550 5.1.1 The user you tried to send mail no longer exists on the domain of example.org (in reply to RCPT TO command))
-Dec 17 06:02:26 mail postfix/bounce[4370]: 7EF20159A759: sender non-delivery notification: 7AA58A48
-Dec 17 06:02:26 mail postfix/qmgr[3900]: 7EF20159A759: removed
-Dec 17 06:02:26 mail postfix/smtpd[4070]: disconnect from vpn7.example.net[192.0.2.90] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:28 mail postfix/smtpd[4071]: connect from server.example.org[192.0.2.91]
-Dec 17 06:02:28 mail postfix/smtpd[4071]: 3922BEFFA7FF: client=server.example.org[192.0.2.91]
-Dec 17 06:02:28 mail postfix/cleanup[4171]: 3922BEFFA7FF: message-id=<FC352127237E1E35@mail.example.com>
-Dec 17 06:02:28 mail postfix/qmgr[3900]: 3922BEFFA7FF: from=<postmaster@example.com>, size=9871, nrcpt=1 (queue active)
-Dec 17 06:02:28 mail postfix/smtp[4271]: 3922BEFFA7FF: to=<irene@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 9C4475DA)
-Dec 17 06:02:28 mail postfix/qmgr[3900]: 3922BEFFA7FF: removed
-Dec 17 06:02:28 mail postfix/smtpd[4071]: disconnect from server.example.org[192.0.2.91] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:30 mail postfix/smtpd[4072]: connect from node3.example.com[192.0.2.92]
-Dec 17 06:02:30 mail postfix/smtpd[4072]: BC109ED0A7D0: client=node3.example.com[192.0.2.92]
-Dec 17 06:02:30 mail postfix/cleanup[4172]: BC109ED0A7D0: message-id=<4F5A42E44E3F4098@mail.example.com>
-Dec 17 06:02:30 mail postfix/qmgr[3900]: BC109ED0A7D0: from=<alice@example.com>, size=5567, nrcpt=1 (queue active)
-Dec 17 06:02:30 mail postfix/smtp[4272]: BC109ED0A7D0: to=<mike@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as E5720771)
-Dec 17 06:02:30 mail postfix/qmgr[3900]: BC109ED0A7D0: removed
-Dec 17 06:02:30 mail postfix/smtpd[4072]: disconnect from node3.example.com[192.0.2.92] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:31 mail postfix/smtpd[4073]: connect from desk12.example.com[192.0.2.93]
-Dec 17 06:02:31 mail postfix/smtpd[4073]: C733A475A775: client=desk12.example.com[192.0.2.93]
-Dec 17 06:02:31 mail postfix/cleanup[4173]: C733A475A775: message-id=<AC6315F47C68805D@mail.example.com>
-Dec 17 06:02:31 mail postfix/qmgr[3900]: C733A475A775: from=<bob@example.com>, size=16004, nrcpt=1 (queue active)
-Dec 17 06:02:31 mail postfix/smtp[4273]: C733A475A775: to=<nina@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host mail.example.net[198.51.100.24] said: 554 5.7.1 Message rejected as spam by Content Filtering (in reply to DATA command))
-Dec 17 06:02:31 mail postfix/bounce[4373]: C733A475A775: sender non-delivery notification: 06D2F9C2
-Dec 17 06:02:31 mail postfix/qmgr[3900]: C733A475A775: removed
-Dec 17 06:02:31 mail postfix/smtpd[4073]: disconnect from desk12.example.com[192.0.2.93] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:34 mail postfix/smtpd[4074]: connect from vpn7.example.net[192.0.2.94]
-Dec 17 06:02:34 mail postfix/smtpd[4074]: 5A7D852CA72C: client=vpn7.example.net[192.0.2.94]
-Dec 17 06:02:34 mail postfix/cleanup[4174]: 5A7D852CA72C: message-id=<92846DA82009BCF8@mail.example.com>
-Dec 17 06:02:34 mail postfix/qmgr[3900]: 5A7D852CA72C: from=<carol@example.com>, size=27334, nrcpt=1 (queue active)
-Dec 17 06:02:34 mail postfix/smtp[4274]: 5A7D852CA72C: to=<Ollie@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as FF9BEB5A)
-Dec 17 06:02:34 mail postfix/qmgr[3900]: 5A7D852CA72C: removed
-Dec 17 06:02:34 mail postfix/smtpd[4074]: disconnect from vpn7.example.net[192.0.2.94] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:35 mail postfix/smtpd[4075]: connect from server.example.org[192.0.2.95]
-Dec 17 06:02:35 mail postfix/smtpd[4075]: F4A348D8A7D8: client=server.example.org[192.0.2.95]
-Dec 17 06:02:35 mail postfix/cleanup[4175]: F4A348D8A7D8: message-id=<46D9DAF1CDB2B2DF@mail.example.com>
-Dec 17 06:02:35 mail postfix/qmgr[3900]: F4A348D8A7D8: from=<postmaster@example.com>, size=874, nrcpt=1 (queue active)
-Dec 17 06:02:35 mail postfix/smtp[4275]: F4A348D8A7D8: to=<hank@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host gateway.example.net[203.0.113.50] said: 451 4.7.1 <192.0.2.95>: Relay access denied (in reply to DATA command))
-Dec 17 06:02:35 mail postfix/qmgr[3900]: F4A348D8A7D8: removed
-Dec 17 06:02:35 mail postfix/smtpd[4075]: disconnect from server.example.org[192.0.2.95] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:36 mail postfix/smtpd[4076]: connect from node3.example.com[192.0.2.96]
-Dec 17 06:02:36 mail postfix/smtpd[4076]: 35A231E5A7E5: client=node3.example.com[192.0.2.96]
-Dec 17 06:02:36 mail postfix/cleanup[4176]: 35A231E5A7E5: message-id=<6641583DB54AD64E@mail.example.com>
-Dec 17 06:02:36 mail postfix/qmgr[3900]: 35A231E5A7E5: from=<alice@example.com>, size=8413, nrcpt=1 (queue active)
-Dec 17 06:02:36 mail postfix/smtp[4276]: 35A231E5A7E5: to=<irene@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host mx.example.org[198.51.100.7] said: 554 delivery error: dd Sorry your message to irene@example.net cannot be delivered. This account has been disabled or discontinued [#102]. - IMCP (in reply to MAIL FROM command))
-Dec 17 06:02:36 mail postfix/bounce[4376]: 35A231E5A7E5: sender non-delivery notification: A8C46CF3
-Dec 17 06:02:36 mail postfix/qmgr[3900]: 35A231E5A7E5: removed
-Dec 17 06:02:36 mail postfix/smtpd[4076]: disconnect from node3.example.com[192.0.2.96] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:39 mail postfix/smtpd[4077]: connect from desk12.example.com[192.0.2.97]
-Dec 17 06:02:39 mail postfix/smtpd[4077]: 0184D846A746: client=desk12.example.com[192.0.2.97]
-Dec 17 06:02:39 mail postfix/cleanup[4177]: 0184D846A746: message-id=<97CA9153E41D4D00@mail.example.com>
-Dec 17 06:02:39 mail postfix/qmgr[3900]: 0184D846A746: from=<bob@example.com>, size=34859, nrcpt=1 (queue active)
-Dec 17 06:02:39 mail postfix/smtp[4277]: 0184D846A746: to=<mike@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host mail.example.net[198.51.100.24] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to MAIL FROM command))
-Dec 17 06:02:39 mail postfix/qmgr[3900]: 0184D846A746: removed
-Dec 17 06:02:39 mail postfix/smtpd[4077]: disconnect from desk12.example.com[192.0.2.97] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:42 mail postfix/smtpd[4078]: connect from vpn7.example.net[192.0.2.98]
-Dec 17 06:02:42 mail postfix/smtpd[4078]: FB112414A714: client=vpn7.example.net[192.0.2.98]
-Dec 17 06:02:42 mail postfix/cleanup[4178]: FB112414A714: message-id=<FCFB70E4E101C098@mail.example.com>
-Dec 17 06:02:42 mail postfix/qmgr[3900]: FB112414A714: from=<carol@example.com>, size=16051, nrcpt=1 (queue active)
-Dec 17 06:02:42 mail postfix/smtp[4278]: FB112414A714: to=<nina@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (host aspmx.example.org[203.0.113.11] said: connect to aspmx.example.org[203.0.113.11]:25: Connection timed out (in reply to MAIL FROM command))
-Dec 17 06:02:42 mail postfix/qmgr[3900]: FB112414A714: removed
-Dec 17 06:02:42 mail postfix/smtpd[4078]: disconnect from vpn7.example.net[192.0.2.98] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:45 mail postfix/smtpd[4079]: connect from server.example.org[192.0.2.99]
-Dec 17 06:02:45 mail postfix/smtpd[4079]: 7950F3C8A7C8: client=server.example.org[192.0.2.99]
-Dec 17 06:02:45 mail postfix/cleanup[4179]: 7950F3C8A7C8: message-id=<00D4DD1A97637E05@mail.example.com>
-Dec 17 06:02:45 mail postfix/qmgr[3900]: 7950F3C8A7C8: from=<postmaster@example.com>, size=29342, nrcpt=1 (queue active)
-Dec 17 06:02:45 mail postfix/smtp[4279]: 7950F3C8A7C8: to=<Ollie@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 4174152D)
-Dec 17 06:02:45 mail postfix/qmgr[3900]: 7950F3C8A7C8: removed
-Dec 17 06:02:45 mail postfix/smtpd[4079]: disconnect from server.example.org[192.0.2.99] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:48 mail postfix/smtpd[4080]: connect from node3.example.com[192.0.2.100]
-Dec 17 06:02:48 mail postfix/smtpd[4080]: 5107D712A712: client=node3.example.com[192.0.2.100]
-Dec 17 06:02:48 mail postfix/cleanup[4180]: 5107D712A712: message-id=<B33398D29E898FA6@mail.example.com>
-Dec 17 06:02:48 mail postfix/qmgr[3900]: 5107D712A712: from=<alice@example.com>, size=36204, nrcpt=1 (queue active)
-Dec 17 06:02:48 mail postfix/smtp[4280]: 5107D712A712: to=<hank@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as CB8D4CF5)
-Dec 17 06:02:48 mail postfix/qmgr[3900]: 5107D712A712: removed
-Dec 17 06:02:48 mail postfix/smtpd[4080]: disconnect from node3.example.com[192.0.2.100] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:51 mail postfix/smtpd[4081]: connect from desk12.example.com[192.0.2.101]
-Dec 17 06:02:51 mail postfix/smtpd[4081]: C0F8D519A719: client=desk12.example.com[192.0.2.101]
-Dec 17 06:02:51 mail postfix/cleanup[4181]: C0F8D519A719: message-id=<C7DC9AECA8F0A0BA@mail.example.com>
-Dec 17 06:02:51 mail postfix/qmgr[3900]: C0F8D519A719: from=<bob@example.com>, size=20724, nrcpt=1 (queue active)
-Dec 17 06:02:51 mail postfix/smtp[4281]: C0F8D519A719: to=<irene@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host mail.example.net[198.51.100.24] said: 554 delivery error: dd Sorry your message to irene@example.net cannot be delivered. This account has been disabled or discontinued [#102]. - IMCP (in reply to DATA command))
-Dec 17 06:02:51 mail postfix/bounce[4381]: C0F8D519A719: sender non-delivery notification: 56FA9BF4
-Dec 17 06:02:51 mail postfix/qmgr[3900]: C0F8D519A719: removed
-Dec 17 06:02:51 mail postfix/smtpd[4081]: disconnect from desk12.example.com[192.0.2.101] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:54 mail postfix/smtpd[4082]: connect from vpn7.example.net[192.0.2.102]
-Dec 17 06:02:54 mail postfix/smtpd[4082]: 66083CF9A7F9: client=vpn7.example.net[192.0.2.102]
-Dec 17 06:02:54 mail postfix/cleanup[4182]: 66083CF9A7F9: message-id=<ECBEE9C8B77FF81A@mail.example.com>
-Dec 17 06:02:54 mail postfix/qmgr[3900]: 66083CF9A7F9: from=<carol@example.com>, size=7653, nrcpt=1 (queue active)
-Dec 17 06:02:54 mail postfix/smtp[4282]: 66083CF9A7F9: to=<mike@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as CDC9FAD6)
-Dec 17 06:02:54 mail postfix/qmgr[3900]: 66083CF9A7F9: removed
-Dec 17 06:02:54 mail postfix/smtpd[4082]: disconnect from vpn7.example.net[192.0.2.102] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:55 mail postfix/smtpd[4083]: connect from server.example.org[192.0.2.103]
-Dec 17 06:02:55 mail postfix/smtpd[4083]: 50C1719DA79D: client=server.example.org[192.0.2.103]
-Dec 17 06:02:55 mail postfix/cleanup[4183]: 50C1719DA79D: message-id=<9BD179A781CD232C@mail.example.com>
-Dec 17 06:02:55 mail postfix/qmgr[3900]: 50C1719DA79D: from=<postmaster@example.com>, size=3620, nrcpt=1 (queue active)
-Dec 17 06:02:55 mail postfix/smtp[4283]: 50C1719DA79D: to=<nina@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 22735D24)
-Dec 17 06:02:55 mail postfix/qmgr[3900]: 50C1719DA79D: removed
-Dec 17 06:02:55 mail postfix/smtpd[4083]: disconnect from server.example.org[192.0.2.103] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:56 mail postfix/smtpd[4084]: connect from node3.example.com[192.0.2.104]
-Dec 17 06:02:56 mail postfix/smtpd[4084]: F876360FA70F: client=node3.example.com[192.0.2.104]
-Dec 17 06:02:56 mail postfix/cleanup[4184]: F876360FA70F: message-id=<4FF493AF5DCEA197@mail.example.com>
-Dec 17 06:02:56 mail postfix/qmgr[3900]: F876360FA70F: from=<alice@example.com>, size=3641, nrcpt=1 (queue active)
-Dec 17 06:02:56 mail postfix/smtp[4284]: F876360FA70F: to=<Ollie@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 015B7A75)
-Dec 17 06:02:56 mail postfix/qmgr[3900]: F876360FA70F: removed
-Dec 17 06:02:56 mail postfix/smtpd[4084]: disconnect from node3.example.com[192.0.2.104] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:02:57 mail postfix/smtpd[4085]: connect from desk12.example.com[192.0.2.105]
-Dec 17 06:02:57 mail postfix/smtpd[4085]: 1BC93B0FA70F: client=desk12.example.com[192.0.2.105]
-Dec 17 06:02:57 mail postfix/cleanup[4185]: 1BC93B0FA70F: message-id=<C17114E630382B2A@mail.example.com>
-Dec 17 06:02:57 mail postfix/qmgr[3900]: 1BC93B0FA70F: from=<bob@example.com>, size=5867, nrcpt=1 (queue active)
-Dec 17 06:02:57 mail postfix/smtp[4285]: 1BC93B0FA70F: to=<hank@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 796A1389)
-Dec 17 06:02:57 mail postfix/qmgr[3900]: 1BC93B0FA70F: removed
-Dec 17 06:02:57 mail postfix/smtpd[4085]: disconnect from desk12.example.com[192.0.2.105] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:00 mail postfix/smtpd[4086]: connect from vpn7.example.net[192.0.2.106]
-Dec 17 06:03:00 mail postfix/smtpd[4086]: 7E5CF144A744: client=vpn7.example.net[192.0.2.106]
-Dec 17 06:03:00 mail postfix/cleanup[4186]: 7E5CF144A744: message-id=<9E6851BB3B4BF9BD@mail.example.com>
-Dec 17 06:03:00 mail postfix/qmgr[3900]: 7E5CF144A744: from=<carol@example.com>, size=26554, nrcpt=1 (queue active)
-Dec 17 06:03:00 mail postfix/smtp[4286]: 7E5CF144A744: to=<irene@example.net>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as C2FD8E3E)
-Dec 17 06:03:00 mail postfix/qmgr[3900]: 7E5CF144A744: removed
-Dec 17 06:03:00 mail postfix/smtpd[4086]: disconnect from vpn7.example.net[192.0.2.106] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:01 mail postfix/smtpd[4087]: connect from server.example.org[192.0.2.107]
-Dec 17 06:03:01 mail postfix/smtpd[4087]: 3415D100A700: client=server.example.org[192.0.2.107]
-Dec 17 06:03:01 mail postfix/cleanup[4187]: 3415D100A700: message-id=<A88723B324A78E55@mail.example.com>
-Dec 17 06:03:01 mail postfix/qmgr[3900]: 3415D100A700: from=<postmaster@example.com>, size=12755, nrcpt=1 (queue active)
-Dec 17 06:03:01 mail postfix/smtp[4287]: 3415D100A700: to=<mike@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.5, status=deferred (host gateway.example.net[203.0.113.50] said: 451 4.4.5 Server out of memory: Drop connection later (in reply to DATA command))
-Dec 17 06:03:01 mail postfix/qmgr[3900]: 3415D100A700: removed
-Dec 17 06:03:01 mail postfix/smtpd[4087]: disconnect from server.example.org[192.0.2.107] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:03 mail postfix/smtpd[4088]: connect from node3.example.com[192.0.2.108]
-Dec 17 06:03:03 mail postfix/smtpd[4088]: 09AD2183A783: client=node3.example.com[192.0.2.108]
-Dec 17 06:03:03 mail postfix/cleanup[4188]: 09AD2183A783: message-id=<B4FA5B26E7FD8D22@mail.example.com>
-Dec 17 06:03:03 mail postfix/qmgr[3900]: 09AD2183A783: from=<alice@example.com>, size=31148, nrcpt=1 (queue active)
-Dec 17 06:03:03 mail postfix/smtp[4288]: 09AD2183A783: to=<nina@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 67C397F1)
-Dec 17 06:03:03 mail postfix/qmgr[3900]: 09AD2183A783: removed
-Dec 17 06:03:03 mail postfix/smtpd[4088]: disconnect from node3.example.com[192.0.2.108] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:06 mail postfix/smtpd[4089]: connect from desk12.example.com[192.0.2.109]
-Dec 17 06:03:06 mail postfix/smtpd[4089]: 7BBC6C13A713: client=desk12.example.com[192.0.2.109]
-Dec 17 06:03:06 mail postfix/cleanup[4189]: 7BBC6C13A713: message-id=<FF1B326C254C832B@mail.example.com>
-Dec 17 06:03:06 mail postfix/qmgr[3900]: 7BBC6C13A713: from=<bob@example.com>, size=20042, nrcpt=1 (queue active)
-Dec 17 06:03:06 mail postfix/smtp[4289]: 7BBC6C13A713: to=<Ollie@example.org>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as F698BC40)
-Dec 17 06:03:06 mail postfix/qmgr[3900]: 7BBC6C13A713: removed
-Dec 17 06:03:06 mail postfix/smtpd[4089]: disconnect from desk12.example.com[192.0.2.109] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:07 mail postfix/smtpd[4090]: connect from vpn7.example.net[192.0.2.110]
-Dec 17 06:03:07 mail postfix/smtpd[4090]: F6FDB7C1A7C1: client=vpn7.example.net[192.0.2.110]
-Dec 17 06:03:07 mail postfix/cleanup[4190]: F6FDB7C1A7C1: message-id=<20447AE5D1377372@mail.example.com>
-Dec 17 06:03:07 mail postfix/qmgr[3900]: F6FDB7C1A7C1: from=<carol@example.com>, size=25996, nrcpt=1 (queue active)
-Dec 17 06:03:07 mail postfix/smtp[4290]: F6FDB7C1A7C1: to=<hank@example.org>, relay=aspmx.example.org[203.0.113.11]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 06DC2C42)
-Dec 17 06:03:07 mail postfix/qmgr[3900]: F6FDB7C1A7C1: removed
-Dec 17 06:03:07 mail postfix/smtpd[4090]: disconnect from vpn7.example.net[192.0.2.110] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:08 mail postfix/smtpd[4091]: connect from server.example.org[192.0.2.111]
-Dec 17 06:03:08 mail postfix/smtpd[4091]: 97A7E08AA78A: client=server.example.org[192.0.2.111]
-Dec 17 06:03:08 mail postfix/cleanup[4191]: 97A7E08AA78A: message-id=<F2C9BCF2B2BD35E6@mail.example.com>
-Dec 17 06:03:08 mail postfix/qmgr[3900]: 97A7E08AA78A: from=<postmaster@example.com>, size=16270, nrcpt=1 (queue active)
-Dec 17 06:03:08 mail postfix/smtp[4291]: 97A7E08AA78A: to=<irene@example.net>, relay=gateway.example.net[203.0.113.50]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as E091BB47)
-Dec 17 06:03:08 mail postfix/qmgr[3900]: 97A7E08AA78A: removed
-Dec 17 06:03:08 mail postfix/smtpd[4091]: disconnect from server.example.org[192.0.2.111] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:11 mail postfix/smtpd[4092]: connect from node3.example.com[192.0.2.112]
-Dec 17 06:03:11 mail postfix/smtpd[4092]: 6DE99BF5A7F5: client=node3.example.com[192.0.2.112]
-Dec 17 06:03:11 mail postfix/cleanup[4192]: 6DE99BF5A7F5: message-id=<238ABF0C22D50EC4@mail.example.com>
-Dec 17 06:03:11 mail postfix/qmgr[3900]: 6DE99BF5A7F5: from=<alice@example.com>, size=18115, nrcpt=1 (queue active)
-Dec 17 06:03:11 mail postfix/smtp[4292]: 6DE99BF5A7F5: to=<mike@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.5, status=deferred (host mx.example.org[198.51.100.7] said: 451 4.4.5 Server out of memory: Drop connection later (in reply to DATA command))
-Dec 17 06:03:11 mail postfix/qmgr[3900]: 6DE99BF5A7F5: removed
-Dec 17 06:03:11 mail postfix/smtpd[4092]: disconnect from node3.example.com[192.0.2.112] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
-Dec 17 06:03:13 mail postfix/smtpd[4093]: connect from desk12.example.com[192.0.2.113]
-Dec 17 06:03:13 mail postfix/smtpd[4093]: EA678ED3A7D3: client=desk12.example.com[192.0.2.113]
-Dec 17 06:03:13 mail postfix/cleanup[4193]: EA678ED3A7D3: message-id=<8FAF5B2987665DB7@mail.example.com>
-Dec 17 06:03:13 mail postfix/qmgr[3900]: EA678ED3A7D3: from=<bob@example.com>, size=13703, nrcpt=1 (queue active)
-Dec 17 06:03:13 mail postfix/smtp[4293]: EA678ED3A7D3: to=<nina@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=2.4, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 01C4E4D6)
-Dec 17 06:03:13 mail postfix/qmgr[3900]: EA678ED3A7D3: removed
-Dec 17 06:03:13 mail postfix/smtpd[4093]: disconnect from desk12.example.com[192.0.2.113] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:04 mail postfix/smtpd[4001]: connect from server.example.org[198.51.100.24]
+Dec 17 06:00:04 mail postfix/smtpd[4001]: 85C97E2A7C15: client=server.example.org[198.51.100.24]
+Dec 17 06:00:04 mail postfix/cleanup[4101]: 85C97E2A7C15: message-id=<86C97E2A7DC8@mail.example.com>
+Dec 17 06:00:04 mail postfix/qmgr[3901]: 85C97E2A7C15: from=<bob@example.com>, size=20137, nrcpt=1 (queue active)
+Dec 17 06:00:04 mail postfix/smtp[4201]: 85C97E2A7C15: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 85C97E2A7C15)
+Dec 17 06:00:04 mail postfix/qmgr[3901]: 85C97E2A7C15: removed
+Dec 17 06:00:04 mail postfix/smtpd[4001]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:06 mail postfix/smtpd[4002]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:00:06 mail postfix/smtpd[4002]: FF82FD74F82A: client=host4.example.net[203.0.113.50]
+Dec 17 06:00:06 mail postfix/cleanup[4102]: FF82FD74F82A: message-id=<0082FD74F9DD@mail.example.com>
+Dec 17 06:00:06 mail postfix/qmgr[3902]: FF82FD74F82A: from=<carol@example.org>, size=20274, nrcpt=1 (queue active)
+Dec 17 06:00:06 mail postfix/smtp[4202]: FF82FD74F82A: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as FF82FD74F82A)
+Dec 17 06:00:06 mail postfix/qmgr[3902]: FF82FD74F82A: removed
+Dec 17 06:00:06 mail postfix/smtpd[4002]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:08 mail postfix/smtpd[4003]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:00:08 mail postfix/smtpd[4003]: 793C7CBF743F: client=mail.example.net[198.51.100.9]
+Dec 17 06:00:08 mail postfix/cleanup[4103]: 793C7CBF743F: message-id=<7A3C7CBF75F2@mail.example.com>
+Dec 17 06:00:08 mail postfix/qmgr[3903]: 793C7CBF743F: from=<dave@example.net>, size=20411, nrcpt=1 (queue active)
+Dec 17 06:00:08 mail postfix/smtp[4203]: 793C7CBF743F: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 793C7CBF743F)
+Dec 17 06:00:08 mail postfix/qmgr[3903]: 793C7CBF743F: removed
+Dec 17 06:00:08 mail postfix/smtpd[4003]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:10 mail postfix/smtpd[4004]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:00:10 mail postfix/smtpd[4004]: F2F5FC09F054: client=laptop.example.org[203.0.113.11]
+Dec 17 06:00:10 mail postfix/cleanup[4104]: F2F5FC09F054: message-id=<F3F5FC09F207@mail.example.com>
+Dec 17 06:00:10 mail postfix/qmgr[3904]: F2F5FC09F054: from=<eve@example.com>, size=20548, nrcpt=1 (queue active)
+Dec 17 06:00:10 mail postfix/smtp[4204]: F2F5FC09F054: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as F2F5FC09F054)
+Dec 17 06:00:10 mail postfix/qmgr[3904]: F2F5FC09F054: removed
+Dec 17 06:00:10 mail postfix/smtpd[4004]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:12 mail postfix/smtpd[4005]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:00:12 mail postfix/smtpd[4005]: 6CAF7B546C69: client=node3.example.com[192.0.2.20]
+Dec 17 06:00:12 mail postfix/cleanup[4105]: 6CAF7B546C69: message-id=<6DAF7B546E1C@mail.example.com>
+Dec 17 06:00:12 mail postfix/qmgr[3905]: 6CAF7B546C69: from=<frank@example.org>, size=20685, nrcpt=1 (queue active)
+Dec 17 06:00:12 mail postfix/smtp[4205]: 6CAF7B546C69: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 6CAF7B546C69)
+Dec 17 06:00:12 mail postfix/qmgr[3905]: 6CAF7B546C69: removed
+Dec 17 06:00:12 mail postfix/smtpd[4005]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:14 mail postfix/smtpd[4006]: connect from server.example.org[198.51.100.24]
+Dec 17 06:00:14 mail postfix/smtpd[4006]: E668FA9EE87E: client=server.example.org[198.51.100.24]
+Dec 17 06:00:14 mail postfix/cleanup[4106]: E668FA9EE87E: message-id=<E768FA9EEA31@mail.example.com>
+Dec 17 06:00:14 mail postfix/qmgr[3906]: E668FA9EE87E: from=<grace@example.net>, size=20822, nrcpt=1 (queue active)
+Dec 17 06:00:14 mail postfix/smtp[4206]: E668FA9EE87E: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as E668FA9EE87E)
+Dec 17 06:00:14 mail postfix/qmgr[3906]: E668FA9EE87E: removed
+Dec 17 06:00:14 mail postfix/smtpd[4006]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:16 mail postfix/smtpd[4007]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:00:16 mail postfix/smtpd[4007]: 602279E96493: client=host4.example.net[203.0.113.50]
+Dec 17 06:00:16 mail postfix/cleanup[4107]: 602279E96493: message-id=<612279E96646@mail.example.com>
+Dec 17 06:00:16 mail postfix/qmgr[3907]: 602279E96493: from=<heidi@example.com>, size=20959, nrcpt=1 (queue active)
+Dec 17 06:00:16 mail postfix/smtp[4207]: 602279E96493: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 602279E96493)
+Dec 17 06:00:16 mail postfix/qmgr[3907]: 602279E96493: removed
+Dec 17 06:00:16 mail postfix/smtpd[4007]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:18 mail postfix/smtpd[4008]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:00:18 mail postfix/smtpd[4008]: D9DBF933E0A8: client=mail.example.net[198.51.100.9]
+Dec 17 06:00:18 mail postfix/cleanup[4108]: D9DBF933E0A8: message-id=<DADBF933E25B@mail.example.com>
+Dec 17 06:00:18 mail postfix/qmgr[3908]: D9DBF933E0A8: from=<alice@example.com>, size=21096, nrcpt=1 (queue active)
+Dec 17 06:00:18 mail postfix/smtp[4208]: D9DBF933E0A8: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as D9DBF933E0A8)
+Dec 17 06:00:18 mail postfix/qmgr[3908]: D9DBF933E0A8: removed
+Dec 17 06:00:18 mail postfix/smtpd[4008]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:20 mail postfix/smtpd[4009]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:00:20 mail postfix/smtpd[4009]: 5395787E5CBD: client=laptop.example.org[203.0.113.11]
+Dec 17 06:00:20 mail postfix/cleanup[4109]: 5395787E5CBD: message-id=<5495787E5E70@mail.example.com>
+Dec 17 06:00:20 mail postfix/qmgr[3909]: 5395787E5CBD: from=<bob@example.com>, size=21233, nrcpt=1 (queue active)
+Dec 17 06:00:20 mail postfix/smtp[4209]: 5395787E5CBD: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 5395787E5CBD)
+Dec 17 06:00:20 mail postfix/qmgr[3909]: 5395787E5CBD: removed
+Dec 17 06:00:20 mail postfix/smtpd[4009]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:22 mail postfix/smtpd[4010]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:00:22 mail postfix/smtpd[4010]: CD4EF7C8D8D2: client=node3.example.com[192.0.2.20]
+Dec 17 06:00:22 mail postfix/cleanup[4110]: CD4EF7C8D8D2: message-id=<CE4EF7C8DA85@mail.example.com>
+Dec 17 06:00:22 mail postfix/qmgr[3910]: CD4EF7C8D8D2: from=<carol@example.org>, size=21370, nrcpt=1 (queue active)
+Dec 17 06:00:22 mail postfix/smtp[4210]: CD4EF7C8D8D2: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as CD4EF7C8D8D2)
+Dec 17 06:00:22 mail postfix/qmgr[3910]: CD4EF7C8D8D2: removed
+Dec 17 06:00:22 mail postfix/smtpd[4010]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:24 mail postfix/smtpd[4011]: connect from server.example.org[198.51.100.24]
+Dec 17 06:00:24 mail postfix/smtpd[4011]: 4708771354E7: client=server.example.org[198.51.100.24]
+Dec 17 06:00:24 mail postfix/cleanup[4111]: 4708771354E7: message-id=<48087713569A@mail.example.com>
+Dec 17 06:00:24 mail postfix/qmgr[3911]: 4708771354E7: from=<dave@example.net>, size=21507, nrcpt=1 (queue active)
+Dec 17 06:00:24 mail postfix/smtp[4211]: 4708771354E7: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 4708771354E7)
+Dec 17 06:00:24 mail postfix/qmgr[3911]: 4708771354E7: removed
+Dec 17 06:00:24 mail postfix/smtpd[4011]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:26 mail postfix/smtpd[4012]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:00:26 mail postfix/smtpd[4012]: C0C1F65DD0FC: client=host4.example.net[203.0.113.50]
+Dec 17 06:00:26 mail postfix/cleanup[4112]: C0C1F65DD0FC: message-id=<C1C1F65DD2AF@mail.example.com>
+Dec 17 06:00:26 mail postfix/qmgr[3912]: C0C1F65DD0FC: from=<eve@example.com>, size=21644, nrcpt=1 (queue active)
+Dec 17 06:00:26 mail postfix/smtp[4212]: C0C1F65DD0FC: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as C0C1F65DD0FC)
+Dec 17 06:00:26 mail postfix/qmgr[3912]: C0C1F65DD0FC: removed
+Dec 17 06:00:26 mail postfix/smtpd[4012]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:28 mail postfix/smtpd[4013]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:00:28 mail postfix/smtpd[4013]: 3A7B75A84D11: client=mail.example.net[198.51.100.9]
+Dec 17 06:00:28 mail postfix/cleanup[4113]: 3A7B75A84D11: message-id=<3B7B75A84EC4@mail.example.com>
+Dec 17 06:00:28 mail postfix/qmgr[3913]: 3A7B75A84D11: from=<frank@example.org>, size=21781, nrcpt=1 (queue active)
+Dec 17 06:00:28 mail postfix/smtp[4213]: 3A7B75A84D11: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 3A7B75A84D11)
+Dec 17 06:00:28 mail postfix/qmgr[3913]: 3A7B75A84D11: removed
+Dec 17 06:00:28 mail postfix/smtpd[4013]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:30 mail postfix/smtpd[4014]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:00:30 mail postfix/smtpd[4014]: B434F4F2C926: client=laptop.example.org[203.0.113.11]
+Dec 17 06:00:30 mail postfix/cleanup[4114]: B434F4F2C926: message-id=<B534F4F2CAD9@mail.example.com>
+Dec 17 06:00:30 mail postfix/qmgr[3914]: B434F4F2C926: from=<grace@example.net>, size=21918, nrcpt=1 (queue active)
+Dec 17 06:00:30 mail postfix/smtp[4214]: B434F4F2C926: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B434F4F2C926)
+Dec 17 06:00:30 mail postfix/qmgr[3914]: B434F4F2C926: removed
+Dec 17 06:00:30 mail postfix/smtpd[4014]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:32 mail postfix/smtpd[4015]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:00:32 mail postfix/smtpd[4015]: 2DEE743D453B: client=node3.example.com[192.0.2.20]
+Dec 17 06:00:32 mail postfix/cleanup[4115]: 2DEE743D453B: message-id=<2EEE743D46EE@mail.example.com>
+Dec 17 06:00:32 mail postfix/qmgr[3915]: 2DEE743D453B: from=<heidi@example.com>, size=22055, nrcpt=1 (queue active)
+Dec 17 06:00:32 mail postfix/smtp[4215]: 2DEE743D453B: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2DEE743D453B)
+Dec 17 06:00:32 mail postfix/qmgr[3915]: 2DEE743D453B: removed
+Dec 17 06:00:32 mail postfix/smtpd[4015]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:34 mail postfix/smtpd[4016]: connect from server.example.org[198.51.100.24]
+Dec 17 06:00:34 mail postfix/smtpd[4016]: A7A7F387C150: client=server.example.org[198.51.100.24]
+Dec 17 06:00:34 mail postfix/cleanup[4116]: A7A7F387C150: message-id=<A8A7F387C303@mail.example.com>
+Dec 17 06:00:34 mail postfix/qmgr[3916]: A7A7F387C150: from=<alice@example.com>, size=22192, nrcpt=1 (queue active)
+Dec 17 06:00:34 mail postfix/smtp[4216]: A7A7F387C150: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as A7A7F387C150)
+Dec 17 06:00:34 mail postfix/qmgr[3916]: A7A7F387C150: removed
+Dec 17 06:00:34 mail postfix/smtpd[4016]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:36 mail postfix/smtpd[4017]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:00:36 mail postfix/smtpd[4017]: 216172D23D65: client=host4.example.net[203.0.113.50]
+Dec 17 06:00:36 mail postfix/cleanup[4117]: 216172D23D65: message-id=<226172D23F18@mail.example.com>
+Dec 17 06:00:36 mail postfix/qmgr[3917]: 216172D23D65: from=<bob@example.com>, size=22329, nrcpt=1 (queue active)
+Dec 17 06:00:36 mail postfix/smtp[4217]: 216172D23D65: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 216172D23D65)
+Dec 17 06:00:36 mail postfix/qmgr[3917]: 216172D23D65: removed
+Dec 17 06:00:36 mail postfix/smtpd[4017]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:38 mail postfix/smtpd[4018]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:00:38 mail postfix/smtpd[4018]: 9B1AF21CB97A: client=mail.example.net[198.51.100.9]
+Dec 17 06:00:38 mail postfix/cleanup[4118]: 9B1AF21CB97A: message-id=<9C1AF21CBB2D@mail.example.com>
+Dec 17 06:00:38 mail postfix/qmgr[3918]: 9B1AF21CB97A: from=<carol@example.org>, size=22466, nrcpt=1 (queue active)
+Dec 17 06:00:38 mail postfix/smtp[4218]: 9B1AF21CB97A: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 9B1AF21CB97A)
+Dec 17 06:00:38 mail postfix/qmgr[3918]: 9B1AF21CB97A: removed
+Dec 17 06:00:38 mail postfix/smtpd[4018]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:40 mail postfix/smtpd[4019]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:00:40 mail postfix/smtpd[4019]: 14D47167358F: client=laptop.example.org[203.0.113.11]
+Dec 17 06:00:40 mail postfix/cleanup[4119]: 14D47167358F: message-id=<15D471673742@mail.example.com>
+Dec 17 06:00:40 mail postfix/qmgr[3919]: 14D47167358F: from=<dave@example.net>, size=22603, nrcpt=1 (queue active)
+Dec 17 06:00:40 mail postfix/smtp[4219]: 14D47167358F: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 14D47167358F)
+Dec 17 06:00:40 mail postfix/qmgr[3919]: 14D47167358F: removed
+Dec 17 06:00:40 mail postfix/smtpd[4019]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:42 mail postfix/smtpd[4020]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:00:42 mail postfix/smtpd[4020]: 8E8DF0B1B1A4: client=node3.example.com[192.0.2.20]
+Dec 17 06:00:42 mail postfix/cleanup[4120]: 8E8DF0B1B1A4: message-id=<8F8DF0B1B357@mail.example.com>
+Dec 17 06:00:42 mail postfix/qmgr[3920]: 8E8DF0B1B1A4: from=<eve@example.com>, size=22740, nrcpt=1 (queue active)
+Dec 17 06:00:42 mail postfix/smtp[4220]: 8E8DF0B1B1A4: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 8E8DF0B1B1A4)
+Dec 17 06:00:42 mail postfix/qmgr[3920]: 8E8DF0B1B1A4: removed
+Dec 17 06:00:42 mail postfix/smtpd[4020]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:44 mail postfix/smtpd[4021]: connect from server.example.org[198.51.100.24]
+Dec 17 06:00:44 mail postfix/smtpd[4021]: 08476FFC2DB9: client=server.example.org[198.51.100.24]
+Dec 17 06:00:44 mail postfix/cleanup[4121]: 08476FFC2DB9: message-id=<09476FFC2F6C@mail.example.com>
+Dec 17 06:00:44 mail postfix/qmgr[3921]: 08476FFC2DB9: from=<frank@example.org>, size=22877, nrcpt=1 (queue active)
+Dec 17 06:00:44 mail postfix/smtp[4221]: 08476FFC2DB9: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 08476FFC2DB9)
+Dec 17 06:00:44 mail postfix/qmgr[3921]: 08476FFC2DB9: removed
+Dec 17 06:00:44 mail postfix/smtpd[4021]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:46 mail postfix/smtpd[4022]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:00:46 mail postfix/smtpd[4022]: 8200EF46A9CE: client=host4.example.net[203.0.113.50]
+Dec 17 06:00:46 mail postfix/cleanup[4122]: 8200EF46A9CE: message-id=<8300EF46AB81@mail.example.com>
+Dec 17 06:00:46 mail postfix/qmgr[3922]: 8200EF46A9CE: from=<grace@example.net>, size=23014, nrcpt=1 (queue active)
+Dec 17 06:00:46 mail postfix/smtp[4222]: 8200EF46A9CE: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 8200EF46A9CE)
+Dec 17 06:00:46 mail postfix/qmgr[3922]: 8200EF46A9CE: removed
+Dec 17 06:00:46 mail postfix/smtpd[4022]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:48 mail postfix/smtpd[4023]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:00:48 mail postfix/smtpd[4023]: FBBA6E9125E3: client=mail.example.net[198.51.100.9]
+Dec 17 06:00:48 mail postfix/cleanup[4123]: FBBA6E9125E3: message-id=<FCBA6E912796@mail.example.com>
+Dec 17 06:00:48 mail postfix/qmgr[3923]: FBBA6E9125E3: from=<heidi@example.com>, size=23151, nrcpt=1 (queue active)
+Dec 17 06:00:48 mail postfix/smtp[4223]: FBBA6E9125E3: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as FBBA6E9125E3)
+Dec 17 06:00:48 mail postfix/qmgr[3923]: FBBA6E9125E3: removed
+Dec 17 06:00:48 mail postfix/smtpd[4023]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:50 mail postfix/smtpd[4024]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:00:50 mail postfix/smtpd[4024]: 7573EDDBA1F8: client=laptop.example.org[203.0.113.11]
+Dec 17 06:00:50 mail postfix/cleanup[4124]: 7573EDDBA1F8: message-id=<7673EDDBA3AB@mail.example.com>
+Dec 17 06:00:50 mail postfix/qmgr[3924]: 7573EDDBA1F8: from=<alice@example.com>, size=23288, nrcpt=1 (queue active)
+Dec 17 06:00:50 mail postfix/smtp[4224]: 7573EDDBA1F8: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 7573EDDBA1F8)
+Dec 17 06:00:50 mail postfix/qmgr[3924]: 7573EDDBA1F8: removed
+Dec 17 06:00:50 mail postfix/smtpd[4024]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:52 mail postfix/smtpd[4025]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:00:52 mail postfix/smtpd[4025]: EF2D6D261E0D: client=node3.example.com[192.0.2.20]
+Dec 17 06:00:52 mail postfix/cleanup[4125]: EF2D6D261E0D: message-id=<F02D6D261FC0@mail.example.com>
+Dec 17 06:00:52 mail postfix/qmgr[3925]: EF2D6D261E0D: from=<bob@example.com>, size=23425, nrcpt=1 (queue active)
+Dec 17 06:00:52 mail postfix/smtp[4225]: EF2D6D261E0D: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as EF2D6D261E0D)
+Dec 17 06:00:52 mail postfix/qmgr[3925]: EF2D6D261E0D: removed
+Dec 17 06:00:52 mail postfix/smtpd[4025]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:54 mail postfix/smtpd[4026]: connect from server.example.org[198.51.100.24]
+Dec 17 06:00:54 mail postfix/smtpd[4026]: 68E6EC709A22: client=server.example.org[198.51.100.24]
+Dec 17 06:00:54 mail postfix/cleanup[4126]: 68E6EC709A22: message-id=<69E6EC709BD5@mail.example.com>
+Dec 17 06:00:54 mail postfix/qmgr[3926]: 68E6EC709A22: from=<carol@example.org>, size=23562, nrcpt=1 (queue active)
+Dec 17 06:00:54 mail postfix/smtp[4226]: 68E6EC709A22: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 68E6EC709A22)
+Dec 17 06:00:54 mail postfix/qmgr[3926]: 68E6EC709A22: removed
+Dec 17 06:00:54 mail postfix/smtpd[4026]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:56 mail postfix/smtpd[4027]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:00:56 mail postfix/smtpd[4027]: E2A06BBB1637: client=host4.example.net[203.0.113.50]
+Dec 17 06:00:56 mail postfix/cleanup[4127]: E2A06BBB1637: message-id=<E3A06BBB17EA@mail.example.com>
+Dec 17 06:00:56 mail postfix/qmgr[3927]: E2A06BBB1637: from=<dave@example.net>, size=23699, nrcpt=1 (queue active)
+Dec 17 06:00:56 mail postfix/smtp[4227]: E2A06BBB1637: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as E2A06BBB1637)
+Dec 17 06:00:56 mail postfix/qmgr[3927]: E2A06BBB1637: removed
+Dec 17 06:00:56 mail postfix/smtpd[4027]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:00:58 mail postfix/smtpd[4028]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:00:58 mail postfix/smtpd[4028]: 5C59EB05924C: client=mail.example.net[198.51.100.9]
+Dec 17 06:00:58 mail postfix/cleanup[4128]: 5C59EB05924C: message-id=<5D59EB0593FF@mail.example.com>
+Dec 17 06:00:58 mail postfix/qmgr[3928]: 5C59EB05924C: from=<eve@example.com>, size=23836, nrcpt=1 (queue active)
+Dec 17 06:00:58 mail postfix/smtp[4228]: 5C59EB05924C: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 5C59EB05924C)
+Dec 17 06:00:58 mail postfix/qmgr[3928]: 5C59EB05924C: removed
+Dec 17 06:00:58 mail postfix/smtpd[4028]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:00 mail postfix/smtpd[4029]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:01:00 mail postfix/smtpd[4029]: D6136A500E61: client=laptop.example.org[203.0.113.11]
+Dec 17 06:01:00 mail postfix/cleanup[4129]: D6136A500E61: message-id=<D7136A501014@mail.example.com>
+Dec 17 06:01:00 mail postfix/qmgr[3929]: D6136A500E61: from=<frank@example.org>, size=23973, nrcpt=1 (queue active)
+Dec 17 06:01:00 mail postfix/smtp[4229]: D6136A500E61: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as D6136A500E61)
+Dec 17 06:01:00 mail postfix/qmgr[3929]: D6136A500E61: removed
+Dec 17 06:01:00 mail postfix/smtpd[4029]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:02 mail postfix/smtpd[4030]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:01:02 mail postfix/smtpd[4030]: 4FCCE99A8A76: client=node3.example.com[192.0.2.20]
+Dec 17 06:01:02 mail postfix/cleanup[4130]: 4FCCE99A8A76: message-id=<50CCE99A8C29@mail.example.com>
+Dec 17 06:01:02 mail postfix/qmgr[3930]: 4FCCE99A8A76: from=<grace@example.net>, size=24110, nrcpt=1 (queue active)
+Dec 17 06:01:02 mail postfix/smtp[4230]: 4FCCE99A8A76: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 4FCCE99A8A76)
+Dec 17 06:01:02 mail postfix/qmgr[3930]: 4FCCE99A8A76: removed
+Dec 17 06:01:02 mail postfix/smtpd[4030]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:04 mail postfix/smtpd[4031]: connect from server.example.org[198.51.100.24]
+Dec 17 06:01:04 mail postfix/smtpd[4031]: C98668E5068B: client=server.example.org[198.51.100.24]
+Dec 17 06:01:04 mail postfix/cleanup[4131]: C98668E5068B: message-id=<CA8668E5083E@mail.example.com>
+Dec 17 06:01:04 mail postfix/qmgr[3931]: C98668E5068B: from=<heidi@example.com>, size=24247, nrcpt=1 (queue active)
+Dec 17 06:01:04 mail postfix/smtp[4231]: C98668E5068B: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as C98668E5068B)
+Dec 17 06:01:04 mail postfix/qmgr[3931]: C98668E5068B: removed
+Dec 17 06:01:04 mail postfix/smtpd[4031]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:06 mail postfix/smtpd[4032]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:01:06 mail postfix/smtpd[4032]: 433FE82F82A0: client=host4.example.net[203.0.113.50]
+Dec 17 06:01:06 mail postfix/cleanup[4132]: 433FE82F82A0: message-id=<443FE82F8453@mail.example.com>
+Dec 17 06:01:06 mail postfix/qmgr[3932]: 433FE82F82A0: from=<alice@example.com>, size=24384, nrcpt=1 (queue active)
+Dec 17 06:01:06 mail postfix/smtp[4232]: 433FE82F82A0: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 433FE82F82A0)
+Dec 17 06:01:06 mail postfix/qmgr[3932]: 433FE82F82A0: removed
+Dec 17 06:01:06 mail postfix/smtpd[4032]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:08 mail postfix/smtpd[4033]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:01:08 mail postfix/smtpd[4033]: BCF96779FEB5: client=mail.example.net[198.51.100.9]
+Dec 17 06:01:08 mail postfix/cleanup[4133]: BCF96779FEB5: message-id=<BDF9677A0068@mail.example.com>
+Dec 17 06:01:08 mail postfix/qmgr[3933]: BCF96779FEB5: from=<bob@example.com>, size=24521, nrcpt=1 (queue active)
+Dec 17 06:01:08 mail postfix/smtp[4233]: BCF96779FEB5: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as BCF96779FEB5)
+Dec 17 06:01:08 mail postfix/qmgr[3933]: BCF96779FEB5: removed
+Dec 17 06:01:08 mail postfix/smtpd[4033]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:10 mail postfix/smtpd[4034]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:01:10 mail postfix/smtpd[4034]: 36B2E6C47ACA: client=laptop.example.org[203.0.113.11]
+Dec 17 06:01:10 mail postfix/cleanup[4134]: 36B2E6C47ACA: message-id=<37B2E6C47C7D@mail.example.com>
+Dec 17 06:01:10 mail postfix/qmgr[3934]: 36B2E6C47ACA: from=<carol@example.org>, size=24658, nrcpt=1 (queue active)
+Dec 17 06:01:10 mail postfix/smtp[4234]: 36B2E6C47ACA: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 36B2E6C47ACA)
+Dec 17 06:01:10 mail postfix/qmgr[3934]: 36B2E6C47ACA: removed
+Dec 17 06:01:10 mail postfix/smtpd[4034]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:12 mail postfix/smtpd[4035]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:01:12 mail postfix/smtpd[4035]: B06C660EF6DF: client=node3.example.com[192.0.2.20]
+Dec 17 06:01:12 mail postfix/cleanup[4135]: B06C660EF6DF: message-id=<B16C660EF892@mail.example.com>
+Dec 17 06:01:12 mail postfix/qmgr[3935]: B06C660EF6DF: from=<dave@example.net>, size=24795, nrcpt=1 (queue active)
+Dec 17 06:01:12 mail postfix/smtp[4235]: B06C660EF6DF: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B06C660EF6DF)
+Dec 17 06:01:12 mail postfix/qmgr[3935]: B06C660EF6DF: removed
+Dec 17 06:01:12 mail postfix/smtpd[4035]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:14 mail postfix/smtpd[4036]: connect from server.example.org[198.51.100.24]
+Dec 17 06:01:14 mail postfix/smtpd[4036]: 2A25E55972F4: client=server.example.org[198.51.100.24]
+Dec 17 06:01:14 mail postfix/cleanup[4136]: 2A25E55972F4: message-id=<2B25E55974A7@mail.example.com>
+Dec 17 06:01:14 mail postfix/qmgr[3936]: 2A25E55972F4: from=<eve@example.com>, size=24932, nrcpt=1 (queue active)
+Dec 17 06:01:14 mail postfix/smtp[4236]: 2A25E55972F4: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 2A25E55972F4)
+Dec 17 06:01:14 mail postfix/qmgr[3936]: 2A25E55972F4: removed
+Dec 17 06:01:14 mail postfix/smtpd[4036]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:16 mail postfix/smtpd[4037]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:01:16 mail postfix/smtpd[4037]: A3DF64A3EF09: client=host4.example.net[203.0.113.50]
+Dec 17 06:01:16 mail postfix/cleanup[4137]: A3DF64A3EF09: message-id=<A4DF64A3F0BC@mail.example.com>
+Dec 17 06:01:16 mail postfix/qmgr[3937]: A3DF64A3EF09: from=<frank@example.org>, size=25069, nrcpt=1 (queue active)
+Dec 17 06:01:16 mail postfix/smtp[4237]: A3DF64A3EF09: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as A3DF64A3EF09)
+Dec 17 06:01:16 mail postfix/qmgr[3937]: A3DF64A3EF09: removed
+Dec 17 06:01:16 mail postfix/smtpd[4037]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:18 mail postfix/smtpd[4038]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:01:18 mail postfix/smtpd[4038]: 1D98E3EE6B1E: client=mail.example.net[198.51.100.9]
+Dec 17 06:01:18 mail postfix/cleanup[4138]: 1D98E3EE6B1E: message-id=<1E98E3EE6CD1@mail.example.com>
+Dec 17 06:01:18 mail postfix/qmgr[3938]: 1D98E3EE6B1E: from=<grace@example.net>, size=25206, nrcpt=1 (queue active)
+Dec 17 06:01:18 mail postfix/smtp[4238]: 1D98E3EE6B1E: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 1D98E3EE6B1E)
+Dec 17 06:01:18 mail postfix/qmgr[3938]: 1D98E3EE6B1E: removed
+Dec 17 06:01:18 mail postfix/smtpd[4038]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:20 mail postfix/smtpd[4039]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:01:20 mail postfix/smtpd[4039]: 97526338E733: client=laptop.example.org[203.0.113.11]
+Dec 17 06:01:20 mail postfix/cleanup[4139]: 97526338E733: message-id=<98526338E8E6@mail.example.com>
+Dec 17 06:01:20 mail postfix/qmgr[3939]: 97526338E733: from=<heidi@example.com>, size=25343, nrcpt=1 (queue active)
+Dec 17 06:01:20 mail postfix/smtp[4239]: 97526338E733: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as 97526338E733)
+Dec 17 06:01:20 mail postfix/qmgr[3939]: 97526338E733: removed
+Dec 17 06:01:20 mail postfix/smtpd[4039]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:22 mail postfix/smtpd[4040]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:01:22 mail postfix/smtpd[4040]: 110BE2836348: client=node3.example.com[192.0.2.20]
+Dec 17 06:01:22 mail postfix/cleanup[4140]: 110BE2836348: message-id=<120BE28364FB@mail.example.com>
+Dec 17 06:01:22 mail postfix/qmgr[3940]: 110BE2836348: from=<alice@example.com>, size=25480, nrcpt=1 (queue active)
+Dec 17 06:01:22 mail postfix/smtp[4240]: 110BE2836348: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to mx.example.org[198.51.100.7]:25: Connection timed out)
+Dec 17 06:01:22 mail postfix/qmgr[3940]: 110BE2836348: removed
+Dec 17 06:01:22 mail postfix/smtpd[4040]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:24 mail postfix/smtpd[4041]: connect from server.example.org[198.51.100.24]
+Dec 17 06:01:24 mail postfix/smtpd[4041]: 8AC561CDDF5D: client=server.example.org[198.51.100.24]
+Dec 17 06:01:24 mail postfix/cleanup[4141]: 8AC561CDDF5D: message-id=<8BC561CDE110@mail.example.com>
+Dec 17 06:01:24 mail postfix/qmgr[3941]: 8AC561CDDF5D: from=<bob@example.com>, size=25617, nrcpt=1 (queue active)
+Dec 17 06:01:24 mail postfix/smtp[4241]: 8AC561CDDF5D: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to aspmx.example.com[192.0.2.60]:25: Connection timed out)
+Dec 17 06:01:24 mail postfix/qmgr[3941]: 8AC561CDDF5D: removed
+Dec 17 06:01:24 mail postfix/smtpd[4041]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:26 mail postfix/smtpd[4042]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:01:26 mail postfix/smtpd[4042]: 047EE1185B72: client=host4.example.net[203.0.113.50]
+Dec 17 06:01:26 mail postfix/cleanup[4142]: 047EE1185B72: message-id=<057EE1185D25@mail.example.com>
+Dec 17 06:01:26 mail postfix/qmgr[3942]: 047EE1185B72: from=<carol@example.org>, size=25754, nrcpt=1 (queue active)
+Dec 17 06:01:26 mail postfix/smtp[4242]: 047EE1185B72: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to gateway.example.net[203.0.113.50]:25: Connection timed out)
+Dec 17 06:01:26 mail postfix/qmgr[3942]: 047EE1185B72: removed
+Dec 17 06:01:26 mail postfix/smtpd[4042]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:28 mail postfix/smtpd[4043]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:01:28 mail postfix/smtpd[4043]: 7E386062D787: client=mail.example.net[198.51.100.9]
+Dec 17 06:01:28 mail postfix/cleanup[4143]: 7E386062D787: message-id=<7F386062D93A@mail.example.com>
+Dec 17 06:01:28 mail postfix/qmgr[3943]: 7E386062D787: from=<dave@example.net>, size=25891, nrcpt=1 (queue active)
+Dec 17 06:01:28 mail postfix/smtp[4243]: 7E386062D787: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to mail.example.net[198.51.100.24]:25: Connection timed out)
+Dec 17 06:01:28 mail postfix/qmgr[3943]: 7E386062D787: removed
+Dec 17 06:01:28 mail postfix/smtpd[4043]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:30 mail postfix/smtpd[4044]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:01:30 mail postfix/smtpd[4044]: F7F1DFAD539C: client=laptop.example.org[203.0.113.11]
+Dec 17 06:01:30 mail postfix/cleanup[4144]: F7F1DFAD539C: message-id=<F8F1DFAD554F@mail.example.com>
+Dec 17 06:01:30 mail postfix/qmgr[3944]: F7F1DFAD539C: from=<eve@example.com>, size=26028, nrcpt=1 (queue active)
+Dec 17 06:01:30 mail postfix/smtp[4244]: F7F1DFAD539C: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to mx.example.org[198.51.100.7]:25: Connection timed out)
+Dec 17 06:01:30 mail postfix/qmgr[3944]: F7F1DFAD539C: removed
+Dec 17 06:01:30 mail postfix/smtpd[4044]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:32 mail postfix/smtpd[4045]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:01:32 mail postfix/smtpd[4045]: 71AB5EF7CFB1: client=node3.example.com[192.0.2.20]
+Dec 17 06:01:32 mail postfix/cleanup[4145]: 71AB5EF7CFB1: message-id=<72AB5EF7D164@mail.example.com>
+Dec 17 06:01:32 mail postfix/qmgr[3945]: 71AB5EF7CFB1: from=<frank@example.org>, size=26165, nrcpt=1 (queue active)
+Dec 17 06:01:32 mail postfix/smtp[4245]: 71AB5EF7CFB1: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to aspmx.example.com[192.0.2.60]:25: Connection refused)
+Dec 17 06:01:32 mail postfix/qmgr[3945]: 71AB5EF7CFB1: removed
+Dec 17 06:01:32 mail postfix/smtpd[4045]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:34 mail postfix/smtpd[4046]: connect from server.example.org[198.51.100.24]
+Dec 17 06:01:34 mail postfix/smtpd[4046]: EB64DE424BC6: client=server.example.org[198.51.100.24]
+Dec 17 06:01:34 mail postfix/cleanup[4146]: EB64DE424BC6: message-id=<EC64DE424D79@mail.example.com>
+Dec 17 06:01:34 mail postfix/qmgr[3946]: EB64DE424BC6: from=<grace@example.net>, size=26302, nrcpt=1 (queue active)
+Dec 17 06:01:34 mail postfix/smtp[4246]: EB64DE424BC6: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to gateway.example.net[203.0.113.50]:25: Connection refused)
+Dec 17 06:01:34 mail postfix/qmgr[3946]: EB64DE424BC6: removed
+Dec 17 06:01:34 mail postfix/smtpd[4046]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:36 mail postfix/smtpd[4047]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:01:36 mail postfix/smtpd[4047]: 651E5D8CC7DB: client=host4.example.net[203.0.113.50]
+Dec 17 06:01:36 mail postfix/cleanup[4147]: 651E5D8CC7DB: message-id=<661E5D8CC98E@mail.example.com>
+Dec 17 06:01:36 mail postfix/qmgr[3947]: 651E5D8CC7DB: from=<heidi@example.com>, size=26439, nrcpt=1 (queue active)
+Dec 17 06:01:36 mail postfix/smtp[4247]: 651E5D8CC7DB: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.1, status=deferred (connect to mail.example.net[198.51.100.24]:25: Connection refused)
+Dec 17 06:01:36 mail postfix/qmgr[3947]: 651E5D8CC7DB: removed
+Dec 17 06:01:36 mail postfix/smtpd[4047]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:38 mail postfix/smtpd[4048]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:01:38 mail postfix/smtpd[4048]: DED7DCD743F0: client=mail.example.net[198.51.100.9]
+Dec 17 06:01:38 mail postfix/cleanup[4148]: DED7DCD743F0: message-id=<DFD7DCD745A3@mail.example.com>
+Dec 17 06:01:38 mail postfix/qmgr[3948]: DED7DCD743F0: from=<alice@example.com>, size=26576, nrcpt=1 (queue active)
+Dec 17 06:01:38 mail postfix/smtp[4248]: DED7DCD743F0: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (lost connection with mx.example.org[198.51.100.7] while sending message body)
+Dec 17 06:01:38 mail postfix/qmgr[3948]: DED7DCD743F0: removed
+Dec 17 06:01:38 mail postfix/smtpd[4048]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:40 mail postfix/smtpd[4049]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:01:40 mail postfix/smtpd[4049]: 58915C21C005: client=laptop.example.org[203.0.113.11]
+Dec 17 06:01:40 mail postfix/cleanup[4149]: 58915C21C005: message-id=<59915C21C1B8@mail.example.com>
+Dec 17 06:01:40 mail postfix/qmgr[3949]: 58915C21C005: from=<bob@example.com>, size=26713, nrcpt=1 (queue active)
+Dec 17 06:01:40 mail postfix/smtp[4249]: 58915C21C005: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (lost connection with aspmx.example.com[192.0.2.60] while sending message body)
+Dec 17 06:01:40 mail postfix/qmgr[3949]: 58915C21C005: removed
+Dec 17 06:01:40 mail postfix/smtpd[4049]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:42 mail postfix/smtpd[4050]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:01:42 mail postfix/smtpd[4050]: D24ADB6C3C1A: client=node3.example.com[192.0.2.20]
+Dec 17 06:01:42 mail postfix/cleanup[4150]: D24ADB6C3C1A: message-id=<D34ADB6C3DCD@mail.example.com>
+Dec 17 06:01:42 mail postfix/qmgr[3950]: D24ADB6C3C1A: from=<carol@example.org>, size=26850, nrcpt=1 (queue active)
+Dec 17 06:01:42 mail postfix/smtp[4250]: D24ADB6C3C1A: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.2, status=deferred (lost connection with gateway.example.net[203.0.113.50] while sending message body)
+Dec 17 06:01:42 mail postfix/qmgr[3950]: D24ADB6C3C1A: removed
+Dec 17 06:01:42 mail postfix/smtpd[4050]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:44 mail postfix/smtpd[4051]: connect from server.example.org[198.51.100.24]
+Dec 17 06:01:44 mail postfix/smtpd[4051]: 4C045AB6B82F: client=server.example.org[198.51.100.24]
+Dec 17 06:01:44 mail postfix/cleanup[4151]: 4C045AB6B82F: message-id=<4D045AB6B9E2@mail.example.com>
+Dec 17 06:01:44 mail postfix/qmgr[3951]: 4C045AB6B82F: from=<dave@example.net>, size=26987, nrcpt=1 (queue active)
+Dec 17 06:01:44 mail postfix/smtp[4251]: 4C045AB6B82F: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.3, status=deferred (Host or domain name not found. Name service error for name=missing51.example.com type=A: Host not found)
+Dec 17 06:01:44 mail postfix/qmgr[3951]: 4C045AB6B82F: removed
+Dec 17 06:01:44 mail postfix/smtpd[4051]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:46 mail postfix/smtpd[4052]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:01:46 mail postfix/smtpd[4052]: C5BDDA013444: client=host4.example.net[203.0.113.50]
+Dec 17 06:01:46 mail postfix/cleanup[4152]: C5BDDA013444: message-id=<C6BDDA0135F7@mail.example.com>
+Dec 17 06:01:46 mail postfix/qmgr[3952]: C5BDDA013444: from=<eve@example.com>, size=27124, nrcpt=1 (queue active)
+Dec 17 06:01:46 mail postfix/smtp[4252]: C5BDDA013444: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.3, status=deferred (Host or domain name not found. Name service error for name=missing52.example.com type=A: Host not found)
+Dec 17 06:01:46 mail postfix/qmgr[3952]: C5BDDA013444: removed
+Dec 17 06:01:46 mail postfix/smtpd[4052]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:48 mail postfix/smtpd[4053]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:01:48 mail postfix/smtpd[4053]: 3F77594BB059: client=mail.example.net[198.51.100.9]
+Dec 17 06:01:48 mail postfix/cleanup[4153]: 3F77594BB059: message-id=<4077594BB20C@mail.example.com>
+Dec 17 06:01:48 mail postfix/qmgr[3953]: 3F77594BB059: from=<frank@example.org>, size=27261, nrcpt=1 (queue active)
+Dec 17 06:01:48 mail postfix/smtp[4253]: 3F77594BB059: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.4.3, status=deferred (Host or domain name not found. Name service error for name=missing53.example.com type=AAAA: Host found but no data record of requested type)
+Dec 17 06:01:48 mail postfix/qmgr[3953]: 3F77594BB059: removed
+Dec 17 06:01:48 mail postfix/smtpd[4053]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:50 mail postfix/smtpd[4054]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:01:50 mail postfix/smtpd[4054]: B930D8962C6E: client=laptop.example.org[203.0.113.11]
+Dec 17 06:01:50 mail postfix/cleanup[4154]: B930D8962C6E: message-id=<BA30D8962E21@mail.example.com>
+Dec 17 06:01:50 mail postfix/qmgr[3954]: B930D8962C6E: from=<grace@example.net>, size=27398, nrcpt=1 (queue active)
+Dec 17 06:01:50 mail postfix/smtp[4254]: B930D8962C6E: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (Domain badmx54.example.com does not accept mail (nullMX))
+Dec 17 06:01:50 mail postfix/bounce[4354]: B930D8962C6E: sender non-delivery notification: BB30D89
+Dec 17 06:01:50 mail postfix/qmgr[3954]: B930D8962C6E: removed
+Dec 17 06:01:50 mail postfix/smtpd[4054]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:52 mail postfix/smtpd[4055]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:01:52 mail postfix/smtpd[4055]: 32EA57E0A883: client=node3.example.com[192.0.2.20]
+Dec 17 06:01:52 mail postfix/cleanup[4155]: 32EA57E0A883: message-id=<33EA57E0AA36@mail.example.com>
+Dec 17 06:01:52 mail postfix/qmgr[3955]: 32EA57E0A883: from=<heidi@example.com>, size=27535, nrcpt=1 (queue active)
+Dec 17 06:01:52 mail postfix/smtp[4255]: 32EA57E0A883: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (Domain badmx55.example.com does not accept mail (nullMX))
+Dec 17 06:01:52 mail postfix/bounce[4355]: 32EA57E0A883: sender non-delivery notification: 34EA57E
+Dec 17 06:01:52 mail postfix/qmgr[3955]: 32EA57E0A883: removed
+Dec 17 06:01:52 mail postfix/smtpd[4055]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:54 mail postfix/smtpd[4056]: connect from server.example.org[198.51.100.24]
+Dec 17 06:01:54 mail postfix/smtpd[4056]: ACA3D72B2498: client=server.example.org[198.51.100.24]
+Dec 17 06:01:54 mail postfix/cleanup[4156]: ACA3D72B2498: message-id=<ADA3D72B264B@mail.example.com>
+Dec 17 06:01:54 mail postfix/qmgr[3956]: ACA3D72B2498: from=<alice@example.com>, size=27672, nrcpt=1 (queue active)
+Dec 17 06:01:54 mail postfix/smtp[4256]: ACA3D72B2498: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host mx.example.org[198.51.100.7] refused to talk to me: 554 Access Denied)
+Dec 17 06:01:54 mail postfix/bounce[4356]: ACA3D72B2498: sender non-delivery notification: AEA3D72
+Dec 17 06:01:54 mail postfix/qmgr[3956]: ACA3D72B2498: removed
+Dec 17 06:01:54 mail postfix/smtpd[4056]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:56 mail postfix/smtpd[4057]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:01:56 mail postfix/smtpd[4057]: 265D5675A0AD: client=host4.example.net[203.0.113.50]
+Dec 17 06:01:56 mail postfix/cleanup[4157]: 265D5675A0AD: message-id=<275D5675A260@mail.example.com>
+Dec 17 06:01:56 mail postfix/qmgr[3957]: 265D5675A0AD: from=<bob@example.com>, size=27809, nrcpt=1 (queue active)
+Dec 17 06:01:56 mail postfix/smtp[4257]: 265D5675A0AD: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host aspmx.example.com[192.0.2.60] refused to talk to me: 554 Access Denied)
+Dec 17 06:01:56 mail postfix/bounce[4357]: 265D5675A0AD: sender non-delivery notification: 285D567
+Dec 17 06:01:56 mail postfix/qmgr[3957]: 265D5675A0AD: removed
+Dec 17 06:01:56 mail postfix/smtpd[4057]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:01:58 mail postfix/smtpd[4058]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:01:58 mail postfix/smtpd[4058]: A016D5C01CC2: client=mail.example.net[198.51.100.9]
+Dec 17 06:01:58 mail postfix/cleanup[4158]: A016D5C01CC2: message-id=<A116D5C01E75@mail.example.com>
+Dec 17 06:01:58 mail postfix/qmgr[3958]: A016D5C01CC2: from=<carol@example.org>, size=27946, nrcpt=1 (queue active)
+Dec 17 06:01:58 mail postfix/smtp[4258]: A016D5C01CC2: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host gateway.example.net[203.0.113.50] said: 550 5.1.1 <trent@example.org>: user not found (in reply to RCPT TO command))
+Dec 17 06:01:58 mail postfix/bounce[4358]: A016D5C01CC2: sender non-delivery notification: A216D5C
+Dec 17 06:01:58 mail postfix/qmgr[3958]: A016D5C01CC2: removed
+Dec 17 06:01:58 mail postfix/smtpd[4058]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:00 mail postfix/smtpd[4059]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:02:00 mail postfix/smtpd[4059]: 19D0550A98D7: client=laptop.example.org[203.0.113.11]
+Dec 17 06:02:00 mail postfix/cleanup[4159]: 19D0550A98D7: message-id=<1AD0550A9A8A@mail.example.com>
+Dec 17 06:02:00 mail postfix/qmgr[3959]: 19D0550A98D7: from=<dave@example.net>, size=28083, nrcpt=1 (queue active)
+Dec 17 06:02:00 mail postfix/smtp[4259]: 19D0550A98D7: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mail.example.net[198.51.100.24] said: 550 5.1.1 <judy@example.net>: user not found (in reply to RCPT TO command))
+Dec 17 06:02:00 mail postfix/bounce[4359]: 19D0550A98D7: sender non-delivery notification: 1BD0550
+Dec 17 06:02:00 mail postfix/qmgr[3959]: 19D0550A98D7: removed
+Dec 17 06:02:00 mail postfix/smtpd[4059]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:02 mail postfix/smtpd[4060]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:02:02 mail postfix/smtpd[4060]: 9389D45514EC: client=node3.example.com[192.0.2.20]
+Dec 17 06:02:02 mail postfix/cleanup[4160]: 9389D45514EC: message-id=<9489D455169F@mail.example.com>
+Dec 17 06:02:02 mail postfix/qmgr[3960]: 9389D45514EC: from=<eve@example.com>, size=28220, nrcpt=1 (queue active)
+Dec 17 06:02:02 mail postfix/smtp[4260]: 9389D45514EC: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.1.1 <olivia@example.net>: user not found (in reply to RCPT TO command))
+Dec 17 06:02:02 mail postfix/bounce[4360]: 9389D45514EC: sender non-delivery notification: 9589D45
+Dec 17 06:02:02 mail postfix/qmgr[3960]: 9389D45514EC: removed
+Dec 17 06:02:02 mail postfix/smtpd[4060]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:04 mail postfix/smtpd[4061]: connect from server.example.org[198.51.100.24]
+Dec 17 06:02:04 mail postfix/smtpd[4061]: 0D43539F9101: client=server.example.org[198.51.100.24]
+Dec 17 06:02:04 mail postfix/cleanup[4161]: 0D43539F9101: message-id=<0E43539F92B4@mail.example.com>
+Dec 17 06:02:04 mail postfix/qmgr[3961]: 0D43539F9101: from=<frank@example.org>, size=28357, nrcpt=1 (queue active)
+Dec 17 06:02:04 mail postfix/smtp[4261]: 0D43539F9101: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host aspmx.example.com[192.0.2.60] said: 550 5.1.1 <victor@example.net>: user not found (in reply to RCPT TO command))
+Dec 17 06:02:04 mail postfix/bounce[4361]: 0D43539F9101: sender non-delivery notification: 0F43539
+Dec 17 06:02:04 mail postfix/qmgr[3961]: 0D43539F9101: removed
+Dec 17 06:02:04 mail postfix/smtpd[4061]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:06 mail postfix/smtpd[4062]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:02:06 mail postfix/smtpd[4062]: 86FCD2EA0D16: client=host4.example.net[203.0.113.50]
+Dec 17 06:02:06 mail postfix/cleanup[4162]: 86FCD2EA0D16: message-id=<87FCD2EA0EC9@mail.example.com>
+Dec 17 06:02:06 mail postfix/qmgr[3962]: 86FCD2EA0D16: from=<grace@example.net>, size=28494, nrcpt=1 (queue active)
+Dec 17 06:02:06 mail postfix/smtp[4262]: 86FCD2EA0D16: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host gateway.example.net[203.0.113.50] said: 550 5.1.1 <mallory@example.com>: user not found (in reply to RCPT TO command))
+Dec 17 06:02:06 mail postfix/bounce[4362]: 86FCD2EA0D16: sender non-delivery notification: 88FCD2E
+Dec 17 06:02:06 mail postfix/qmgr[3962]: 86FCD2EA0D16: removed
+Dec 17 06:02:06 mail postfix/smtpd[4062]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:08 mail postfix/smtpd[4063]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:02:08 mail postfix/smtpd[4063]: 00B65234892B: client=mail.example.net[198.51.100.9]
+Dec 17 06:02:08 mail postfix/cleanup[4163]: 00B65234892B: message-id=<01B652348ADE@mail.example.com>
+Dec 17 06:02:08 mail postfix/qmgr[3963]: 00B65234892B: from=<heidi@example.com>, size=28631, nrcpt=1 (queue active)
+Dec 17 06:02:08 mail postfix/smtp[4263]: 00B65234892B: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mail.example.net[198.51.100.24] said: 550 5.1.1 <peggy@example.com>: user not found (in reply to RCPT TO command))
+Dec 17 06:02:08 mail postfix/bounce[4363]: 00B65234892B: sender non-delivery notification: 02B6523
+Dec 17 06:02:08 mail postfix/qmgr[3963]: 00B65234892B: removed
+Dec 17 06:02:08 mail postfix/smtpd[4063]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:10 mail postfix/smtpd[4064]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:02:10 mail postfix/smtpd[4064]: 7A6FD17F0540: client=laptop.example.org[203.0.113.11]
+Dec 17 06:02:10 mail postfix/cleanup[4164]: 7A6FD17F0540: message-id=<7B6FD17F06F3@mail.example.com>
+Dec 17 06:02:10 mail postfix/qmgr[3964]: 7A6FD17F0540: from=<alice@example.com>, size=28768, nrcpt=1 (queue active)
+Dec 17 06:02:10 mail postfix/smtp[4264]: 7A6FD17F0540: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host mx.example.org[198.51.100.7] said: 550 No Such User Here (in reply to RCPT TO command))
+Dec 17 06:02:10 mail postfix/bounce[4364]: 7A6FD17F0540: sender non-delivery notification: 7C6FD17
+Dec 17 06:02:10 mail postfix/qmgr[3964]: 7A6FD17F0540: removed
+Dec 17 06:02:10 mail postfix/smtpd[4064]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:12 mail postfix/smtpd[4065]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:02:12 mail postfix/smtpd[4065]: F42950C98155: client=node3.example.com[192.0.2.20]
+Dec 17 06:02:12 mail postfix/cleanup[4165]: F42950C98155: message-id=<F52950C98308@mail.example.com>
+Dec 17 06:02:12 mail postfix/qmgr[3965]: F42950C98155: from=<bob@example.com>, size=28905, nrcpt=1 (queue active)
+Dec 17 06:02:12 mail postfix/smtp[4265]: F42950C98155: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host aspmx.example.com[192.0.2.60] said: 550 No Such User Here (in reply to RCPT TO command))
+Dec 17 06:02:12 mail postfix/bounce[4365]: F42950C98155: sender non-delivery notification: F62950C
+Dec 17 06:02:12 mail postfix/qmgr[3965]: F42950C98155: removed
+Dec 17 06:02:12 mail postfix/smtpd[4065]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:14 mail postfix/smtpd[4066]: connect from server.example.org[198.51.100.24]
+Dec 17 06:02:14 mail postfix/smtpd[4066]: 6DE2D013FD6A: client=server.example.org[198.51.100.24]
+Dec 17 06:02:14 mail postfix/cleanup[4166]: 6DE2D013FD6A: message-id=<6EE2D013FF1D@mail.example.com>
+Dec 17 06:02:14 mail postfix/qmgr[3966]: 6DE2D013FD6A: from=<carol@example.org>, size=29042, nrcpt=1 (queue active)
+Dec 17 06:02:14 mail postfix/smtp[4266]: 6DE2D013FD6A: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.0.0, status=bounced (host gateway.example.net[203.0.113.50] said: 550 No Such User Here (in reply to RCPT TO command))
+Dec 17 06:02:14 mail postfix/bounce[4366]: 6DE2D013FD6A: sender non-delivery notification: 6FE2D01
+Dec 17 06:02:14 mail postfix/qmgr[3966]: 6DE2D013FD6A: removed
+Dec 17 06:02:14 mail postfix/smtpd[4066]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:16 mail postfix/smtpd[4067]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:02:16 mail postfix/smtpd[4067]: E79C4F5E797F: client=host4.example.net[203.0.113.50]
+Dec 17 06:02:16 mail postfix/cleanup[4167]: E79C4F5E797F: message-id=<E89C4F5E7B32@mail.example.com>
+Dec 17 06:02:16 mail postfix/qmgr[3967]: E79C4F5E797F: from=<dave@example.net>, size=29179, nrcpt=1 (queue active)
+Dec 17 06:02:16 mail postfix/smtp[4267]: E79C4F5E797F: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mail.example.net[198.51.100.24] said: 550 Message was not accepted -- invalid mailbox.  Local mailbox judy@example.net is unavailable: user not found (in reply to DATA command))
+Dec 17 06:02:16 mail postfix/bounce[4367]: E79C4F5E797F: sender non-delivery notification: E99C4F5
+Dec 17 06:02:16 mail postfix/qmgr[3967]: E79C4F5E797F: removed
+Dec 17 06:02:16 mail postfix/smtpd[4067]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:18 mail postfix/smtpd[4068]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:02:18 mail postfix/smtpd[4068]: 6155CEA8F594: client=mail.example.net[198.51.100.9]
+Dec 17 06:02:18 mail postfix/cleanup[4168]: 6155CEA8F594: message-id=<6255CEA8F747@mail.example.com>
+Dec 17 06:02:18 mail postfix/qmgr[3968]: 6155CEA8F594: from=<eve@example.com>, size=29316, nrcpt=1 (queue active)
+Dec 17 06:02:18 mail postfix/smtp[4268]: 6155CEA8F594: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 Message was not accepted -- invalid mailbox.  Local mailbox olivia@example.net is unavailable: user not found (in reply to DATA command))
+Dec 17 06:02:18 mail postfix/bounce[4368]: 6155CEA8F594: sender non-delivery notification: 6355CEA
+Dec 17 06:02:18 mail postfix/qmgr[3968]: 6155CEA8F594: removed
+Dec 17 06:02:18 mail postfix/smtpd[4068]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:20 mail postfix/smtpd[4069]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:02:20 mail postfix/smtpd[4069]: DB0F4DF371A9: client=laptop.example.org[203.0.113.11]
+Dec 17 06:02:20 mail postfix/cleanup[4169]: DB0F4DF371A9: message-id=<DC0F4DF3735C@mail.example.com>
+Dec 17 06:02:20 mail postfix/qmgr[3969]: DB0F4DF371A9: from=<frank@example.org>, size=29453, nrcpt=1 (queue active)
+Dec 17 06:02:20 mail postfix/smtp[4269]: DB0F4DF371A9: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.2.2, status=bounced (host aspmx.example.com[192.0.2.60] said: 552 5.2.2 <victor@example.net>: user is over quota (in reply to RCPT TO command))
+Dec 17 06:02:20 mail postfix/bounce[4369]: DB0F4DF371A9: sender non-delivery notification: DD0F4DF
+Dec 17 06:02:20 mail postfix/qmgr[3969]: DB0F4DF371A9: removed
+Dec 17 06:02:20 mail postfix/smtpd[4069]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:22 mail postfix/smtpd[4070]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:02:22 mail postfix/smtpd[4070]: 54C8CD3DEDBE: client=node3.example.com[192.0.2.20]
+Dec 17 06:02:22 mail postfix/cleanup[4170]: 54C8CD3DEDBE: message-id=<55C8CD3DEF71@mail.example.com>
+Dec 17 06:02:22 mail postfix/qmgr[3970]: 54C8CD3DEDBE: from=<grace@example.net>, size=29590, nrcpt=1 (queue active)
+Dec 17 06:02:22 mail postfix/smtp[4270]: 54C8CD3DEDBE: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.2.2, status=bounced (host gateway.example.net[203.0.113.50] said: 552 5.2.2 <mallory@example.com>: user is over quota (in reply to RCPT TO command))
+Dec 17 06:02:22 mail postfix/bounce[4370]: 54C8CD3DEDBE: sender non-delivery notification: 56C8CD3
+Dec 17 06:02:22 mail postfix/qmgr[3970]: 54C8CD3DEDBE: removed
+Dec 17 06:02:22 mail postfix/smtpd[4070]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:24 mail postfix/smtpd[4071]: connect from server.example.org[198.51.100.24]
+Dec 17 06:02:24 mail postfix/smtpd[4071]: CE824C8869D3: client=server.example.org[198.51.100.24]
+Dec 17 06:02:24 mail postfix/cleanup[4171]: CE824C8869D3: message-id=<CF824C886B86@mail.example.com>
+Dec 17 06:02:24 mail postfix/qmgr[3971]: CE824C8869D3: from=<heidi@example.com>, size=29727, nrcpt=1 (queue active)
+Dec 17 06:02:24 mail postfix/smtp[4271]: CE824C8869D3: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.2.2, status=bounced (host mail.example.net[198.51.100.24] said: 552 5.2.2 <peggy@example.com>: user is over quota (in reply to RCPT TO command))
+Dec 17 06:02:24 mail postfix/bounce[4371]: CE824C8869D3: sender non-delivery notification: D0824C8
+Dec 17 06:02:24 mail postfix/qmgr[3971]: CE824C8869D3: removed
+Dec 17 06:02:24 mail postfix/smtpd[4071]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:26 mail postfix/smtpd[4072]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:02:26 mail postfix/smtpd[4072]: 483BCBD2E5E8: client=host4.example.net[203.0.113.50]
+Dec 17 06:02:26 mail postfix/cleanup[4172]: 483BCBD2E5E8: message-id=<493BCBD2E79B@mail.example.com>
+Dec 17 06:02:26 mail postfix/qmgr[3972]: 483BCBD2E5E8: from=<alice@example.com>, size=29864, nrcpt=1 (queue active)
+Dec 17 06:02:26 mail postfix/smtp[4272]: 483BCBD2E5E8: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.2.2, status=bounced (host mx.example.org[198.51.100.7] said: 552 5.2.2 <ivan@example.org>: user is over quota (in reply to RCPT TO command))
+Dec 17 06:02:26 mail postfix/bounce[4372]: 483BCBD2E5E8: sender non-delivery notification: 4A3BCBD
+Dec 17 06:02:26 mail postfix/qmgr[3972]: 483BCBD2E5E8: removed
+Dec 17 06:02:26 mail postfix/smtpd[4072]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:28 mail postfix/smtpd[4073]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:02:28 mail postfix/smtpd[4073]: C1F54B1D61FD: client=mail.example.net[198.51.100.9]
+Dec 17 06:02:28 mail postfix/cleanup[4173]: C1F54B1D61FD: message-id=<C2F54B1D63B0@mail.example.com>
+Dec 17 06:02:28 mail postfix/qmgr[3973]: C1F54B1D61FD: from=<bob@example.com>, size=30001, nrcpt=1 (queue active)
+Dec 17 06:02:28 mail postfix/smtp[4273]: C1F54B1D61FD: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.2.2, status=deferred (host aspmx.example.com[192.0.2.60] said: 452 4.2.2 <niaj@example.org>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to RCPT TO command))
+Dec 17 06:02:28 mail postfix/qmgr[3973]: C1F54B1D61FD: removed
+Dec 17 06:02:28 mail postfix/smtpd[4073]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:30 mail postfix/smtpd[4074]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:02:30 mail postfix/smtpd[4074]: 3BAECA67DE12: client=laptop.example.org[203.0.113.11]
+Dec 17 06:02:30 mail postfix/cleanup[4174]: 3BAECA67DE12: message-id=<3CAECA67DFC5@mail.example.com>
+Dec 17 06:02:30 mail postfix/qmgr[3974]: 3BAECA67DE12: from=<carol@example.org>, size=30138, nrcpt=1 (queue active)
+Dec 17 06:02:30 mail postfix/smtp[4274]: 3BAECA67DE12: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.2.2, status=deferred (host gateway.example.net[203.0.113.50] said: 452 4.2.2 <trent@example.org>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to RCPT TO command))
+Dec 17 06:02:30 mail postfix/qmgr[3974]: 3BAECA67DE12: removed
+Dec 17 06:02:30 mail postfix/smtpd[4074]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:32 mail postfix/smtpd[4075]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:02:32 mail postfix/smtpd[4075]: B56849B25A27: client=node3.example.com[192.0.2.20]
+Dec 17 06:02:32 mail postfix/cleanup[4175]: B56849B25A27: message-id=<B66849B25BDA@mail.example.com>
+Dec 17 06:02:32 mail postfix/qmgr[3975]: B56849B25A27: from=<dave@example.net>, size=30275, nrcpt=1 (queue active)
+Dec 17 06:02:32 mail postfix/smtp[4275]: B56849B25A27: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.2.2, status=deferred (host mail.example.net[198.51.100.24] said: 452 4.2.2 <judy@example.net>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to RCPT TO command))
+Dec 17 06:02:32 mail postfix/qmgr[3975]: B56849B25A27: removed
+Dec 17 06:02:32 mail postfix/smtpd[4075]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:34 mail postfix/smtpd[4076]: connect from server.example.org[198.51.100.24]
+Dec 17 06:02:34 mail postfix/smtpd[4076]: 2F21C8FCD63C: client=server.example.org[198.51.100.24]
+Dec 17 06:02:34 mail postfix/cleanup[4176]: 2F21C8FCD63C: message-id=<3021C8FCD7EF@mail.example.com>
+Dec 17 06:02:34 mail postfix/qmgr[3976]: 2F21C8FCD63C: from=<eve@example.com>, size=30412, nrcpt=1 (queue active)
+Dec 17 06:02:34 mail postfix/smtp[4276]: 2F21C8FCD63C: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.2.2, status=deferred (host mx.example.org[198.51.100.7] said: 452 4.2.2 <olivia@example.net>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to RCPT TO command))
+Dec 17 06:02:34 mail postfix/qmgr[3976]: 2F21C8FCD63C: removed
+Dec 17 06:02:34 mail postfix/smtpd[4076]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:36 mail postfix/smtpd[4077]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:02:36 mail postfix/smtpd[4077]: A8DB48475251: client=host4.example.net[203.0.113.50]
+Dec 17 06:02:36 mail postfix/cleanup[4177]: A8DB48475251: message-id=<A9DB48475404@mail.example.com>
+Dec 17 06:02:36 mail postfix/qmgr[3977]: A8DB48475251: from=<frank@example.org>, size=30549, nrcpt=1 (queue active)
+Dec 17 06:02:36 mail postfix/smtp[4277]: A8DB48475251: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host aspmx.example.com[192.0.2.60] said: 554 5.7.1 <victor@example.net>: Relay access denied (in reply to RCPT TO command))
+Dec 17 06:02:36 mail postfix/bounce[4377]: A8DB48475251: sender non-delivery notification: AADB484
+Dec 17 06:02:36 mail postfix/qmgr[3977]: A8DB48475251: removed
+Dec 17 06:02:36 mail postfix/smtpd[4077]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:38 mail postfix/smtpd[4078]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:02:38 mail postfix/smtpd[4078]: 2294C791CE66: client=mail.example.net[198.51.100.9]
+Dec 17 06:02:38 mail postfix/cleanup[4178]: 2294C791CE66: message-id=<2394C791D019@mail.example.com>
+Dec 17 06:02:38 mail postfix/qmgr[3978]: 2294C791CE66: from=<grace@example.net>, size=30686, nrcpt=1 (queue active)
+Dec 17 06:02:38 mail postfix/smtp[4278]: 2294C791CE66: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host gateway.example.net[203.0.113.50] said: 554 5.7.1 <mallory@example.com>: Relay access denied (in reply to RCPT TO command))
+Dec 17 06:02:38 mail postfix/bounce[4378]: 2294C791CE66: sender non-delivery notification: 2494C79
+Dec 17 06:02:38 mail postfix/qmgr[3978]: 2294C791CE66: removed
+Dec 17 06:02:38 mail postfix/smtpd[4078]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:40 mail postfix/smtpd[4079]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:02:40 mail postfix/smtpd[4079]: 9C4E46DC4A7B: client=laptop.example.org[203.0.113.11]
+Dec 17 06:02:40 mail postfix/cleanup[4179]: 9C4E46DC4A7B: message-id=<9D4E46DC4C2E@mail.example.com>
+Dec 17 06:02:40 mail postfix/qmgr[3979]: 9C4E46DC4A7B: from=<heidi@example.com>, size=30823, nrcpt=1 (queue active)
+Dec 17 06:02:40 mail postfix/smtp[4279]: 9C4E46DC4A7B: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host mail.example.net[198.51.100.24] said: 554 5.7.1 <peggy@example.com>: Relay access denied (in reply to RCPT TO command))
+Dec 17 06:02:40 mail postfix/bounce[4379]: 9C4E46DC4A7B: sender non-delivery notification: 9E4E46D
+Dec 17 06:02:40 mail postfix/qmgr[3979]: 9C4E46DC4A7B: removed
+Dec 17 06:02:40 mail postfix/smtpd[4079]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:42 mail postfix/smtpd[4080]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:02:42 mail postfix/smtpd[4080]: 1607C626C690: client=node3.example.com[192.0.2.20]
+Dec 17 06:02:42 mail postfix/cleanup[4180]: 1607C626C690: message-id=<1707C626C843@mail.example.com>
+Dec 17 06:02:42 mail postfix/qmgr[3980]: 1607C626C690: from=<alice@example.com>, size=30960, nrcpt=1 (queue active)
+Dec 17 06:02:42 mail postfix/smtp[4280]: 1607C626C690: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.4.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.4.1 Recipient address rejected: Access denied. [198.51.100.7] (in reply to RCPT TO command))
+Dec 17 06:02:42 mail postfix/bounce[4380]: 1607C626C690: sender non-delivery notification: 1807C62
+Dec 17 06:02:42 mail postfix/qmgr[3980]: 1607C626C690: removed
+Dec 17 06:02:42 mail postfix/smtpd[4080]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:44 mail postfix/smtpd[4081]: connect from server.example.org[198.51.100.24]
+Dec 17 06:02:44 mail postfix/smtpd[4081]: 8FC1457142A5: client=server.example.org[198.51.100.24]
+Dec 17 06:02:44 mail postfix/cleanup[4181]: 8FC1457142A5: message-id=<90C145714458@mail.example.com>
+Dec 17 06:02:44 mail postfix/qmgr[3981]: 8FC1457142A5: from=<bob@example.com>, size=31097, nrcpt=1 (queue active)
+Dec 17 06:02:44 mail postfix/smtp[4281]: 8FC1457142A5: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.4.1, status=bounced (host aspmx.example.com[192.0.2.60] said: 550 5.4.1 Recipient address rejected: Access denied. [192.0.2.60] (in reply to RCPT TO command))
+Dec 17 06:02:44 mail postfix/bounce[4381]: 8FC1457142A5: sender non-delivery notification: 91C1457
+Dec 17 06:02:44 mail postfix/qmgr[3981]: 8FC1457142A5: removed
+Dec 17 06:02:44 mail postfix/smtpd[4081]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:46 mail postfix/smtpd[4082]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:02:46 mail postfix/smtpd[4082]: 097AC4BBBEBA: client=host4.example.net[203.0.113.50]
+Dec 17 06:02:46 mail postfix/cleanup[4182]: 097AC4BBBEBA: message-id=<0A7AC4BBC06D@mail.example.com>
+Dec 17 06:02:46 mail postfix/qmgr[3982]: 097AC4BBBEBA: from=<carol@example.org>, size=31234, nrcpt=1 (queue active)
+Dec 17 06:02:46 mail postfix/smtp[4282]: 097AC4BBBEBA: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host gateway.example.net[203.0.113.50] said: 550-5.7.1 [203.0.113.50 12] Our system has detected that this 550-5.7.1 message is likely unsolicited mail. To reduce the amount of spam sent 550-5.7.1 to Gmail, this message has been blocked. Please visit 550-5.7.1  https://support.google.com/mail/?p=UnsolicitedMessageError 550 5.7.1  for more information. esmtps-in2-1-0 - gsmtp (in reply to DATA command))
+Dec 17 06:02:46 mail postfix/bounce[4382]: 097AC4BBBEBA: sender non-delivery notification: 0B7AC4B
+Dec 17 06:02:46 mail postfix/qmgr[3982]: 097AC4BBBEBA: removed
+Dec 17 06:02:46 mail postfix/smtpd[4082]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:48 mail postfix/smtpd[4083]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:02:48 mail postfix/smtpd[4083]: 833444063ACF: client=mail.example.net[198.51.100.9]
+Dec 17 06:02:48 mail postfix/cleanup[4183]: 833444063ACF: message-id=<843444063C82@mail.example.com>
+Dec 17 06:02:48 mail postfix/qmgr[3983]: 833444063ACF: from=<dave@example.net>, size=31371, nrcpt=1 (queue active)
+Dec 17 06:02:48 mail postfix/smtp[4283]: 833444063ACF: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.7.1, status=bounced (host mail.example.net[198.51.100.24] said: 550-5.7.1 [198.51.100.9 12] Our system has detected that this 550-5.7.1 message is likely unsolicited mail. To reduce the amount of spam sent 550-5.7.1 to Gmail, this message has been blocked. Please visit 550-5.7.1  https://support.google.com/mail/?p=UnsolicitedMessageError 550 5.7.1  for more information. esmtps-in3-1-0 - gsmtp (in reply to DATA command))
+Dec 17 06:02:48 mail postfix/bounce[4383]: 833444063ACF: sender non-delivery notification: 8534440
+Dec 17 06:02:48 mail postfix/qmgr[3983]: 833444063ACF: removed
+Dec 17 06:02:48 mail postfix/smtpd[4083]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:50 mail postfix/smtpd[4084]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:02:50 mail postfix/smtpd[4084]: FCEDC350B6E4: client=laptop.example.org[203.0.113.11]
+Dec 17 06:02:50 mail postfix/cleanup[4184]: FCEDC350B6E4: message-id=<FDEDC350B897@mail.example.com>
+Dec 17 06:02:50 mail postfix/qmgr[3984]: FCEDC350B6E4: from=<eve@example.com>, size=31508, nrcpt=1 (queue active)
+Dec 17 06:02:50 mail postfix/smtp[4284]: FCEDC350B6E4: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.3.0, status=bounced (host mx.example.org[198.51.100.7] said: 553 5.3.0 smtp.example.net DNSBL:RBL 521< 198.51.100.7 >_is_blocked.For assistance forward this error to abuse_rbl@abuse-att.net (in reply to MAIL FROM command))
+Dec 17 06:02:50 mail postfix/bounce[4384]: FCEDC350B6E4: sender non-delivery notification: FEEDC35
+Dec 17 06:02:50 mail postfix/qmgr[3984]: FCEDC350B6E4: removed
+Dec 17 06:02:50 mail postfix/smtpd[4084]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:52 mail postfix/smtpd[4085]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:02:52 mail postfix/smtpd[4085]: 76A7429B32F9: client=node3.example.com[192.0.2.20]
+Dec 17 06:02:52 mail postfix/cleanup[4185]: 76A7429B32F9: message-id=<77A7429B34AC@mail.example.com>
+Dec 17 06:02:52 mail postfix/qmgr[3985]: 76A7429B32F9: from=<frank@example.org>, size=31645, nrcpt=1 (queue active)
+Dec 17 06:02:52 mail postfix/smtp[4285]: 76A7429B32F9: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=5.3.0, status=bounced (host aspmx.example.com[192.0.2.60] said: 553 5.3.0 smtp.example.net DNSBL:RBL 521< 192.0.2.60 >_is_blocked.For assistance forward this error to abuse_rbl@abuse-att.net (in reply to MAIL FROM command))
+Dec 17 06:02:52 mail postfix/bounce[4385]: 76A7429B32F9: sender non-delivery notification: 78A7429
+Dec 17 06:02:52 mail postfix/qmgr[3985]: 76A7429B32F9: removed
+Dec 17 06:02:52 mail postfix/smtpd[4085]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:54 mail postfix/smtpd[4086]: connect from server.example.org[198.51.100.24]
+Dec 17 06:02:54 mail postfix/smtpd[4086]: F060C1E5AF0E: client=server.example.org[198.51.100.24]
+Dec 17 06:02:54 mail postfix/cleanup[4186]: F060C1E5AF0E: message-id=<F160C1E5B0C1@mail.example.com>
+Dec 17 06:02:54 mail postfix/qmgr[3986]: F060C1E5AF0E: from=<grace@example.net>, size=31782, nrcpt=1 (queue active)
+Dec 17 06:02:54 mail postfix/smtp[4286]: F060C1E5AF0E: to=<mallory@example.com>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host gateway.example.net[203.0.113.50] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to RCPT TO command))
+Dec 17 06:02:54 mail postfix/qmgr[3986]: F060C1E5AF0E: removed
+Dec 17 06:02:54 mail postfix/smtpd[4086]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:56 mail postfix/smtpd[4087]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:02:56 mail postfix/smtpd[4087]: 6A1A41302B23: client=host4.example.net[203.0.113.50]
+Dec 17 06:02:56 mail postfix/cleanup[4187]: 6A1A41302B23: message-id=<6B1A41302CD6@mail.example.com>
+Dec 17 06:02:56 mail postfix/qmgr[3987]: 6A1A41302B23: from=<heidi@example.com>, size=31919, nrcpt=1 (queue active)
+Dec 17 06:02:56 mail postfix/smtp[4287]: 6A1A41302B23: to=<peggy@example.com>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host mail.example.net[198.51.100.24] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to RCPT TO command))
+Dec 17 06:02:56 mail postfix/qmgr[3987]: 6A1A41302B23: removed
+Dec 17 06:02:56 mail postfix/smtpd[4087]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:02:58 mail postfix/smtpd[4088]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:02:58 mail postfix/smtpd[4088]: E3D3C07AA738: client=mail.example.net[198.51.100.9]
+Dec 17 06:02:58 mail postfix/cleanup[4188]: E3D3C07AA738: message-id=<E4D3C07AA8EB@mail.example.com>
+Dec 17 06:02:58 mail postfix/qmgr[3988]: E3D3C07AA738: from=<alice@example.com>, size=32056, nrcpt=1 (queue active)
+Dec 17 06:02:58 mail postfix/smtp[4288]: E3D3C07AA738: to=<ivan@example.org>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host mx.example.org[198.51.100.7] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to RCPT TO command))
+Dec 17 06:02:58 mail postfix/qmgr[3988]: E3D3C07AA738: removed
+Dec 17 06:02:58 mail postfix/smtpd[4088]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:03:00 mail postfix/smtpd[4089]: connect from laptop.example.org[203.0.113.11]
+Dec 17 06:03:00 mail postfix/smtpd[4089]: 5D8D3FC5234D: client=laptop.example.org[203.0.113.11]
+Dec 17 06:03:00 mail postfix/cleanup[4189]: 5D8D3FC5234D: message-id=<5E8D3FC52500@mail.example.com>
+Dec 17 06:03:00 mail postfix/qmgr[3989]: 5D8D3FC5234D: from=<bob@example.com>, size=32193, nrcpt=1 (queue active)
+Dec 17 06:03:00 mail postfix/smtp[4289]: 5D8D3FC5234D: to=<niaj@example.org>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host aspmx.example.com[192.0.2.60] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to RCPT TO command))
+Dec 17 06:03:00 mail postfix/qmgr[3989]: 5D8D3FC5234D: removed
+Dec 17 06:03:00 mail postfix/smtpd[4089]: disconnect from laptop.example.org[203.0.113.11] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:03:02 mail postfix/smtpd[4090]: connect from node3.example.com[192.0.2.20]
+Dec 17 06:03:02 mail postfix/smtpd[4090]: D746BF0F9F62: client=node3.example.com[192.0.2.20]
+Dec 17 06:03:02 mail postfix/cleanup[4190]: D746BF0F9F62: message-id=<D846BF0FA115@mail.example.com>
+Dec 17 06:03:02 mail postfix/qmgr[3990]: D746BF0F9F62: from=<carol@example.org>, size=32330, nrcpt=1 (queue active)
+Dec 17 06:03:02 mail postfix/smtp[4290]: D746BF0F9F62: to=<trent@example.org>, relay=gateway.example.net[203.0.113.50]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host gateway.example.net[203.0.113.50] said: 450 4.7.1 Error: connection has exceeded local traffic-limit (in reply to RCPT TO command))
+Dec 17 06:03:02 mail postfix/qmgr[3990]: D746BF0F9F62: removed
+Dec 17 06:03:02 mail postfix/smtpd[4090]: disconnect from node3.example.com[192.0.2.20] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:03:04 mail postfix/smtpd[4091]: connect from server.example.org[198.51.100.24]
+Dec 17 06:03:04 mail postfix/smtpd[4091]: 51003E5A1B77: client=server.example.org[198.51.100.24]
+Dec 17 06:03:04 mail postfix/cleanup[4191]: 51003E5A1B77: message-id=<52003E5A1D2A@mail.example.com>
+Dec 17 06:03:04 mail postfix/qmgr[3991]: 51003E5A1B77: from=<dave@example.net>, size=32467, nrcpt=1 (queue active)
+Dec 17 06:03:04 mail postfix/smtp[4291]: 51003E5A1B77: to=<judy@example.net>, relay=mail.example.net[198.51.100.24]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.7.1, status=deferred (host mail.example.net[198.51.100.24] said: 450 4.7.1 Error: connection has exceeded local traffic-limit (in reply to RCPT TO command))
+Dec 17 06:03:04 mail postfix/qmgr[3991]: 51003E5A1B77: removed
+Dec 17 06:03:04 mail postfix/smtpd[4091]: disconnect from server.example.org[198.51.100.24] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:03:06 mail postfix/smtpd[4092]: connect from host4.example.net[203.0.113.50]
+Dec 17 06:03:06 mail postfix/smtpd[4092]: CAB9BDA4978C: client=host4.example.net[203.0.113.50]
+Dec 17 06:03:06 mail postfix/cleanup[4192]: CAB9BDA4978C: message-id=<CBB9BDA4993F@mail.example.com>
+Dec 17 06:03:06 mail postfix/qmgr[3992]: CAB9BDA4978C: from=<eve@example.com>, size=32604, nrcpt=1 (queue active)
+Dec 17 06:03:06 mail postfix/smtp[4292]: CAB9BDA4978C: to=<olivia@example.net>, relay=mx.example.org[198.51.100.7]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host mx.example.org[198.51.100.7] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to DATA command))
+Dec 17 06:03:06 mail postfix/qmgr[3992]: CAB9BDA4978C: removed
+Dec 17 06:03:06 mail postfix/smtpd[4092]: disconnect from host4.example.net[203.0.113.50] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7
+Dec 17 06:03:08 mail postfix/smtpd[4093]: connect from mail.example.net[198.51.100.9]
+Dec 17 06:03:08 mail postfix/smtpd[4093]: 44733CEF13A1: client=mail.example.net[198.51.100.9]
+Dec 17 06:03:08 mail postfix/cleanup[4193]: 44733CEF13A1: message-id=<45733CEF1554@mail.example.com>
+Dec 17 06:03:08 mail postfix/qmgr[3993]: 44733CEF13A1: from=<frank@example.org>, size=32741, nrcpt=1 (queue active)
+Dec 17 06:03:08 mail postfix/smtp[4293]: 44733CEF13A1: to=<victor@example.net>, relay=aspmx.example.com[192.0.2.60]:25, delay=3.1, delays=0.02/0.01/0.9/1.1, dsn=4.3.0, status=deferred (host aspmx.example.com[192.0.2.60] said: 451 4.3.0 Temporary server error. Please try again later. PRX 5 (in reply to DATA command))
+Dec 17 06:03:08 mail postfix/qmgr[3993]: 44733CEF13A1: removed
+Dec 17 06:03:08 mail postfix/smtpd[4093]: disconnect from mail.example.net[198.51.100.9] ehlo=2 starttls=1 mail=1 rcpt=1 data=1 quit=1 commands=7

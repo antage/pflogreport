@@ -3,26 +3,57 @@
 //! delivery attempt together.
 //!
 //! Run with `cargo bench`. Everything works on `fixtures/sample.log`, a synthetic log
-//! of 94 deliveries whose outcome mix is that of a working mail server (most sent,
-//! some deferred, few bounced), so the numbers are a real workload and not a best
-//! case. It is 672 lines and 80 KB: small enough to live in the repository, big enough
-//! for one pass to be measurable, and it contains no address that exists.
+//! of 94 deliveries (686 lines) that succeeds 40 times, defers 26 and bounces 28, and
+//! holds a reply of each kind a pattern is kept for. It holds no address that exists.
 //!
 //! Every bench times a whole pass over the fixture, so a per-line or per-message
-//! figure is the printed time divided by 672 lines or 94 messages.
+//! figure is the printed time divided by 686 lines or 94 messages.
+
+use std::collections::BTreeMap;
 
 use divan::Bencher;
 use pflogreport::log_line::LogLine;
 use pflogreport::message::Message;
-use pflogreport::reason::parse_reason;
+use pflogreport::reason::{
+    ReasonKind,
+    ReasonType,
+    parse_reason,
+};
 
 const FIXTURE: &str = include_str!("fixtures/sample.log");
 
-/// What the fixture holds: 672 lines of 94 deliveries. These are the divisors for a
+/// What the fixture holds: 686 lines of 94 deliveries. These are the divisors for a
 /// per-line or per-delivery figure, and they are asserted inside every bench, so an
 /// edited fixture cannot quietly turn a bench into a measurement of nothing.
-const FIXTURE_LINES: usize = 672;
+const FIXTURE_LINES: usize = 686;
 const FIXTURE_DELIVERIES: usize = 94;
+
+/// How many replies of the fixture land in each reason category. 48 are words no pattern
+/// knows: 40 successes and 8 replies of a remote server that mean nothing to the tool, the
+/// latter the ones that walk a whole group of patterns. 18 more are the local server's own
+/// words about connections, DNS and the domain it tried to reach, and those are the
+/// patterns that carry capture groups. The rest are replies of a remote server, two of them
+/// answering `MAIL FROM`.
+///
+/// A reply whose text stops matching its pattern falls into `Other` and breaks this table,
+/// so the bench fails instead of quietly measuring less than it claims to: 90 of the old
+/// fixture's 94 replies were `Other` by accident, and it saw none of the work that
+/// attributes a known reply.
+const REASON_MIX: [(ReasonKind, usize); 13] = [
+    (ReasonKind::AccessDenied, 4),
+    (ReasonKind::BadMX, 2),
+    (ReasonKind::BlockList, 2),
+    (ReasonKind::ConnectionRefused, 3),
+    (ReasonKind::ConnectionTimedOut, 5),
+    (ReasonKind::DNSError, 3),
+    (ReasonKind::LostConnection, 3),
+    (ReasonKind::NoSuchUser, 11),
+    (ReasonKind::Other, 48),
+    (ReasonKind::OverQuotaPerm, 4),
+    (ReasonKind::OverQuotaTemp, 4),
+    (ReasonKind::RelayAccessDenied, 3),
+    (ReasonKind::UnsolicitedMessageError, 2),
+];
 
 /// Lines of the fixture, as the reader would hand them to the parser.
 fn lines() -> Vec<String> {
@@ -86,15 +117,26 @@ fn parse_line(bencher: Bencher) {
     });
 }
 
-/// What a reply means. The patterns are grouped by the command the reply answers, and
-/// the biggest group - the one a `RCPT TO` reply is tried against - is some 80 regular
-/// expressions long, so a reply that means nothing to the tool costs all of them. In
-/// this fixture most lines are successes, and `250 Ok` means nothing to the tool.
+/// What a reply means. The patterns are grouped by the SMTP command the reply answers, so
+/// a reply tries the patterns kept for its own command: some 84 for a `RCPT TO` reply, 23
+/// for a `DATA` reply, 13 for the replies the local server makes itself, and 1 for a
+/// `MAIL FROM` reply. A reply that means nothing to the tool pays for its whole group, and
+/// 8 of the fixture's replies are `RCPT TO` or `DATA` replies of that kind.
 #[divan::bench]
 fn classify_reason(bencher: Bencher) {
     let reasons = reasons();
     assert_eq!(reasons.len(), FIXTURE_DELIVERIES,
         "every delivery should contribute one reason to classify");
+    let mut counts: BTreeMap<ReasonKind, usize> = BTreeMap::new();
+    for reason in &reasons {
+        let kind = parse_reason(reason)
+            .unwrap_or_else(|_| panic!("a reply of the fixture should parse: {reason}"))
+            .kind();
+        *counts.entry(kind).or_default() += 1;
+    }
+    let expected: BTreeMap<ReasonKind, usize> = REASON_MIX.into();
+    assert_eq!(counts, expected,
+        "the fixture no longer reaches the reason tables this bench is for");
     bencher.bench_local(|| {
         let mut classified = 0usize;
         for reason in &reasons {

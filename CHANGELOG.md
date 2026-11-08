@@ -40,6 +40,11 @@ versioning.
   DNS failure reads one or two groups, so the map cost three to seven allocations on each
   such reply, and about a tenth of all allocations on a reply set shaped like a real log's.
   Working out a reply is 8% quicker; reports are unchanged.
+- The bench fixture reaches the reason tables now: 46 of its 94 replies land in a known
+  category, and a reply of each of the four kinds of pattern is there, where 90 of 94 used
+  to fall through to `Other` unseen. `cargo bench` asserts the mix, so a reply that stops
+  matching its pattern fails the bench instead of quietly shrinking what it measures. The
+  "Hot path" figures are re-measured on the new fixture.
 
 ### Fixed
 
