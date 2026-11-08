@@ -1,0 +1,23 @@
+Dec 17 08:59:59 mail postfix/master[998]: daemon started -- version 3.5.6
+Dec 17 09:00:00 mail rsyslogd[999]: action "action-3" suspended, and will be retried in 30 second(s)
+Dec 17 09:00:01 mail postfix/smtpd[1001]: connect from desk1.example.com[192.0.2.10]
+Dec 17 09:00:01 mail postfix/smtpd[1001]: A10000000001: client=desk1.example.com[192.0.2.10]
+Dec 17 09:00:01 mail postfix/cleanup[1002]: A10000000001: message-id=<s1@mail.example.com>
+Dec 17 09:00:01 mail postfix/qmgr[1000]: A10000000001: from=<alice@example.com>, size=1200, nrcpt=1 (queue active)
+Dec 17 09:00:02 mail postfix/smtp[1003]: A10000000001: to=<alice@example.com>, relay=mx.example.org[198.51.100.7]:25, delay=1.1, delays=0.01/0.01/0.5/0.5, dsn=2.0.0, status=sent (250 2.0.0 Ok: queued as B20000000001)
+Dec 17 09:00:02 mail postfix/qmgr[1000]: A10000000001: removed
+Dec 17 09:00:03 mail postfix/qmgr[1000]: A10000000002: from=<alice@example.com>, size=1300, nrcpt=1 (queue active)
+Dec 17 09:00:04 mail postfix/smtp[1004]: A10000000002: to=<bob@example.com>, relay=mx.example.org[198.51.100.7]:25, delay=1.4, delays=0.01/0.01/0.6/0.7, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.1.1 <bob@example.com>: Recipient address rejected: User unknown in virtual mailbox table (in reply to RCPT TO command))
+Dec 17 09:00:04 mail postfix/qmgr[1000]: A10000000002: removed
+Dec 17 09:00:05 mail postfix/qmgr[1000]: A10000000003: from=<alice@example.com>, size=1400, nrcpt=1 (queue active)
+Dec 17 09:00:06 mail postfix/smtp[1005]: A10000000003: to=<Bob@EXAMPLE.com>, relay=mx.example.org[198.51.100.7]:25, delay=1.5, delays=0.01/0.01/0.6/0.8, dsn=5.1.1, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.1.1 <Bob@EXAMPLE.com>: Recipient address rejected: User unknown in virtual mailbox table (in reply to RCPT TO command))
+Dec 17 09:00:06 mail postfix/qmgr[1000]: A10000000003: removed
+Dec 17 09:00:07 mail postfix/qmgr[1000]: A10000000004: from=<alice@example.com>, size=1500, nrcpt=1 (queue active)
+2025-12-17T09:00:08+03:00 mail postfix/smtp[1006]: A10000000004: to=<Ted@Mail.EXAMPLE.com>, relay=mx.example.org[198.51.100.7]:25, delay=1.6, delays=0.01/0.01/0.6/0.9, dsn=5.0.0, status=bounced (host mx.example.org[198.51.100.7] said: 550 5.0.0 Unrecognised reply from the remote host, code 999 (in reply to RCPT TO command))
+Dec 17 09:00:08 mail postfix/qmgr[1000]: A10000000004: removed
+Dec 17 09:00:09 mail postfix/qmgr[1000]: A10000000005: from=<alice@example.com>, size=1600, nrcpt=1 (queue active)
+Dec 17 09:00:10 mail postfix/smtp[1007]: A10000000005: to=<carol@example.net>, relay=mx.example.net[203.0.113.9]:25, delay=4.1, delays=0.01/0.01/4.0/0.0, dsn=4.4.1, status=deferred (connect to mx.example.net[203.0.113.9]:25: Connection timed out)
+Dec 17 09:00:11 mail postfix/qmgr[1000]: A10000000006: from=<alice@example.com>, size=1700, nrcpt=1 (queue active)
+Dec 17 09:00:12 mail postfix/smtp[1008]: A10000000006: to=<carol@example.net>, relay=mx.example.net[203.0.113.9]:25, delay=2.2, delays=0.01/0.01/2.0/0.1, dsn=4.2.2, status=deferred (host mx.example.net[203.0.113.9] said: 452 4.2.2 <carol@example.net>: Recipient address rejected: Recipient mailbox quota exceeded (in reply to RCPT TO command))
+Dec 17 09:00:13 mail postfix/qmgr[1000]: A10000000007: from=<alice@example.com>, size=1800, nrcpt=1 (queue active)
+Dec 17 09:00:13 mail postfix/cleanup[1009]: A10000000007: message-id=<q7@mail.example.com>

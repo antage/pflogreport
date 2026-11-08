@@ -8,6 +8,9 @@ versioning.
 
 ### Added
 
+- The tool is now tested the way it is run: `tests/cli.rs` executes the built binary over a
+  small fixture log and checks the reports the README documents, the exit codes and the
+  error messages. Counting the fixture by hand is enough to check any expectation in it.
 - Reading and analysis are now a library target, and `cargo bench` measures them a function
   at a time: reading one log line, working out what a server's reply means, and putting one
   delivery back together. The new "Hot path" section of the README carries the numbers and
@@ -32,6 +35,8 @@ versioning.
 
 ### Fixed
 
+- The README promised that an unknown `-f` or `-g` value falls back to the default behavior.
+  0.3.0 stopped doing that and left the sentence behind.
 - `bounced -g addr` and `bounced -g domain` grouped recipients by the exact spelling of the
   address, so one domain written two ways was reported as two (`Mail.ru` next to
   `mail.ru`), while `deferred` folded the whole address and disagreed with `bounced`. The

@@ -359,28 +359,13 @@ fn main() -> Result<()> {
 
 #[cfg(test)]
 mod tests {
+    // Which documented values the options accept is a question about the tool, so it is
+    // answered in `tests/cli.rs`, over the binary. What stays here is the parser refusing
+    // a value it was not given, which is cheaper to point at directly.
     use super::*;
 
     fn parse(cmd: &str, flag: &str, value: &str) -> clap::error::Result<Cli> {
         Cli::try_parse_from(["pflogreport", cmd, "-", flag, value])
-    }
-
-    #[test]
-    fn options_accept_the_documented_values() {
-        for (cmd, flag, value) in [
-            ("stats", "-f", "json"),
-            ("bounced", "-f", "json"),
-            ("deferred", "-f", "json"),
-            ("bounced", "-g", "addr"),
-            ("bounced", "-g", "domain"),
-            ("deferred", "-g", "addr"),
-            ("deferred", "-g", "domain"),
-        ] {
-            assert!(
-                parse(cmd, flag, value).is_ok(),
-                "{cmd} {flag} {value} must parse"
-            );
-        }
     }
 
     #[test]

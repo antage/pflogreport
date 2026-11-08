@@ -39,6 +39,8 @@ cargo build --release
 
 The binary is placed at `target/release/pflogreport`.
 
+`cargo test` checks the tool, `cargo bench` measures it ([hot path](#hot-path)).
+
 ## Installation
 
 Either install from the local source with Cargo:
@@ -265,8 +267,6 @@ What the numbers say:
   used as written). The one case the order cannot settle is a file whose own date is much
   later than its content, an archive copied without preserving timestamps: its lines are
   read in that later year, and `--year` is the fix.
-- `-f` values other than `json` and `-g` values other than `addr`/`domain` silently
-  fall back to the default behavior (console output / no grouping).
 - Only `postfix` program lines are analyzed; other daemons in the same log file are
   ignored.
 
