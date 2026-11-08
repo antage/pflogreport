@@ -20,17 +20,14 @@ use rayon::prelude::*;
 #[global_allocator]
 static ALLOCATOR: MiMalloc = MiMalloc;
 
-mod log_line;
-use log_line::{LogLine, LogStamp, YearTracker};
-
-mod message;
-use message::Message;
-
-mod reason;
-use reason::{Reason, ReasonKind};
-
-mod reason_stats;
-use reason_stats::ReasonStats;
+// Reading and analysis live in the library half of this package (src/lib.rs), so that
+// benches/hot_path.rs can measure them; this binary owns the command line, the input
+// and the three reports.
+use pflogreport::log_line;
+use pflogreport::log_line::{LogLine, LogStamp, YearTracker};
+use pflogreport::message::Message;
+use pflogreport::reason::{Reason, ReasonKind};
+use pflogreport::reason_stats::ReasonStats;
 
 mod cmd_stats;
 mod cmd_bounced;

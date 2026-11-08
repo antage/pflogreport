@@ -271,10 +271,10 @@ pub enum LogStamp {
     Absolute(NaiveDateTime),
 }
 
+// A line as the grammar reads it. `hostname` and `pid` are part of that shape and are
+// not consulted by the analysis; they are here because a line without them is not a
+// parsed line.
 #[derive(Debug)]
-// `dead_code` is reported once for the whole definition, and the fields are live in
-// `cfg(test)` because the parser tests read them, so only the real build expects it.
-#[cfg_attr(not(test), expect(dead_code, reason = "hostname and pid are parsed by the line grammar but not read by analysis"))]
 pub struct LogLine {
     pub stamp: LogStamp,
     pub hostname: String,

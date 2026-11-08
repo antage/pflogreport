@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use anyhow::Result;
 use serde_derive::Serialize;
 
-use crate::message::{Message, Status};
+use pflogreport::message::{Message, Status};
 
 #[derive(Default, Serialize)]
 pub struct Stats {

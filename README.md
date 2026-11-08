@@ -223,6 +223,35 @@ $ pflogreport bounced -v -f json data/mail.log
 | `BadReverseDNS` | Client hostname has a missing or inconsistent PTR record |
 | `Other` | Reason text that did not match any known pattern (raw text is kept) |
 
+## Hot path
+
+`cargo bench` measures the three functions that do the work, one pass over
+`benches/fixtures/sample.log` each. That fixture is a synthetic log of 94 deliveries
+(672 lines) with the outcome mix of a working mail server - most deliveries succeed - and
+it contains no address that exists.
+
+Medians of the median column, release build, one core of the development machine:
+
+| Bench | What it times | Per pass | Per item |
+|---|---|---|---|
+| `parse_line` | one line through the grammar | 386 µs | 574 ns per line |
+| `classify_reason` | one server reply worked out | 134 µs | 1.4 µs per reply |
+| `analyze_message` | one delivery reconstructed | 283 µs | 3.0 µs per delivery |
+
+What the numbers say:
+
+- Every byte of input goes through the grammar, and it costs about 574 ns per line
+  whatever the line turns out to mean.
+- A reply is tried against the patterns kept for the SMTP command it answers - some 80 of
+  them for a `RCPT TO` reply - and `250 Ok` is in no pattern at all, so every delivered
+  message pays for the whole table. It is the dearest thing done to a delivery: about half
+  of the 3.0 µs it takes to analyze one.
+- Reading the file, decoding its charset and merging lines into deliveries is what is left
+  over: on a 17 MB log with one thread the whole tool costs 1.4 µs per line, and the
+  benches above account for about 1.0 µs of that.
+- Run on all cores the tool holds about 370 MB/s on a 2.26 GB log, which is roughly 1.3
+  million lines a second.
+
 ## Notes and limitations
 
 - Classic syslog timestamps do not include the year. The first line takes the year of

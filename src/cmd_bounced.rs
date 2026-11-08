@@ -4,9 +4,9 @@ use anyhow::Result;
 use serde_derive::Serialize;
 use serde_json::{Value, json};
 
-use crate::message::{Message, Status};
-use crate::reason::{Reason, ReasonKind, ReasonType};
-use crate::reason_stats::ReasonStats;
+use pflogreport::message::{Message, Status};
+use pflogreport::reason::{Reason, ReasonKind, ReasonType};
+use pflogreport::reason_stats::ReasonStats;
 
 #[derive(Default, Serialize)]
 pub struct Bounced<T>
@@ -182,7 +182,7 @@ impl<T> Bounced<T>
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::log_line::LogLine;
+    use pflogreport::log_line::LogLine;
 
     #[test]
     fn grouped_json_non_verbose_is_object() {

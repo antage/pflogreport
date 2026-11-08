@@ -8,6 +8,10 @@ versioning.
 
 ### Added
 
+- Reading and analysis are now a library target, and `cargo bench` measures them a function
+  at a time: reading one log line, working out what a server's reply means, and putting one
+  delivery back together. The new "Hot path" section of the README carries the numbers and
+  what they say about where the time actually goes.
 - The year of a classic syslog timestamp is inferred from the order of the log. A mail log
   is appended to, so `Jan  1` after `Dec 31` is read as the next year. Before, every such
   line got the year the analysis ran in, which dated the December half of a log read after
