@@ -31,7 +31,7 @@ impl Stats {
 
 pub fn stats(logs_by_message_id: &BTreeMap<u64, Message>) -> Result<Stats> {
     let mut stats = Stats::default();
-    for (_, msg) in logs_by_message_id.iter() {
+    for msg in logs_by_message_id.values() {
         match msg.status {
             Status::Unknown => { stats.unknown += 1 },
             Status::Sent { .. } => { stats.sent += 1 },

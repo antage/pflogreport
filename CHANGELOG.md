@@ -53,6 +53,9 @@ versioning.
   measures 15% quicker without them. A `postfix/smtpd client=` or `postfix/cleanup
   message-id=` line the parser could not read used to fail the whole run; such a line is
   now simply not read.
+- `cargo clippy --all-targets` is clean. Among the eleven warnings, two `match`es on
+  `Status` carried an empty catch-all; they now list the statuses they ignore, so a new
+  `Status` variant stops the build in `bounced` and `deferred` instead of going uncounted.
 
 ### Fixed
 

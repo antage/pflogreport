@@ -28,7 +28,7 @@ impl<T> Bounced<T>
         for (k, v) in r {
             s
                 .entry(k.kind())
-                .or_insert(Vec::new())
+                .or_default()
                 .push((k, *v));
         }
         s.into_values().flatten().map(|(k, v)| (k.clone(), v)).collect()
@@ -144,9 +144,9 @@ impl<T> Bounced<T>
 
     pub fn new(logs_by_message_id: &BTreeMap<u64, Message>) -> Result<Self> {
         let mut bounced = Bounced::default();
-        for (_, msg) in logs_by_message_id.iter() {
-            match msg.status {
-                Status::Bounced { ref reason } => {
+        for msg in logs_by_message_id.values() {
+            match &msg.status {
+                Status::Bounced { reason } => {
                     let reason_kind = T::from(reason.clone());
                     if let Some(counter) = bounced.reasons.get_mut(&reason_kind) {
                         *counter += 1;
@@ -191,7 +191,9 @@ impl<T> Bounced<T>
                         }
                     }
                 },
-                _ => {},
+                // The other statuses are listed instead of a catch-all: a variant added
+                // to Status has to be thought of here, not skipped in silence.
+                Status::Unknown | Status::Sent { .. } | Status::Deferred { .. } => {},
             }
         }
 

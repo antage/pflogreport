@@ -94,7 +94,7 @@ impl ReasonType for Reason {
 
 impl ReasonType for ReasonKind {
     fn kind(&self) -> ReasonKind {
-        self.clone()
+        *self
     }
 }
 
@@ -183,7 +183,7 @@ fn pre_parse_reason(s: &str) -> Result<ReasonPreParse> {
 // named group, is what keeps a match to one copy per group the `Reason` really uses.
 fn find_any_reason<'a>(pre_parse: &'a ReasonPreParse, pre_parse_kind: &ReasonPreParseKind, patterns: &[(ReasonPreParseKind, Lazy<Regex>)]) -> Option<Captures<'a>> {
     patterns
-        .into_iter()
+        .iter()
         .filter(|(kind, _)| kind == pre_parse_kind)
         .find_map(|(_, re)| re.captures(pre_parse.message()))
 }

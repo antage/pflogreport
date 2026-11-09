@@ -56,8 +56,9 @@ pub struct Message {
 
 impl Message {
     pub fn analyze(&mut self) -> Result<()> {
-        // is_in_queue
-        self.is_in_queue = self.log_lines.len() > 0;
+        // Any line at all puts the delivery in the queue; qmgr "removed" takes it out
+        // further down.
+        self.is_in_queue = !self.log_lines.is_empty();
         if self.is_in_queue {
             for line in &self.log_lines {
                 if line.program == "postfix" {
@@ -94,54 +95,52 @@ impl Message {
                                 }
                             }
                         },
-                        Some("smtp") => {
-                            if line.content.starts_with("to=") {
-                                let (_, fields) =
-                                    parse_fields(&line.content)
-                                        .map_err(|err| {
-                                            anyhow!("postfix/smtp fields parsing error: {}", err)
-                                        })?;
-                                for (name, value) in fields {
-                                    match name.as_ref() {
-                                        "to" => {
-                                            let (_, email) =
-                                                parse_email(&value)
-                                                    .map_err(|err| {
-                                                        anyhow!("postfix/smtp to field parsing error: {}", err)
-                                                    })?;
-                                            self.to = Some(lowercase_domain(email));
-                                        },
-                                        "status" => {
-                                            let (_, (status, reason)) =
-                                                parse_status(&value)
-                                                    .map_err(|err| {
-                                                        anyhow!("postfix/smtp status field parsing error: {}", err)
-                                                    })?;
-                                            match status.as_ref() {
-                                                "sent" => {
-                                                    self.status = Status::Sent {
-                                                        reason: parse_reason(&reason)?
-                                                    };
-                                                },
-                                                "deferred" => {
-                                                    self.status = Status::Deferred {
-                                                        reason: parse_reason(&reason)?
-                                                    };
-                                                },
-                                                "bounced" => {
-                                                    self.status = Status::Bounced {
-                                                        reason: parse_reason(&reason)?
-                                                    };
-                                                }
-                                                _ => {
-                                                    return Err(anyhow!("Unknown smtp status: {}", status));
-                                                },
-                                            }
-                                        }
-                                        _ => {},
-                                    }
-                                }
-                            }
+                        Some("smtp") if line.content.starts_with("to=") => {
+                              let (_, fields) =
+                                  parse_fields(&line.content)
+                                      .map_err(|err| {
+                                          anyhow!("postfix/smtp fields parsing error: {}", err)
+                                      })?;
+                              for (name, value) in fields {
+                                  match name.as_ref() {
+                                      "to" => {
+                                          let (_, email) =
+                                              parse_email(&value)
+                                                  .map_err(|err| {
+                                                      anyhow!("postfix/smtp to field parsing error: {}", err)
+                                                  })?;
+                                          self.to = Some(lowercase_domain(email));
+                                      },
+                                      "status" => {
+                                          let (_, (status, reason)) =
+                                              parse_status(&value)
+                                                  .map_err(|err| {
+                                                      anyhow!("postfix/smtp status field parsing error: {}", err)
+                                                  })?;
+                                          match status.as_ref() {
+                                              "sent" => {
+                                                  self.status = Status::Sent {
+                                                      reason: parse_reason(&reason)?
+                                                  };
+                                              },
+                                              "deferred" => {
+                                                  self.status = Status::Deferred {
+                                                      reason: parse_reason(&reason)?
+                                                  };
+                                              },
+                                              "bounced" => {
+                                                  self.status = Status::Bounced {
+                                                      reason: parse_reason(&reason)?
+                                                  };
+                                              }
+                                              _ => {
+                                                  return Err(anyhow!("Unknown smtp status: {}", status));
+                                              },
+                                          }
+                                      }
+                                      _ => {},
+                                  }
+                              }
                         },
                         _ => {},
                     }
