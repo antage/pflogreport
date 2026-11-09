@@ -6,7 +6,11 @@ use serde_json::{Value, json};
 
 use pflogreport::message::{Message, Status};
 use pflogreport::reason::{Reason, ReasonKind, ReasonType};
-use pflogreport::reason_stats::ReasonStats;
+use pflogreport::reason_stats::{
+    Format,
+    Grouping,
+    ReasonStats,
+};
 
 #[derive(Default, Serialize)]
 pub struct Bounced<T>
@@ -52,7 +56,23 @@ impl<T> Bounced<T>
 impl<T> ReasonStats for Bounced<T>
     where T: std::fmt::Debug + From<Reason> + ReasonType + serde::Serialize + Ord + Clone
 {
-    fn print_console_reasons(&self) -> Result<()> {
+    fn print(&self, format: Format, grouping: Grouping) -> Result<()> {
+        match (format, grouping) {
+            (Format::Console, Grouping::None) => self.console_reasons(),
+            (Format::Console, Grouping::ToAddr) => self.console_by_to_addr(),
+            (Format::Console, Grouping::ToDomain) => self.console_by_to_domain(),
+            (Format::Json, Grouping::None) => self.json_reasons(),
+            (Format::Json, Grouping::ToAddr) => self.json_by_to_addr(),
+            (Format::Json, Grouping::ToDomain) => self.json_by_to_domain(),
+        }
+    }
+}
+
+
+impl<T> Bounced<T>
+    where T: std::fmt::Debug + From<Reason> + ReasonType + serde::Serialize + Ord + Clone
+{
+    fn console_reasons(&self) -> Result<()> {
         println!("All reasons:");
         for reason in &self.reasons {
             println!("\t{:10} {:?}", reason.1, reason.0);
@@ -60,7 +80,7 @@ impl<T> ReasonStats for Bounced<T>
         Ok(())
     }
 
-    fn print_console_reasons_by_to_addr(&self) -> Result<()> {
+    fn console_by_to_addr(&self) -> Result<()> {
         println!("Reasons by TO address:");
         for (addr, reasons) in &self.reasons_by_to {
             println!("\t{}:", addr);
@@ -71,7 +91,7 @@ impl<T> ReasonStats for Bounced<T>
         Ok(())
     }
 
-    fn print_console_reasons_by_to_domain(&self) -> Result<()> {
+    fn console_by_to_domain(&self) -> Result<()> {
         println!("Reasons by TO domain:");
         for (domain, reasons) in &self.reasons_by_to_domain {
             println!("\t{}:", domain);
@@ -82,12 +102,12 @@ impl<T> ReasonStats for Bounced<T>
         Ok(())
     }
 
-    fn print_json_reasons(&self) -> Result<()> {
+    fn json_reasons(&self) -> Result<()> {
         println!("{}", serde_json::to_string(&Self::grouped_json(&self.reasons))?);
         Ok(())
     }
 
-    fn print_json_reasons_by_to_addr(&self) -> Result<()> {
+    fn json_by_to_addr(&self) -> Result<()> {
         let m: BTreeMap<String, Value> =
             self
                 .reasons_by_to
@@ -98,7 +118,7 @@ impl<T> ReasonStats for Bounced<T>
         Ok(())
     }
 
-    fn print_json_reasons_by_to_domain(&self) -> Result<()> {
+    fn json_by_to_domain(&self) -> Result<()> {
         let m: BTreeMap<String, Value> =
             self
                 .reasons_by_to_domain

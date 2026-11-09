@@ -27,7 +27,11 @@ use pflogreport::log_line;
 use pflogreport::log_line::{LogLine, LogStamp, YearTracker};
 use pflogreport::message::Message;
 use pflogreport::reason::{Reason, ReasonKind};
-use pflogreport::reason_stats::ReasonStats;
+use pflogreport::reason_stats::{
+    Format,
+    Grouping,
+    ReasonStats,
+};
 
 mod cmd_stats;
 mod cmd_bounced;
@@ -221,6 +225,25 @@ fn load_messages(input: LogInput, base_year: i32) -> Result<BTreeMap<u64, Messag
     Ok(logs_by_message_id)
 }
 
+/// The flag that picks how a report is written. clap refuses a value outside the list it
+/// is given, and says that list in the message, so the fallback here is the flag being
+/// absent and never a typo that got through.
+fn format_of(format: &Option<String>) -> Format {
+    match format.as_deref() {
+        Some("json") => Format::Json,
+        _ => Format::Console,
+    }
+}
+
+/// The flag that picks what a report groups its reasons under.
+fn grouping_of(group_by: &Option<String>) -> Grouping {
+    match group_by.as_deref() {
+        Some("addr") => Grouping::ToAddr,
+        Some("domain") => Grouping::ToDomain,
+        _ => Grouping::None,
+    }
+}
+
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
@@ -229,15 +252,9 @@ fn main() -> Result<()> {
             let base = base_year(&args.log_file, args.year);
             let logs_by_message_id = load_messages(open_log(&args.log_file)?, base)?;
             let stats = cmd_stats::stats(&logs_by_message_id)?;
-            match args.format {
-                Some(fmt) => {
-                    match fmt.as_ref() {
-                        "json" => stats.print_json()?,
-                        _ => stats.print_console()?,
-                    }
-
-                }
-                _ => stats.print_console()?,
+            match format_of(&args.format) {
+                Format::Json => stats.print_json()?,
+                Format::Console => stats.print_console()?,
             }
         },
         Commands::Bounced(args) => {
@@ -249,52 +266,7 @@ fn main() -> Result<()> {
                 } else {
                     Box::new(cmd_bounced::Bounced::<ReasonKind>::new(&logs_by_message_id)?)
                 };
-            match args.format {
-                Some(fmt) => {
-                    match fmt.as_ref() {
-                        "json" => {
-                            match args.group_by.as_deref() {
-                                Some("addr") => {
-                                    bounced.print_json_reasons_by_to_addr()?
-                                },
-                                Some("domain") => {
-                                    bounced.print_json_reasons_by_to_domain()?
-                                },
-                                _ => {
-                                    bounced.print_json_reasons()?
-                                },
-                            }
-                        },
-                        _ => {
-                            match args.group_by.as_deref() {
-                                Some("addr") => {
-                                    bounced.print_console_reasons_by_to_addr()?
-                                },
-                                Some("domain") => {
-                                    bounced.print_console_reasons_by_to_domain()?
-                                },
-                                _ => {
-                                    bounced.print_console_reasons()?
-                                },
-                            }
-                        }
-                    }
-
-                }
-                _ => {
-                    match args.group_by.as_deref() {
-                        Some("addr") => {
-                            bounced.print_console_reasons_by_to_addr()?
-                        },
-                        Some("domain") => {
-                            bounced.print_console_reasons_by_to_domain()?
-                        },
-                        _ => {
-                            bounced.print_console_reasons()?
-                        },
-                    }
-                }
-            }
+            bounced.print(format_of(&args.format), grouping_of(&args.group_by))?
         },
         Commands::Deferred(args) => {
             let base = base_year(&args.log_file, args.year);
@@ -305,52 +277,7 @@ fn main() -> Result<()> {
                 } else {
                     Box::new(cmd_deferred::Deferred::<ReasonKind>::new(&logs_by_message_id)?)
                 };
-            match args.format {
-                Some(fmt) => {
-                    match fmt.as_ref() {
-                        "json" => {
-                            match args.group_by.as_deref() {
-                                Some("addr") => {
-                                    deferred.print_json_reasons_by_to_addr()?
-                                },
-                                Some("domain") => {
-                                    deferred.print_json_reasons_by_to_domain()?
-                                },
-                                _ => {
-                                    deferred.print_json_reasons()?
-                                },
-                            }
-                        },
-                        _ => {
-                            match args.group_by.as_deref() {
-                                Some("addr") => {
-                                    deferred.print_console_reasons_by_to_addr()?
-                                },
-                                Some("domain") => {
-                                    deferred.print_console_reasons_by_to_domain()?
-                                },
-                                _ => {
-                                    deferred.print_console_reasons()?
-                                },
-                            }
-                        },
-                    }
-
-                }
-                _ => {
-                    match args.group_by.as_deref() {
-                        Some("addr") => {
-                            deferred.print_console_reasons_by_to_addr()?
-                        },
-                        Some("domain") => {
-                            deferred.print_console_reasons_by_to_domain()?
-                        },
-                        _ => {
-                            deferred.print_console_reasons()?
-                        },
-                    }
-        }
-            }
+            deferred.print(format_of(&args.format), grouping_of(&args.group_by))?
         },
     }
 

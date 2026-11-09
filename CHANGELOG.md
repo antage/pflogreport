@@ -45,6 +45,9 @@ versioning.
   to fall through to `Other` unseen. `cargo bench` asserts the mix, so a reply that stops
   matching its pattern fails the bench instead of quietly shrinking what it measures. The
   "Hot path" figures are re-measured on the new fixture.
+- The report a run prints is chosen by one match on `-f` and `-g` instead of six copies of
+  the same choice. A grouping or a format nobody handled now stops the build instead of
+  printing a report nobody asked for. Output is unchanged.
 
 ### Fixed
 
