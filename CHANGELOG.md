@@ -56,6 +56,9 @@ versioning.
 - `cargo clippy --all-targets` is clean. Among the eleven warnings, two `match`es on
   `Status` carried an empty catch-all; they now list the statuses they ignore, so a new
   `Status` variant stops the build in `bounced` and `deferred` instead of going uncounted.
+- The clippy level is declared in `Cargo.toml` (`[lints.clippy] all = "warn"`) rather than
+  inherited from whatever the toolchain defaults to, so `cargo clippy` is asked for the same
+  set of lints everywhere the crate is built.
 
 ### Fixed
 

@@ -39,6 +39,13 @@ mimalloc = "0.1.52"
 [dev-dependencies]
 divan = "0.1"
 
+# The default clippy level, written down: what `cargo clippy --all-targets` reports today
+# (nothing) is what a fresh toolchain is asked to report, not whatever a default happens to
+# be. A warning stays a warning, so exceptions stay possible without a flag on the
+# command line.
+[lints.clippy]
+all = "warn"
+
 [[bench]]
 name = "hot_path"
 harness = false
