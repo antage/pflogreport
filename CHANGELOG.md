@@ -48,6 +48,11 @@ versioning.
 - The report a run prints is chosen by one match on `-f` and `-g` instead of six copies of
   the same choice. A grouping or a format nobody handled now stops the build instead of
   printing a report nobody asked for. Output is unchanged.
+- `Message` no longer holds the client host and IP or the RFC 5322 `message-id`. No report
+  reads them, and reading them cost about six heap allocations per delivery: `analyze`
+  measures 15% quicker without them. A `postfix/smtpd client=` or `postfix/cleanup
+  message-id=` line the parser could not read used to fail the whole run; such a line is
+  now simply not read.
 
 ### Fixed
 

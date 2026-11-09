@@ -48,8 +48,6 @@ pub enum Status {
 pub struct Message {
     pub log_lines: Vec<LogLine>,
     pub is_in_queue: bool,
-    pub message_id: Option<String>,
-    pub client: Option<(String, String)>,
     pub from: Option<String>,
     pub to: Option<String>,
     pub size: Option<u64>,
@@ -90,50 +88,6 @@ impl Message {
                                                         anyhow!("postfix/qmgr size field parsing error: {}", err)
                                                     })?;
                                             self.size = Some(size);
-                                        },
-                                        _ => {},
-                                    }
-                                }
-                            }
-                        },
-                        Some("smtpd") => {
-                            if line.content.starts_with("client=") {
-                                let (_, fields) =
-                                    parse_fields(&line.content)
-                                        .map_err(|err| {
-                                            anyhow!("postfix/smtpd fields parsing error: {}", err)
-                                        })?;
-                                for (name, value) in fields {
-                                    match name.as_ref() {
-                                        "client" => {
-                                            let (_, (hostname, ip_addr)) =
-                                                parse_client(&value)
-                                                    .map_err(|err| {
-                                                        anyhow!("postfix/smtpd client field parsing error: {}", err)
-                                                    })?;
-                                            self.client = Some((hostname, ip_addr));
-                                        },
-                                        _ => {},
-                                    }
-                                }
-                            }
-                        },
-                        Some("cleanup") => {
-                            if line.content.starts_with("message-id=") {
-                                let (_, fields) =
-                                    parse_fields(&line.content)
-                                        .map_err(|err| {
-                                            anyhow!("postfix/cleanup fields parsing error: {}", err)
-                                        })?;
-                                for (name, value) in fields {
-                                    match name.as_ref() {
-                                        "message-id" => {
-                                            let (_, message_id) =
-                                                parse_email(&value)
-                                                    .map_err(|err| {
-                                                        anyhow!("postfix/cleanup message-id field parsing error: {}", err)
-                                                    })?;
-                                            self.message_id = Some(message_id);
                                         },
                                         _ => {},
                                     }
@@ -203,8 +157,6 @@ impl Default for Message {
         Message {
             log_lines: Vec::new(),
             is_in_queue: false,
-            client: None,
-            message_id: None,
             from: None,
             to: None,
             size: None,
@@ -272,20 +224,6 @@ fn parse_size(input: &str) -> IResult<&str, u64> {
         nom::character::complete::u64,
         |size| {
             size
-        }
-    )(input)
-}
-
-fn parse_client(input: &str) -> IResult<&str, (String, String)> {
-    map(
-        tuple((
-            take_until1::<&str, &str, _>("["),
-            tag("["),
-            take_until1("]"),
-            tag("]"),
-        )),
-        |(hostname, _, ip_addr, _)| {
-            (hostname.into(), ip_addr.into())
         }
     )(input)
 }
@@ -364,8 +302,6 @@ mod tests {
         assert!(msg.is_in_queue);
         assert_eq!(msg.from, Some("sender@example.com".to_string()));
         assert_eq!(msg.size, Some(1234));
-        assert_eq!(msg.client, Some(("mail.example.com".to_string(), "192.0.2.4".to_string())));
-        assert_eq!(msg.message_id, Some("20260101.000001@example.com".to_string()));
         assert_eq!(msg.to, Some("rcpt@example.com".to_string()));
         assert_eq!(
             msg.status,
@@ -440,11 +376,15 @@ mod tests {
         assert_eq!(msg.size, Some(100));
     }
 
+    /// The `smtpd` and `cleanup` lines of a delivery tell the reports nothing, so they are
+    /// not read at all: whatever they hold, the delivery is analyzed from `qmgr` and `smtp`.
     #[test]
-    fn analyze_ignores_non_field_smtpd_and_cleanup_lines() {
+    fn analyze_skips_the_subsystems_that_carry_no_report_fields() {
         let mut msg = test_message(vec![
             test_line(Some("smtpd"), "warning: TLS handshake failed"),
             test_line(Some("cleanup"), "unexpected line without fields"),
+            test_line(Some("smtpd"), "client=no-brackets-here"),
+            test_line(Some("cleanup"), "message-id=not-an-address-at-all"),
             test_line(
                 Some("smtp"),
                 "to=<rcpt@example.com>, status=sent (250 2.0.0 Ok)",
@@ -452,8 +392,6 @@ mod tests {
         ]);
         msg.analyze().unwrap();
         assert!(msg.is_in_queue);
-        assert!(msg.client.is_none());
-        assert!(msg.message_id.is_none());
         assert!(matches!(msg.status, Status::Sent { .. }));
     }
 
